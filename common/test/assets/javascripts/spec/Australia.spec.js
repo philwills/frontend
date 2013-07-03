@@ -1,4 +1,4 @@
-define(['modules/navigation/australia', "common", "bean", 'modules/userPrefs', 'fixtures'],
+define(['modules/navigation/australia', "common", "bean", 'modules/userPrefs', 'Fixtures'],
     function(Australia, common, bean, userPrefs, fixtures) {
 
     describe('Australia', function() {

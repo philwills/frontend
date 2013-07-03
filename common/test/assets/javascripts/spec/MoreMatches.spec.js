@@ -1,8 +1,17 @@
-define(['modules/more-matches', 'bonzo', 'qwery', 'common', 'ajax'], function(MoreMatches, bonzo, qwery, common, ajax) {
+define(['modules/more-matches', 'bonzo', 'qwery', 'common', 'ajax', 'Fixtures'], function(MoreMatches, bonzo, qwery, common, ajax, fixtures) {
 
     describe("MoreMatches", function() {
 
-        var server;
+        var server,
+            tmp = '<div id="matches-nav" class="cf js-not-ajax">';
+            tmp += '<a href="fixtures/football-prev" class="match-prev"';
+            tmp += 'data-js-title="Show previous day\'s matches">Previous day</a>';
+            tmp += '</div>';
+
+        fixtures.render({
+            id : 'matches',
+            fixtures: [tmp]
+        });
 
         beforeEach(function () {
             ajax.init({page: {

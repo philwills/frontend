@@ -1,11 +1,14 @@
-define(['common', 'ajax', 'modules/fonts', 'modules/storage'], function(common, ajax, Fonts, storage) {
+define(['common', 'ajax', 'modules/fonts', 'modules/storage', 'Fixtures'], function(common, ajax, Fonts, storage, fixtures) {
     
     describe("Web Font Loader", function() {
 
         var styleNodes,
             fileFormat,
             callback,
-            storagePrefix = 'gu.fonts.';
+            storagePrefix = 'gu.fonts.',
+            server = '/base/common/test/assets/javascripts/fixtures/',
+            tmp = '<style data-cache-name="font1" data-cache-file-woff="fonts/font1.woff.12345.js" data-cache-file-ttf="fonts/font1.ttf.12345.js"></style>' +
+                  '<style data-cache-name="font2" data-cache-file-woff="fonts/font2.woff.12345.js" data-cache-file-ttf="fonts/font2.ttf.12345.js"></style>';
 
         function getNameAndCacheKey(style) {       
             var nameAndCacheKey = style.getAttribute('data-cache-file-woff').match(/fonts\/(.*)\.woff\.(.*)\.js$/);
@@ -20,6 +23,10 @@ define(['common', 'ajax', 'modules/fonts', 'modules/storage'], function(common, 
         }
 
         beforeEach(function() {
+            fixtures.render({
+               id: 'fonts',
+               fixtures: [tmp]
+            });
             ajax.init({page: {
                 ajaxUrl: "",
                 edition: "UK"
@@ -35,7 +42,7 @@ define(['common', 'ajax', 'modules/fonts', 'modules/storage'], function(common, 
             common.mediator.on('modules:fonts:loaded', callback);
 
             runs(function() {
-                new Fonts(styleNodes, fileFormat).loadFromServer('fixtures/');
+                new Fonts(styleNodes, fileFormat).loadFromServer(server);
             });
 
             waitsFor(function() {
@@ -55,7 +62,7 @@ define(['common', 'ajax', 'modules/fonts', 'modules/storage'], function(common, 
             common.mediator.on('modules:fonts:loaded', callback);
 
             runs(function() {
-                new Fonts(styleNodes, fileFormat).loadFromServerAndApply('fixtures/');
+                new Fonts(styleNodes, fileFormat).loadFromServerAndApply(server);
             });
 
             waitsFor(function() {
@@ -77,7 +84,7 @@ define(['common', 'ajax', 'modules/fonts', 'modules/storage'], function(common, 
             fileFormat = 'ttf';
 
             runs(function() {
-                new Fonts(styleNodes, fileFormat).loadFromServerAndApply('fixtures/');
+                new Fonts(styleNodes, fileFormat).loadFromServerAndApply(server);
             });
 
             waitsFor(function() {
@@ -102,7 +109,7 @@ define(['common', 'ajax', 'modules/fonts', 'modules/storage'], function(common, 
             }
 
             runs(function() {
-                new Fonts(styleNodes, fileFormat).loadFromServer('fixtures/');
+                new Fonts(styleNodes, fileFormat).loadFromServer(server);
             });
 
             waitsFor(function() {
@@ -141,7 +148,7 @@ define(['common', 'ajax', 'modules/fonts', 'modules/storage'], function(common, 
             common.mediator.on('modules:fonts:loaded', callback);
 
             runs(function() {
-                new Fonts(styleNodes, fileFormat).loadFromServer('fixtures/');
+                new Fonts(styleNodes, fileFormat).loadFromServer(server);
             });
 
             waitsFor(function() {
@@ -159,7 +166,7 @@ define(['common', 'ajax', 'modules/fonts', 'modules/storage'], function(common, 
                 replaceCacheKeysInDOM('12345', '123456789');
                 var styleNodes = document.querySelectorAll('[data-cache-name]');
                 callback.reset();
-                new Fonts(styleNodes, fileFormat).loadFromServer('fixtures/');
+                new Fonts(styleNodes, fileFormat).loadFromServer(server);
             });
 
             waitsFor(function() {
@@ -187,7 +194,7 @@ define(['common', 'ajax', 'modules/fonts', 'modules/storage'], function(common, 
 
             runs(function() {
                 var f = new Fonts(styleNodes, fileFormat);
-                f.loadFromServer('fixtures/');
+                f.loadFromServer(server);
                 ajaxSpy = sinon.spy(f.ajax);
             });
 

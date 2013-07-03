@@ -1,4 +1,4 @@
-define(['common', 'ajax', 'modules/matchnav', 'modules/pageconfig'], function(common, ajax, MatchNav, PageConfig) {
+define(['common', 'ajax', 'modules/matchnav', 'modules/pageconfig', 'Fixtures'], function(common, ajax, MatchNav, PageConfig, fixtures) {
 
     var config = PageConfig({
         page: {
@@ -14,6 +14,10 @@ define(['common', 'ajax', 'modules/matchnav', 'modules/pageconfig'], function(co
             server;
 
         beforeEach(function() {
+            fixtures.render({
+                id: 'match-nav',
+                fixtures: ['<div class="js-related"></div>','<div class="after-header"></div>']
+            });
             ajax.init({page: {
                 ajaxUrl: "",
                 edition: "UK"

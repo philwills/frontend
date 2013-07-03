@@ -1,13 +1,19 @@
-define(['common', 'bean', 'modules/gallery', 'bonzo'], function(common, bean, Gallery, bonzo) {
+define(['common', 'bean', 'modules/gallery', 'bonzo', 'Fixtures', 'text!fixtures/gallery.html'],
+    function(common, bean, Gallery, bonzo, fixtures, data) {
 
     describe("Gallery", function() {
 
-        var g = new Gallery(document).init();
-        var nextLink = document.querySelector('.js-gallery-next');
-        var prevLink = document.querySelector('.js-gallery-prev');
-        var selectedItemClass = 'js-current-gallery-slide';
-        var initialSlide = document.querySelector('.' + selectedItemClass);
-        var counter = document.querySelector('.js-gallery-index');
+        fixtures.render({
+            id: 'gallery',
+            fixtures: [data]
+        });
+
+        var  g = new Gallery(document).init(),
+            nextLink = document.querySelector('.js-gallery-next'),
+            prevLink = document.querySelector('.js-gallery-prev'),
+            selectedItemClass = 'js-current-gallery-slide',
+            initialSlide = document.querySelector('.' + selectedItemClass),
+            counter = document.querySelector('.js-gallery-index');
 
         // taken from http://stackoverflow.com/a/10520017/176615
         function triggerKeypress(k) {
@@ -42,33 +48,33 @@ define(['common', 'bean', 'modules/gallery', 'bonzo'], function(common, bean, Ga
 
         // prev/next links - check they work
         it("should advance the slideshow when the 'next' link is clicked", function() {
-            nextLink.click();
+            bean.fire(nextLink, 'click');
             expect(initialSlide.className).not.toContain(selectedItemClass);
         });
 
         // check url param on change
         it("should update the page URL with an index querystring when advanced", function() {
             // we've already clicked once above
-            nextLink.click();
+            bean.fire(nextLink, 'click');
             expect(window.location.search).toBe("?index=3");
         });
 
         // check the count works
         it("should correctly update the index count when advanced", function() {
-            nextLink.click();
+            bean.fire(nextLink, 'click');
             var currentPosition = bonzo(counter).text();
             expect(currentPosition).toBe('4');
         });
         
         // check prev links are correct urls
         it("should update the 'next' URL to the correct offset when advanced", function(){
-            nextLink.click();
+            bean.fire(nextLink, 'click');
             expect(nextLink.getAttribute('href')).toBe('?index=6');
         });
 
         // check next links are correct urls
         it("should update the 'previous' URL to the correct offset when advanced", function(){
-            nextLink.click();
+            bean.fire(nextLink, 'click');
             expect(prevLink.getAttribute('href')).toBe('?index=5');
         });
 

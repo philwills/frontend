@@ -1,4 +1,4 @@
-define(['common','ajax', 'bean', 'bonzo', 'modules/trailblock-show-more', '../fixtures/trails'], function(common, ajax, bean, bonzo, TrailblockShowMore, testData) {
+define(['common','ajax', 'bean', 'bonzo', 'modules/trailblock-show-more', 'Fixtures', 'fixtures/trails'], function(common, ajax, bean, bonzo, TrailblockShowMore, fixtures, testData) {
 
     describe("TrailblockShowMore", function() {
 
@@ -21,7 +21,10 @@ define(['common','ajax', 'bean', 'bonzo', 'modules/trailblock-show-more', '../fi
         }});
 
         beforeEach(function() {
-            common.$g('body').append(fixtureTrailblock);
+            fixtures.render({
+                id: 'trails',
+                fixtures: [fixtureTrailblock]
+            });
             // spy on mediator
             sinon.spy(common.mediator, 'emit');
 
@@ -49,7 +52,6 @@ define(['common','ajax', 'bean', 'bonzo', 'modules/trailblock-show-more', '../fi
         });
 
         afterEach(function() {
-            common.$g('.front-container').remove();
             common.mediator.emit.restore();
             common.mediator.removeEvent('module:clickstream:click');
             server.restore();

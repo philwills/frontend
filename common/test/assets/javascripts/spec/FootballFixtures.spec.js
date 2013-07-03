@@ -1,8 +1,14 @@
-define(['common', 'ajax', 'qwery', 'modules/footballfixtures'], function(common, ajax, qwery, FootballFixtures) {
+define(['common', 'ajax', 'qwery', 'modules/footballfixtures', 'Fixtures'], function(common, ajax, qwery, FootballFixtures, fixtures) {
 
     describe("Football fixtures component", function() {
 
+        var tmp = '<div id="football-fixtures"><ul><li></li></ul></div>';
+
         beforeEach(function() {
+            fixtures.render({
+                id: 'football',
+                fixtures: [tmp]
+            });
             ajax.init({page: {
                 ajaxUrl: "",
                 edition: "UK"

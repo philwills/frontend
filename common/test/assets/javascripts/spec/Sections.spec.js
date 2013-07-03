@@ -1,7 +1,7 @@
 define([ 'common',
          'bean',
          'modules/navigation/sections',
-         'fixtures'], function(common, bean, Sections, fixtures) {
+         'Fixtures'], function(common, bean, Sections, fixtures) {
 
 
         describe("Sections", function() {

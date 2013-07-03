@@ -1,5 +1,5 @@
 var specs = Object.keys(window.__karma__.files).filter(function (file) {
-    return (/Autoupdate\.spec\.js$/).test(file);
+    return (/Clickstream\.spec\.js$/).test(file);
 });
 require.config({
     'baseUrl': "/base/common/app/assets/javascripts/",
@@ -14,7 +14,9 @@ require.config({
         'swipe':        'components/swipe/swipe',
         'swipeview':    'components/swipeview/src/swipeview',
         'omniture':     '../../../app/public/javascripts/vendor/omniture',
-        'fixtures':     '../../../test/assets/javascripts/helpers/fixtures'
+        'Fixtures':     '../../../test/assets/javascripts/helpers/fixtures',
+        'fixtures':     '../../../test/assets/javascripts/fixtures',
+        'text':         '../../../test/assets/javascripts/components/requirejs-text/text'
     },
 
     // ask Require.js to load these files (all our tests)

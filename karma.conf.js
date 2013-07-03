@@ -4,7 +4,7 @@ module.exports = function(karma) {
 
         frameworks: ['jasmine', 'requirejs'],
 
-        browsers: ['node_modules/phantomjs/bin/phantomjs'],
+        browsers: ['PhantomJS'],
 
         // list of files / patterns to load in the browser
         files: [
@@ -17,6 +17,8 @@ module.exports = function(karma) {
             {pattern: 'common/test/assets/javascripts/components/sinon/lib/sinon/util/fake_server.js', included: true},
             {pattern: 'common/test/assets/javascripts/components/sinon/lib/sinon/util/fake_xml_http_request.js', included: true},
             {pattern: 'common/test/assets/javascripts/components/jasmine-sinon/lib/jasmine-sinon.js', included: true},
+            {pattern: 'common/test/assets/javascripts/components/seedrandom/index.js', included: true},
+            {pattern: 'common/test/assets/javascripts/helpers/cors.js', included: true},
             
             {pattern: 'common/app/assets/javascripts/common.js', included: false},
             {pattern: 'common/app/assets/javascripts/components/bonzo/src/bonzo.js', included: false},
@@ -29,15 +31,28 @@ module.exports = function(karma) {
             {pattern: 'common/app/assets/javascripts/components/swipeview/src/swipeview.js', included: false},
             {pattern: 'common/app/public/javascripts/vendor/omniture.js', included: false},
             {pattern: 'common/test/assets/javascripts/helpers/fixtures.js', included: false},
+            {pattern: 'common/test/assets/javascripts/components/requirejs-text/text.js', included: false},
+            {pattern: 'common/app/assets/javascripts/components/gu-id/id.js', included: false},
 
             {pattern: 'common/app/assets/javascripts/*.js', included: false},
             {pattern: 'common/app/assets/javascripts/modules/*.js', included: false},
             {pattern: 'common/app/assets/javascripts/modules/**/*.js', included: false},
             {pattern: 'common/test/assets/javascripts/spec/*.spec.js', included: false},
-            {pattern: 'common/test/assets/javascripts/fixtures/*.js', included: false},
+            {pattern: 'common/test/assets/javascripts/fixtures/*', included: false, served: true},
+            {pattern: 'common/test/assets/javascripts/fixtures/**/*.js', included: false, served: true},
             {pattern: 'common/test/assets/javascripts/helpers/*.js', included: false},
-            //'common/test/assets/javascripts/spec/Url.spec.js',
             'common/test/assets/javascripts/run.js'
+        ],
+
+        exclude: [
+            'common/test/assets/javascripts/spec/Cookies.spec.js',
+            'common/test/assets/javascripts/spec/Aware.spec.js',
+            'common/test/assets/javascripts/spec/DocumentWrite.spec.js',
+            'common/test/assets/javascripts/spec/Gallery.spec.js',
+            'common/test/assets/javascripts/spec/GallerySwipe.spec.js',
+            'common/test/assets/javascripts/spec/OmnitureLib.spec.js',
+            'common/test/assets/javascripts/spec/Swipe.spec.js',
+            'common/test/assets/javascripts/spec/TrailBlockShowMore.spec.js'
         ],
 
         plugins: [

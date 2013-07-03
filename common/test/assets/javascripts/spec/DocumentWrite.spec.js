@@ -6,6 +6,8 @@ define([
     'modules/adverts/documentwriteslot',
     'modules/adverts/dimensionMap',
     'modules/storage',
+    'Fixtures',
+    'fixtures/documentwrite'
     ], function(
         common,
         domwrite,
@@ -13,7 +15,9 @@ define([
         DocumentWrite,
         DocumentWriteSlot,
         dimensionMap,
-        storage
+        storage,
+        fixtures,
+        data
     )  {
 
     var slots = [
@@ -35,6 +39,10 @@ define([
     };
    
     beforeEach(function(){
+        fixtures.render({
+            id: 'docwrite',
+            fixtures: [data]
+        })
         ajax.init({page: {
             ajaxUrl: "",
             edition: "UK"
@@ -87,7 +95,7 @@ define([
 
             waitsFor(function(){
                 return (window.admeld_url != undefined); // variable evaluated in fixtures
-            }, "window.admeld_url never evaluated", 1000);
+            }, "window.admeld_url never evaluated", 2000);
             
             runs(function(){ 
                 expect(window.admeld_url).toBeTruthy();

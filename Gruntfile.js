@@ -1,5 +1,7 @@
 /* global module: false */
 module.exports = function (grunt) {
+
+    process.env['PHANTOMJS_BIN'] = 'node_modules/phantomjs/bin/phantomjs';
     var isTeamCity = process.env.TEAMCITY_REPORTER === 'true';
     var isDev = (grunt.option('dev')) || process.env.GRUNT_ISDEV === '1';
     if (isDev) {

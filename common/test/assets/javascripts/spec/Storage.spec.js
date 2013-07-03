@@ -1,8 +1,7 @@
 define(['common', 'modules/storage'], function(common, storage) {
 
     describe('Storage', function() {
-        
-        sinon.spy(common.mediator, 'emit');
+
         var date;
 
         Date.prototype.addHours = function(h){
@@ -11,7 +10,8 @@ define(['common', 'modules/storage'], function(common, storage) {
         };
 
         beforeEach(function() {
-           date = new Date;
+            sinon.spy(common.mediator, 'emit');
+            date = new Date;
         });
 
         afterEach(function() {
@@ -22,6 +22,7 @@ define(['common', 'modules/storage'], function(common, storage) {
                 }
             }
             storage._setWindow(window);
+            common.mediator.emit.restore();
         });
         
         function setWindowLocalStorage(winLocalStorage) {

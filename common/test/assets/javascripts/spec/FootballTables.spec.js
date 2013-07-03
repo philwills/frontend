@@ -1,10 +1,15 @@
-define(['common', 'ajax',  'qwery', 'modules/footballtables'], function(common, ajax, qwery, FootballTable) {
+define(['common', 'ajax',  'qwery', 'modules/footballtables', 'Fixtures'], function(common, ajax, qwery, FootballTable, fixtures) {
 
     describe("Football fixtures component", function() {
 
         var server;
-       
+        var tmp = '<div id="football-tables"><ul><li></li></ul></div>';
+
         beforeEach(function() {
+            fixtures.render({
+                id: 'football',
+                fixtures: [tmp]
+            });
             ajax.init({page: {
                 ajaxUrl: "",
                 edition: "UK"
@@ -23,6 +28,7 @@ define(['common', 'ajax',  'qwery', 'modules/footballtables'], function(common, 
 
         afterEach(function () {
             server.restore();
+            renderCall.reset();
         });
 
         // json test needs to be run asynchronously 
@@ -57,7 +63,9 @@ define(['common', 'ajax',  'qwery', 'modules/footballtables'], function(common, 
                 return renderCall.calledOnce === true
             }, "football tables callback never called", 500);
 
-            expect(document.getElementById('football-tables').innerHTML).toContain('<p>foo</p>');
+            runs(function(){
+                expect(document.getElementById('football-tables').innerHTML).toContain('<p>foo</p>');
+            });
         });
 
         it("should fail silently if no response is returned from table request", function() {

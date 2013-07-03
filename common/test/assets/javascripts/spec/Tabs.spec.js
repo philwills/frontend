@@ -1,6 +1,11 @@
-define(['common', 'modules/tabs', 'bean'], function(common, Tabs, bean) {
+define(['common', 'modules/tabs', 'bean', 'Fixtures', 'text!fixtures/tabs.html'], function(common, Tabs, bean, fixtures, data) {
 
     describe("Tabs", function() {
+
+        fixtures.render({
+            id: 'tabs',
+            fixtures: [data]
+        });
 
         var t = new Tabs();
         t.init(document);

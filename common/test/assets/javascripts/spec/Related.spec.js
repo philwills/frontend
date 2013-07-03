@@ -1,10 +1,14 @@
-define(['common', 'ajax', 'modules/related'], function(common, ajax, Related) {
+define(['common', 'ajax', 'modules/related', 'Fixtures'], function(common, ajax, Related, fixtures) {
 
     describe("Related", function() {
 
         var callback, appendTo, server;
 
         beforeEach(function() {
+            fixtures.render({
+                id: 'related',
+                fixtures: ['<div class="js-related"></div>']
+            });
             ajax.init({page: {
                 ajaxUrl: "",
                 edition: "UK"
@@ -56,8 +60,6 @@ define(['common', 'ajax', 'modules/related'], function(common, ajax, Related) {
                     document
                 );
             });
-
-            console.log('poop foop');
 
             waits(500);
 

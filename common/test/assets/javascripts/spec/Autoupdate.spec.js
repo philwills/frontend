@@ -1,4 +1,4 @@
-define(['common', 'ajax', 'bean', 'modules/autoupdate', 'modules/storage', 'fixtures'], function(common, ajax, bean, Autoupdate, storage, fixtures) {
+define(['common', 'ajax', 'bean', 'modules/autoupdate', 'modules/storage', 'Fixtures'], function(common, ajax, bean, Autoupdate, storage, fixtures) {
 
     describe("Auto update", function() {
 

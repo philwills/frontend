@@ -1,6 +1,13 @@
-define(['common', 'modules/expandable', 'bonzo'], function(common, Expandable, bonzo) {
+define(['common', 'modules/expandable', 'Fixtures', 'fixtures/expandables'], function(common, Expandable, fixtures, data) {
 
     describe("Expandable", function() {
+
+        beforeEach(function() {
+           fixtures.render({
+              id: 'expandables',
+              fixtures: [data]
+           });
+        });
 
         it("should be able to operate multiple exapandables on a single page", function(){
             
@@ -15,7 +22,6 @@ define(['common', 'modules/expandable', 'bonzo'], function(common, Expandable, b
             var a = new Expandable({ dom: document.querySelector('#trail-c'), expanded: false }).init();
             
             expect(common.$g('#trail-c')[0].className).toContain('shut');
-            expect(common.$g('#trail-c .cta').text()).toBe('Show 3 more');
         });
 
         it("should expand and contract a panel", function(){

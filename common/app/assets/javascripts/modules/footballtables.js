@@ -24,6 +24,7 @@ define(['common', 'ajax', 'bonzo'], function (common, ajax, bonzo) {
                 function (response) {
                     //This is because the endpoint can also return a 204 no-content
                     if(response) {
+
                        that.view.render(response.html);
                     }
                 },

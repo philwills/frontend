@@ -1,4 +1,4 @@
-define(['common', 'modules/swipenav', 'fixtures'], function(common, Swipe, fixtures) {
+define(['common', 'modules/swipenav', 'Fixtures'], function(common, Swipe, fixtures) {
 
     describe("Swipe", function() {
             

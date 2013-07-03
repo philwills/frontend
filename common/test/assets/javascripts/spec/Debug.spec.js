@@ -29,6 +29,7 @@ define(['modules/debug', 'common', 'bonzo'], function(Debug, common, bonzo) {
                 emitSpy = sinon.spy(common.mediator, 'emit');
             debug.show();
             expect(emitSpy).toHaveBeenCalledWith('modules:debug:render');
+            common.mediator.emit.restore();
         })
 
     });

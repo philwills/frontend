@@ -1,33 +1,39 @@
-define(['analytics/clickstream', 'bean', 'common'], function(Clickstream, bean, common) {
+define(['modules/analytics/clickstream', 'bean', 'common', 'Fixtures', 'fixtures/clickstream'],
+    function(Clickstream, bean, common, fixtures, fixtureData) {
 
     describe("Clickstream", function() {
 
-        // prevents unit tests from visiting the link
-        bean.add(document.getElementById('click-me'), 'click', function(e) {
-            e.preventDefault();
-        })
-
-        bean.add(document.getElementById('click-me-ancestor'), 'click', function(e) {
-            e.preventDefault();
-        })
-
-        bean.add(document.getElementById('click-me-descendant'), 'click', function(e) {
-            e.preventDefault();
-        })
-
-        bean.add(document.getElementById('click-me-quick'), 'click', function(e) {
-            e.preventDefault();
-        })
-
-        bean.add(document.getElementById('click-me-internal'), 'click', function(e) {
-            e.preventDefault();
-        })
-
-        bean.add(document.getElementById('click-me-external'), 'click', function(e) {
-            e.preventDefault();
-        })
-
         beforeEach(function(){
+
+            fixtures.render({
+                id: 'clickstream',
+                fixtures: [fixtureData]
+            });
+
+            // prevents unit tests from visiting the link
+            bean.add(document.getElementById('click-me'), 'click', function(e) {
+                e.preventDefault();
+            });
+
+            bean.add(document.getElementById('click-me-ancestor'), 'click', function(e) {
+                e.preventDefault();
+            });
+
+            bean.add(document.getElementById('click-me-descendant'), 'click', function(e) {
+                e.preventDefault();
+            });
+
+            bean.add(document.getElementById('click-me-quick'), 'click', function(e) {
+                e.preventDefault();
+            });
+
+            bean.add(document.getElementById('click-me-internal'), 'click', function(e) {
+                e.preventDefault();
+            });
+
+            bean.add(document.getElementById('click-me-external'), 'click', function(e) {
+                e.preventDefault();
+            });
 
             // ensure each instance of Clickstream has a fresh <body>
             bean.remove(document.body, 'click');
