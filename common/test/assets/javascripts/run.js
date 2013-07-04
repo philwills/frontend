@@ -1,10 +1,11 @@
 var specs = Object.keys(window.__karma__.files).filter(function (file) {
-    return (/Clickstream\.spec\.js$/).test(file);
+    return (/\.spec\.js$/).test(file);
 });
 require.config({
     'baseUrl': "/base/common/app/assets/javascripts/",
     'paths': {
         'common':       'common',
+        'ajax':         'ajax',
         'bonzo':        'components/bonzo/src/bonzo',
         'qwery':        'components/qwery/mobile/qwery-mobile',
         'bean':         'components/bean/bean',

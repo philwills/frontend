@@ -21,6 +21,7 @@ module.exports = function(karma) {
             {pattern: 'common/test/assets/javascripts/helpers/cors.js', included: true},
             
             {pattern: 'common/app/assets/javascripts/common.js', included: false},
+            {pattern: 'common/app/assets/javascripts/ajax.js', included: false},
             {pattern: 'common/app/assets/javascripts/components/bonzo/src/bonzo.js', included: false},
             {pattern: 'common/app/assets/javascripts/components/qwery/mobile/qwery-mobile.js', included: false},
             {pattern: 'common/app/assets/javascripts/components/bean/bean.js', included: false},
@@ -34,7 +35,6 @@ module.exports = function(karma) {
             {pattern: 'common/test/assets/javascripts/components/requirejs-text/text.js', included: false},
             {pattern: 'common/app/assets/javascripts/components/gu-id/id.js', included: false},
 
-            {pattern: 'common/app/assets/javascripts/*.js', included: false},
             {pattern: 'common/app/assets/javascripts/modules/*.js', included: false},
             {pattern: 'common/app/assets/javascripts/modules/**/*.js', included: false},
             {pattern: 'common/test/assets/javascripts/spec/*.spec.js', included: false},

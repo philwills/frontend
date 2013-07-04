@@ -27,7 +27,6 @@ define(["reqwest"], function (reqwest) {
     ajax.reqwest = reqwest; // expose publicly so we can inspect it in unit tests
 
     ajax.init = function (config) {
-
         edition = config.page.edition;
 
         makeAbsolute = function (url) {
