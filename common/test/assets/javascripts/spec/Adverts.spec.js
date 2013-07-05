@@ -1,35 +1,41 @@
 define(['common', 'ajax', 'modules/adverts/adverts', 'modules/adverts/iframeadslot', 'modules/detect', 'modules/storage'], function(common, ajax, Adverts, IframeAdSlot, detect, storage) {
 
+    var config;
+
     //Ignore audience science for these tests.
     storage.remove("gu.ads.audsci");
 
     beforeEach(function(){
+        config = {
+            page: {
+                'keywords': 'keyword,go,here',
+                'oasUrl':"http://oas.guardian.co.uk/RealMedia/ads/",
+                'oasSiteIdHost':"beta.guardian.co.uk",
+                'contentType': 'contentType',
+                'section': 'section',
+                'audienceScienceUrl': 'http://js.revsci.net/gateway/gw.js?csid=E05516',
+                'pageId': ''
+            },
+            switches: {
+                'audienceScience': true
+            }
+        };
+
+        window.guardian = {
+            userPrefs: {
+                isOff: function() { return false; }
+            }
+        };
         ajax.init({page: {
             ajaxUrl: "",
             edition: "UK"
         }});
     });
 
-    var config = {
-        page: {
-            'keywords': 'keyword,go,here',
-            'oasUrl':"http://oas.guardian.co.uk/RealMedia/ads/",
-            'oasSiteIdHost':"beta.guardian.co.uk",
-            'contentType': 'contentType',
-            'section': 'section',
-            'audienceScienceUrl': 'http://js.revsci.net/gateway/gw.js?csid=E05516',
-            'pageId': ''
-        },
-        switches: {
-            'audienceScience': true
-        }
-    };
-
-    window.guardian = {
-        userPrefs: {
-            isOff: function() { return false; }
-        }
-    };
+    afterEach(function() {
+        config = null;
+        delete window.guardian;
+    });
     
     describe("Iframe advert slots", function() {
 

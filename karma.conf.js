@@ -4,7 +4,7 @@ module.exports = function(karma) {
 
         frameworks: ['jasmine', 'requirejs'],
 
-        browsers: ['PhantomJS'],
+        browsers: ['Chrome', 'PhantomJS'],
 
         // list of files / patterns to load in the browser
         files: [
@@ -45,6 +45,7 @@ module.exports = function(karma) {
         ],
 
         exclude: [
+            'common/test/assets/javascripts/spec/Ajax.spec.js',
             'common/test/assets/javascripts/spec/Cookies.spec.js',
             'common/test/assets/javascripts/spec/Aware.spec.js',
             'common/test/assets/javascripts/spec/DocumentWrite.spec.js',
@@ -59,7 +60,7 @@ module.exports = function(karma) {
             'karma-jasmine',
             'karma-requirejs',
             'karma-phantomjs-launcher',
-            'karma-teamcity-reporter',
+            //'karma-teamcity-reporter',
             'karma-chrome-launcher'
             // 'karma-firefox-launcher',
             // 'karma-junit-reporter'
