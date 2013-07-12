@@ -203,19 +203,19 @@ define(['modules/userPrefs'], function (userPrefs) {
         if (!hasPushStateSupport()) {
             return false;
         }
-        os = getMobileOS();
-        // iOS
-        if (os.name === 'iOS' && os.version >= 6) {
-            // This'll be true only for iPhone5:
-            return window.devicePixelRatio >= 2 && screen.availHeight === 548;
-        }
+//        os = getMobileOS();
+//        // iOS
+//        if (os.name === 'iOS' && os.version >= 6) {
+//            // This'll be true only for iPhone5:
+//            return window.devicePixelRatio >= 2 && screen.availHeight === 548;
+//        }
         /*
         // Android
         if (os.name === 'Android' && os.version >= 4) {
             return true;
         }
         */
-        return false;
+        return true;
     }
 
     return {

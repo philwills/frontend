@@ -81,7 +81,7 @@ module.exports = function (grunt) {
         uglify: {
             common: {
                 files: {
-                    "common/app/assets/public/javascripts/vendor/ftscroller.min.js" : ['common/app/assets/javascripts/components/ftscroller/lib/ftscroller.js']
+                    "common/app/public/javascripts/vendor/ftscroller.min.js" : ['common/app/assets/javascripts/components/ftscroller/lib/ftscroller.js']
                 }
             }
         },
