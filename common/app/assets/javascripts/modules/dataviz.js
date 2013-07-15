@@ -1,4 +1,4 @@
-define(['common','bonzo'], function (common, bonzo) {
+define(['common','bonzo', 'bean'], function (common, bonzo, bean) {
 
 
     function DataViz() {
@@ -8,8 +8,11 @@ define(['common','bonzo'], function (common, bonzo) {
         var vizNodes = document.querySelectorAll(this.selector);
 
         if (vizNodes.length) {
+            self.bindEvents();
+
             require(['js!d3'], function(d3) {
                 Array.prototype.forEach.call(vizNodes, function(node) {
+                    //console.log(node.offsetTop);
                     var data = self.serializeTable(node);
                     self.doughnut(node, data);
                 });
@@ -21,12 +24,29 @@ define(['common','bonzo'], function (common, bonzo) {
         return angle * (Math.PI / 180);
     }
 
-    function arcTween(b) {
+    /*function arcTween(b) {
         var i = d3.interpolate({value: b.previous}, b);
         return function(t) {
             return arc(i(t));
         };
+    }*/
+
+    function isVisible(node) {
+        var vScroll    = window.pageYOffset || document.documentElement.scrollTop,
+            viewBottom = vScroll + window.innerHeight,
+            nodeTop    = node.offsetTop;
+
+        return nodeTop < viewBottom;
     }
+
+
+    DataViz.prototype.bindEvents = function() {
+        bean.add(window, 'scroll', function (e) {
+            vScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+            console.log(vScroll);
+        });
+    };
 
     DataViz.prototype.serializeTable = function(el) {
         var tableData = [];
@@ -35,7 +55,7 @@ define(['common','bonzo'], function (common, bonzo) {
             var tableRow = el.tBodies[0].rows[i];
             tableData.push(
                 {
-                    "Value": +tableRow.cells[1].innerHTML,
+                    "Value": tableRow.cells[1].innerHTML,
                     "Color": tableRow.cells[0].getAttribute('data-viz-color')
                 }
             );
@@ -49,11 +69,10 @@ define(['common','bonzo'], function (common, bonzo) {
         var displayNode = bonzo.create('<div class="dataviz" style="text-align: center"></div>')[0],
             doughnutSize = 180,
             doughnutRadius = doughnutSize * 0.5,
-            labelRadius = doughnutRadius + 10, // radius for label anchor
             doughnut = d3.layout.pie().sort(null).value(function(d) { return d.Value }),
             arc = d3.svg.arc().innerRadius(65).outerRadius(doughnutRadius),
             width = doughnutSize * 2,
-            height = doughnutSize * 1.5;
+            height = doughnutSize;
 
             svg = d3.select(displayNode)
                 .append("svg:svg")
