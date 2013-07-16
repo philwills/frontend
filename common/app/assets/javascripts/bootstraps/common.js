@@ -256,9 +256,8 @@ define([
         initSwipe: function(config) {
             //if (config.switches.swipeNav && detect.canSwipe() && !userPrefs.isOff('swipe') || userPrefs.isOn('swipe-dev')) {
             if (detect.canSwipe()) {
-                require('js!scroller', function() {
-                    console.log(window.Scroller);
-                    swipeNav(config, Scroller);
+                require('js!scroller!exports=window.FTScroller', function(Scroller) {
+                    swipeNav(config);
                 });
             }
             if (config.switches.swipeNav && detect.canSwipe()) {

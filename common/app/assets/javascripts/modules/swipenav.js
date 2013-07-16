@@ -29,14 +29,17 @@ define([
         hiddenPaneMargin = 0,
         initiatedBy = 'initial',
         initialUrl,
+        inner = document.querySelector('#preloads-inner'),
         linkContext,
         noHistoryPush = false,
-        panes,
-        paneNow = 1,
-        paneThen = 1,
+        panes = Array.prototype.slice.call(document.querySelectorAll('.preload')),
+        paneNow = 0,
+        paneThen = 0,
+        pageWidth = 0,
         pendingHTML = '<div class="preload-msg">Loading page…<div class="is-updating"></div></div>',
         referrer,
         referrerPageName,
+        scroller,
         sequencePos = -1,
         sequence = [],
         sequenceCache,
@@ -59,6 +62,10 @@ define([
         }
     }
 
+    function mod(x, m) {
+        return ((x % m) + m) % m;
+    }
+
     function urlAbsPath(url) {
         var a = document.createElement('a');
         a.href = url;
@@ -67,30 +74,25 @@ define([
         return a;
     }
 
-    function mod(x, m) {
-        return ((x % m) + m) % m;
-    }
-
-    function mod3(x) {
-        return mod(x, 3);
-    }
-
-    function prepareDOM() {
-        var pages = document.querySelector('#preloads'),
-            page0 = pages.querySelector('#preload-0 .parts'),
-            page1 = pages.querySelector('#preload-1 .parts'),
-            page2 = pages.querySelector('#preload-2 .parts'),
-            head  = page1.querySelector('.parts__head'),
-            foot  = page1.querySelector('.parts__foot'),
+    function prepareDOM(n) {
+        var newPage = document.createElement('div'),
+            head  = panes[0].querySelector('.parts__head'),
+            foot  = panes[0].querySelector('.parts__foot'),
             initialBodyHtml = '<div class="parts__body">' + pendingHTML + '</div>';
 
-        bonzo(page0).append(head.cloneNode(true));
-        bonzo(page0).append(bonzo.create(initialBodyHtml));
-        bonzo(page0).append(foot.cloneNode(true));
+        newPage.id = 'preload-' + (n+1);
+        newPage.className = 'preload';
+        newPage.style.width = pageWidth + 'px';
 
-        bonzo(page2).append(head.cloneNode(true));
-        bonzo(page2).append(bonzo.create(initialBodyHtml));
-        bonzo(page2).append(foot.cloneNode(true));
+        newPage.appendChild(head.cloneNode(true));
+        newPage.appendChild(bonzo.create(initialBodyHtml)[0]);
+        newPage.appendChild(foot.cloneNode(true));
+
+        inner.appendChild(newPage);
+        panes.push(newPage);
+        recalcWidth();
+
+        return newPage;
     }
 
     function load(o) {
@@ -165,6 +167,10 @@ define([
         }
     }
 
+    function recalcWidth() {
+        inner.style.width = pageWidth*(panes.length) + "px";
+    }
+
     // Fire post load actions
     function doAfterShow (context) {
         var url,
@@ -179,7 +185,7 @@ define([
             return;
         }
 
-        recalcHeight(true);
+        //recalcHeight(true);
 
         url = context.dataset.url;
         setSequencePos(url);
@@ -203,7 +209,7 @@ define([
         config.swipe = {
             initiatedBy: initiatedBy,
             referrer: referrer,
-            referrerPageName: referrerPageName,
+            referrerPageName: referrerPageName
         };
 
         common.mediator.emit('page:ready', pageConfig(config), context);
@@ -299,13 +305,9 @@ define([
     }
 
     function gotoUrl(url, dir) {
-        var pos = getSequencePos(url);
-        if (typeof dir === 'undefined') {
-            dir = pos > -1 && pos < sequencePos ? -1 : 1;
-        }
         preparePane({
             url: url,
-            dir: dir,
+            dir: (dir) ? dir : 1,
             slideIn: true
         });
     }
@@ -335,7 +337,7 @@ define([
     function gotoSequencePage(pos) {
         var dir;
         if (pos !== sequencePos && pos < sequenceLen) {
-            dir = pos < sequencePos ? -1 : 1;
+            dir = 1;
             sequencePos = pos;
             gotoUrl(getSequenceUrl(pos), dir);
         }
@@ -352,8 +354,8 @@ define([
             url = getAdjacentUrl(dir);
         }
 
-        el = panes.masterPages[mod3(paneNow + dir)];
-        
+        el = (panes[paneNow + dir]) ? panes[paneNow + dir] : prepareDOM(paneNow);
+
         // Only load if not already loaded into this pane
         if (el.dataset.url !== url) {
             load({
@@ -373,24 +375,14 @@ define([
     }
 
     function slideInPane(dir) {
-        switch(dir) {
-            case 1:
-                panes.next();
-                break;
-            case -1:
-                panes.prev();
-                break;
-            default:
-                common.mediator.emit('module:swipenav:pane:loaded', visiblePane);
-        }
+        console.log(dir);
+        scroller.scrollBy(2, 0, true);
+        common.mediator.emit('module:swipenav:pane:loaded', visiblePane);
     }
 
     function loadSidePanes() {
         preparePane({
             dir: 1
-        });
-        preparePane({
-            dir: -1
         });
     }
 
@@ -399,20 +391,20 @@ define([
 
         if( hiddenPaneMargin < visiblePaneMargin) {
             // We've scrolled up over the offset; reset all margins and jump to topmost scroll
-            $(panes.masterPages[mod3(paneNow)]).css(  'marginTop', 0);
-            $(panes.masterPages[mod3(paneNow+1)]).css('marginTop', 0);
-            $(panes.masterPages[mod3(paneNow-1)]).css('marginTop', 0);
+            $(panes[paneNow]).css('marginTop', 0);
+            $(panes[paneNow+1]).css('marginTop', 0);
+            $(panes[paneNow-1]).css('marginTop', 0);
             // And reset the scroll
             body.scrollTop(0);
-            recalcHeight(true);
+            //recalcHeight(true);
 
             visiblePaneMargin = 0;
             hiddenPaneMargin = 0;
         }
         else {
             // We've scrolled down; push L/R sidepanes down to level of current pane
-            $(panes.masterPages[mod3(paneNow+1)]).css('marginTop', hiddenPaneMargin);
-            $(panes.masterPages[mod3(paneNow-1)]).css('marginTop', hiddenPaneMargin);
+            $(panes[paneNow+1]).css('marginTop', hiddenPaneMargin);
+            $(panes[paneNow-1]).css('marginTop', hiddenPaneMargin);
         }
     }, 250);
 
@@ -442,28 +434,36 @@ define([
     function start() {
 
         // SwipeView
-        panes = new SwipeView(swipeContainer, {});
+        scroller = new FTScroller(swipeContainerEl, {
+            scrollingY: false,
+            snapping: true,
+            paginatedSnap: true,
+            scrollbars: false,
+            bouncing: false,
+            scrollBoundary: 10,
+            scrollResponseBoundary: 10
+        });
 
-        panes.onFlip(function () {
-            paneNow = mod3(panes.pageIndex+1);
+        scroller.addEventListener('segmentdidchange', function(coords) {
+            paneNow = coords.segmentX;
             if (paneThen !== paneNow) {
                 // shuffle down the pane we've just left
-                $(panes.masterPages[paneThen]).css('marginTop', hiddenPaneMargin);
+                $(panes[paneThen]).css('marginTop', hiddenPaneMargin);
                 visiblePaneMargin = hiddenPaneMargin;
 
                 paneThen = paneNow;
-                visiblePane = panes.masterPages[paneNow];
+                visiblePane = panes[paneNow];
 
                 common.mediator.emit('module:swipenav:pane:loaded', visiblePane);
             }
         });
 
-        panes.onMoveOut(function () {
+        scroller.addEventListener('segmentwillchange', function() {
             initiatedBy = 'swipe';
         });
 
         // Identify and annotate the initially visible pane
-        visiblePane = panes.masterPages[1];
+        visiblePane = panes[0];
         visiblePane.dataset.url = initialUrl;
 
         // Render panes that come into view, and that are not still loading
@@ -477,31 +477,11 @@ define([
         common.mediator.emit('module:swipenav:pane:loaded', visiblePane);
 
         // BINDINGS
-
         common.mediator.on('module:clickstream:click', function(clickSpec){
-            var url;
-
             if (clickSpec.sameHost && !clickSpec.samePage) {
-                if (swipeNavOnClick) {
-                    url = urlAbsPath(clickSpec.target.href);
-                    if (!url || clickSpec.target.href.indexOf('mailto:') === 0) {
-                        return;
-                    } else if (url === urlAbsPath(window.location.href)) {
-                        // Force a complete reload if the link is for the current page
-                        window.location.reload(true);
-                    }
-                    else {
-                        clickSpec.event.preventDefault();
-                        linkContext = clickSpec.linkContext;
-                        initiatedBy = 'click';
-                        gotoUrl(url);
-                    }
-
-                } else if (clickSpec.linkContext) {
-                    storage.set(storePrefix + 'linkContext', clickSpec.linkContext, {
-                        expires: 10000 + (new Date()).getTime()
-                    });
-                }
+                storage.set(storePrefix + 'linkContext', clickSpec.linkContext, {
+                    expires: 10000 + (new Date()).getTime()
+                });
             }
         });
 
@@ -543,11 +523,11 @@ define([
 
         // Set a periodic height adjustment for the content area. Necessary to account for diverse heights of side-panes as they slide in, and dynamic page elements.
         setInterval(function(){
-            recalcHeight();
+            //recalcHeight();
         }, 1009); // Prime number, for good luck
     }
 
-    var initialise = function(config, Scroller) {
+    var initialise = function(config) {
         loadSequence(function(){
             var loc = window.location.href;
 
@@ -556,18 +536,20 @@ define([
             referrerPageName = config.page.analyticsName;
             body             = $('body');
             canonicalLink    = $('link[rel=canonical]');
-            visiblePane      = $('#preloads-inner > #preload-1', swipeContainerEl)[0];
+            visiblePane      = $('#preloads-inner > #preload-0', swipeContainerEl)[0];
+            pageWidth        = visiblePane.offsetWidth;
 
             swipeNavOnClick = config.switches.swipeNavOnClick || userPrefs.isOn('swipe-dev-on-click');
 
             // Set explicit height on container, because it's about to be absolute-positioned.
-            recalcHeight();
+            //recalcHeight();
+            visiblePane.style.width = pageWidth + 'px';
 
             // Set a body class.
             body.addClass('has-swipe');
 
             // Set up the DOM structure, CSS
-            prepareDOM();
+            prepareDOM(0);
 
             // Cache the config of the initial page, in case the 2nd swipe is backwards to this page.
             if (sequenceCache[initialUrl]) {
