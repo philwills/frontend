@@ -67,6 +67,7 @@ define(['common','bonzo', 'bean'], function (common, bonzo, bean) {
 
     DataViz.prototype.doughnut = function(node, data) {
         var displayNode = bonzo.create('<div class="dataviz" style="text-align: center"></div>')[0],
+            title = node.getAttribute('data-viz-title') || "",
             doughnutSize = 180,
             doughnutRadius = doughnutSize * 0.5,
             doughnut = d3.layout.pie().sort(null).value(function(d) { return d.Value }),
@@ -145,7 +146,7 @@ define(['common','bonzo', 'bean'], function (common, bonzo, bean) {
             .attr('dy', 5)
             .attr("class", "doughnut__unit")
             .attr("text-anchor", "middle")
-            .text("Possession");
+            .text(title);
 
         var markerSizeInDegs = 8,
             markers = svg.append("svg:g")

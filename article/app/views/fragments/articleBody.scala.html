@@ -51,13 +51,7 @@
 
 
                  <h2>Possession</h2>
-                 <table data-viz-type="doughnut">
-                         <!--thead>
-                         <tr>
-                             <th data-viz-display="false" data-viz-field-type="string">Party</th>
-                             <th data-viz-display="true"  data-viz-field-type="integer" data-viz-field-unit="%">Share</th>
-                         </tr>
-                     </thead-->
+                 <table data-viz-type="doughnut" data-viz-title="Possession">
                      <tbody>
                          <tr>
                              <th data-viz-color="#19646e">Away</th>
@@ -72,7 +66,7 @@
 
 
                  <h2>State of the parties</h2>
-                 <table summary="Change on last Guardian/ICM Poll" data-viz-type="doughnut">
+                 <table summary="Change on last Guardian/ICM Poll" data-viz-type="doughnut" data-viz-title="State of parties">
                      <thead>
                          <tr>
                              <th data-viz-display="false" data-viz-field-type="string">Party</th>
@@ -109,77 +103,9 @@
                      </tbody>
                  </table>
 
-
-
-
-
-                 <script>
-                    //define("doughnut", [], function ( ) {
-/*
-                        'use strict';
-
-                        var doughnutDemoTable = document.querySelector('[data-viz-type=doughnut]'),
-                            doughnutDemoData = [];
-
-                        for (var i=0; i < doughnutDemoTable.tBodies[0].rows.length; i++) {
-                            var tableRow = doughnutDemoTable.tBodies[0].rows[i];
-                            doughnutDemoData.push(
-                                {
-                                    "Value": +tableRow.cells[1].innerHTML,
-                                    "Color": tableRow.cells[0].getAttribute('data-viz-color')
-                                }
-                            );
-                        }
-                        console.log(doughnutDemoData);
-
-
-
-                        //var DougnutDemo = function(){
-
-                            //this.init = function() {
-                                this.displayObject = document.createElement('div');
-
-                                var doughnutSize = 200,
-                                    doughnutRadius = doughnutSize * 0.5,
-                                    doughnut = d3.layout.pie().sort(null).value(function(d) { return d.Value }),
-                                    arc = d3.svg.arc().innerRadius(50).outerRadius(doughnutRadius),
-
-                                    svg = d3.select(this.displayObject)
-                                            .append("svg:svg")
-                                            .attr("width", doughnutSize)
-                                            .attr("height", doughnutSize)
-                                            .append("svg:g")
-                                            .attr("transform", "translate(" + doughnutRadius + "," + doughnutRadius + ")"),
-
-                                    arcs = svg.selectAll("path")
-                                              .data(doughnut(doughnutDemoData))
-                                              .enter().append("svg:path")
-                                              .attr("fill", function(d, i) { return doughnutDemoData[i].Color; })
-                                              .attr("d", arc)
-                                              .each(function(d) { this._current = d; })
-                                              .attr("transform", "rotate(-145)");
-
-                                    svg.append('svg:text')
-                                       .attr('dx', -25)
-                                       .attr('dy', 20)
-                                       .attr("class", "doughnut__unit")
-                                       .text("%");
-
-                                    document.querySelector('.article-body').appendChild(this.displayObject)
-                               //}
-                        //};
-
-                        //return DoughnutDemo;
-
-                    //});
-                    
-                    //require(['doughnut'], function(doughnut) {
-                    //    doughnut.init();
-                    //});*/
-                 </script>
                  <style type="text/css" media="screen">
                     .doughnut__unit {
-                        fill: #20a111;
+                        fill: #333333;
                         font-size: 15px;
                     }
                  </style>

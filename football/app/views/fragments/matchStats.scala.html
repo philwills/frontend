@@ -30,8 +30,7 @@
 @vizStat(title: String, home: Int, away: Int, firstItem: Boolean = false) = {
     @defining(home + away){ total =>
         @defining(PercentMaker(home, away)){ case (homePercent, awayPercent) =>
-            <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-            <table data-viz-type="doughnut">
+            <table data-viz-type="doughnut" data-viz-title="Possession">
                 <tbody>
                     <tr>
                         <th data-viz-color="#19646e">Home</th>
