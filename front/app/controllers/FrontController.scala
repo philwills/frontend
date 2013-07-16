@@ -6,9 +6,7 @@ import model._
 import conf._
 import play.api.mvc._
 import model.Trailblock
-import scala.Some
-
-import concurrent.Future
+import Switches.EditionRedirectSwitch
 
 // TODO, this needs a rethink, does not seem elegant
 object FrontPage {
@@ -37,6 +35,48 @@ object FrontPage {
 
       override lazy val metaData: Map[String, Any] = super.metaData ++ Map(
         "keywords" -> "Sport",
+        "content-type" -> "Section",
+        "is-front" -> true
+      )
+    },
+
+    new MetaData {
+      override val canonicalUrl = Some("http://www.guardian.co.uk/money")
+      override val id = "money"
+      override val section = "money"
+      override val webTitle = "Money"
+      override lazy val analyticsName = "GFE:money"
+
+      override lazy val metaData: Map[String, Any] = super.metaData ++ Map(
+        "keywords" -> "Money",
+        "content-type" -> "Section",
+        "is-front" -> true
+      )
+    },
+
+    new MetaData {
+      override val canonicalUrl = Some("http://www.guardian.co.uk/commentisfree")
+      override val id = "commentisfree"
+      override val section = "commentisfree"
+      override val webTitle = "commentisfree"
+      override lazy val analyticsName = "GFE:commentisfree"
+
+      override lazy val metaData: Map[String, Any] = super.metaData ++ Map(
+        "keywords" -> "Comment is free",
+        "content-type" -> "Section",
+        "is-front" -> true
+      )
+    },
+
+    new MetaData {
+      override val canonicalUrl = Some("http://www.guardian.co.uk/business")
+      override val id = "business"
+      override val section = "business"
+      override val webTitle = "business"
+      override lazy val analyticsName = "GFE:business"
+
+      override lazy val metaData: Map[String, Any] = super.metaData ++ Map(
+        "keywords" -> "Business",
         "content-type" -> "Section",
         "is-front" -> true
       )
@@ -98,7 +138,11 @@ class FrontController extends Controller with Logging with JsonTrails with Execu
     // go live
     val realPath = editionPath(path, Edition(request))
 
-    FrontPage(realPath).map { frontPage =>
+    // TODO - needed till after www.theguardian.com
+    val pageId = realPath.drop(3)  //removes the edition
+
+
+    FrontPage(pageId).map { frontPage =>
 
       // get the trailblocks
       val trailblocks: Seq[Trailblock] = front(realPath).filterNot { trailblock =>
@@ -111,7 +155,9 @@ class FrontController extends Controller with Logging with JsonTrails with Execu
         }
       }
 
-      if (trailblocks.isEmpty) {
+      if (EditionRedirectSwitch.isSwitchedOn && request.isSingleDomain && path != realPath) {
+        Redirect(s"/$realPath")
+      } else if (trailblocks.isEmpty) {
         InternalServerError
       } else {
         val htmlResponse = () => views.html.front(frontPage, trailblocks)
