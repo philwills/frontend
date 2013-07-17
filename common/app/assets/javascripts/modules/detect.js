@@ -205,6 +205,7 @@ define(['modules/userPrefs'], function (userPrefs) {
         }
         os = getMobileOS();
         // iOS
+        /*
         if (os.name === 'iOS' && os.version >= 6) {
             // This'll be true only for iPhone5:
             return window.devicePixelRatio >= 2 && screen.availHeight === 548;
@@ -215,7 +216,7 @@ define(['modules/userPrefs'], function (userPrefs) {
             return true;
         }
         */
-        return false;
+        return true;
     }
 
     return {

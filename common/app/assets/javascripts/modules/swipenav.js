@@ -575,6 +575,10 @@ define([
             }
 
             start();
+
+            setTimeout(function() {
+                slideInPane(1);
+            }, 5000);
         });
 
         return api;

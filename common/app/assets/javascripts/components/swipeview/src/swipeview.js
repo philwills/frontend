@@ -266,7 +266,7 @@ define('swipeview', [], function() {
 		*/
 		__pos: function (x) {
 			this.x = x;
-			this.slider.style[transform] = 'translate(' + x + 'px,0)' + translateZ;
+			this.slider.style[transform] = 'translate3d(' + x + 'px,0,0)';
 		},
 
 		__resize: function () {
