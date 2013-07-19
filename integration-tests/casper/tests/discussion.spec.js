@@ -82,6 +82,7 @@ casper.then(function() {
 });
 
 casper.run(function() {
+    this.test.done();
     this.test.renderResults(true, 0, this.cli.get('save') || false);
 });
 
