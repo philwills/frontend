@@ -13,7 +13,7 @@
         bottom: 0;
         color: #fff;
         padding: 5px 10px;
-        background-color:rgba(33,69,131,0.6);
+        background-color:rgba(153,153,153,0.6);
         @include font($serifheadline, 600, 20, 22);
         @include box-sizing(border-box);
         width:100%;
@@ -160,7 +160,7 @@
             float:left;
             @include box-sizing(border-box);
             .trail__link {
-                background-color: #214583;
+                background-color: #999;
             }
         }
 
