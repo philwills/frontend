@@ -1,8 +1,20 @@
 @mixin featured {
-    .trail__title {
+    .trail__link {
+        display: block;
+        position: relative;
+        padding-bottom: 60%;
+    }
+    .trail__link .trail__img {
+        position: absolute;
+        top: 0;
+    }
+    .trail__link .trail__title {
+        position: absolute;
+        bottom: 0;
+        color: #fff;
         padding: 5px 10px;
-        background-color:rgba(255,255,255,0.6);
-        @include font($serifheadline, 600, 20, 28);
+        background-color:rgba(33,69,131,0.6);
+        @include font($serifheadline, 600, 20, 22);
         @include box-sizing(border-box);
         width:100%;
         margin:0;
@@ -26,21 +38,25 @@
         overflow:hidden;
     }
     .trail__title {
-        padding: 0 10px;
         @include font($serif, normal, 14, 20);
     }
 }
 @mixin thumbnail--with-image {
+    height: 72px;
     .trail__img {
-        width:30%;
+        width: 120px;
         float:left;
+        margin-right: 10px;
     }
     .trail__title {
-        margin-left:30%;
+        margin-left: 120px;
     }
 }
 
 .front-container-refresh {
+    section {
+        padding-bottom: 20px;
+    }
     .trailblock ul {
         overflow:hidden;
     }
@@ -68,6 +84,9 @@
         }
         .trail:nth-child(1) {
             @include featured;
+            .trail__link .trail__title {
+                color: #fff;
+            }
         }
         .trail--with-image:nth-child(1) {
             @include featured--with-image;
@@ -80,12 +99,6 @@
         }
         .trail:nth-child(n+7) {
             display:none;
-        }
-        .trail.trail--featured {
-            @include featured;
-        }
-        .trail.trail--featured.trail--with-image {
-            @include featured--with-image;
         }
         .trail__carousel {
             display:none;
@@ -113,12 +126,18 @@
         }
         .trail:nth-child(-n+2){
             @include featured;
+            .trail__link .trail__title {
+                color: #fff;
+            }
         }
         .trail--with-image:nth-child(-n+2){
             @include featured--with-image;
         }
         .trail:nth-child(n+3) {
             @include thumbnail;
+            display: block;
+            height: 76px;
+            overflow: hidden;
         }
         .trail--with-image:nth-child(n+3) {
             @include thumbnail--with-image;
@@ -137,10 +156,14 @@
      * DESKTOP
      */
     @media (min-width: $desktop) {
-        .trail{
+        .trail {
             float:left;
             @include box-sizing(border-box);
+            .trail__link {
+                background-color: #214583;
+            }
         }
+
         .trail:nth-child(-n+2){
             width:50%;
         }
