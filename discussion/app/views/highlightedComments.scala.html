@@ -1,12 +1,18 @@
-@(highlightedComments: HighlightedComments)(implicit request: RequestHeader)
+@(page: discussion.HighlightedCommentsPage)(implicit request: RequestHeader)
+@import conf.Switches
 
 
-<div class="monocolumn-wrapper">
-    <h2 class="page-head page-head--article">Highlighted comments</h2>
-    <ul class="d-thread">
-        @highlightedComments.comments.map{ comment =>
-        @fragments.comment(comment)
+@main(page, Switches.all){ }{
+    <div class="monocolumn-wrapper">
+        <h2 class="page-head page-head--article">Highlighted comments</h2>
+        <ul class="d-thread">
+        @page.comments.map{ comment =>
+            @fragments.comment(comment)
         }
-    </ul>
-</div>
+        </ul>
+    </div>
+}
+
+
+
 

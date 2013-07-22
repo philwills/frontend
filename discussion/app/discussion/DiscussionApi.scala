@@ -20,9 +20,9 @@ case class CommentPage(
   lazy val hasMore: Boolean = currentPage < pages
 }
 
-case class HighlightedComments(
-  comments: Seq[Comment]
-)
+case class HighlightedCommentsPage(comments: Seq[Comment]) extends Page(canonicalUrl = None,
+  id = "discussion/highlighted", section = "Global", webTitle = "Highlighted Comments",
+  analyticsName = s"GFE:Discussion: Highlighted Comments")
 
 trait DiscussionApi extends ExecutionContexts with Logging {
 
@@ -72,7 +72,7 @@ trait DiscussionApi extends ExecutionContexts with Logging {
           val comments = (json \\ "comments")(0).asInstanceOf[JsArray].value.map{ commentJson =>
             Comment(commentJson, Nil)
           }
-          HighlightedComments(comments)
+          HighlightedCommentsPage(comments)
         case other =>
           log.error(s"Error loading highlighted comments status: $other message: ${response.statusText}")
           throw new RuntimeException("Error from discussion API")
