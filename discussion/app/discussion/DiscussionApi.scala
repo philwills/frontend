@@ -56,7 +56,7 @@ trait DiscussionApi extends ExecutionContexts with Logging {
 
   def highlightedComments() = {
 
-    val apiUrl = s"http://discussion.guardianapis.com/discussion-api/recent/highlighted"
+    val apiUrl = "http://discussion.guardianapis.com/discussion-api/recent/highlighted"
 
     val start = currentTimeMillis
 

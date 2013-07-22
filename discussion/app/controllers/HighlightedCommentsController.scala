@@ -15,14 +15,13 @@ import play.api.libs.json.{JsString, JsArray, JsNumber, JsObject}
 
 object HighlightedCommentsController extends Controller with Logging with ExecutionContexts {
 
-  def render(shortUrl: String) = Action { implicit request =>
+  def render() = Action { implicit request =>
     val promiseOfHighlightedComments = DiscussionApi.highlightedComments()
 
     Async {
-      promiseOfHighlightedComments.map{ comment =>
+      promiseOfHighlightedComments.map{ highlightedComments =>
         Cached(60){
-          JsonComponent(
-            JsObject(Seq("comments" -> JsArray(comment.map(_.toJson)))
+          Ok(views.html.highlightedComments(highlightedComments))
       }
     }
   }

@@ -1,0 +1,12 @@
+@(highlightedComments: HighlightedComments)(implicit request: RequestHeader)
+
+
+<div class="monocolumn-wrapper">
+    <h2 class="page-head page-head--article">Highlighted comments</h2>
+    <ul class="d-thread">
+        @highlightedComments.comments.map{ comment =>
+        @fragments.comment(comment)
+        }
+    </ul>
+</div>
+
