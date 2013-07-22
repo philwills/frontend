@@ -20,6 +20,10 @@ case class CommentPage(
   lazy val hasMore: Boolean = currentPage < pages
 }
 
+case class HighlightedComments(
+  comments: Seq[Comment]
+)
+
 trait DiscussionApi extends ExecutionContexts with Logging {
 
   def GET(url: String): Future[Response] = WS.url(url).withTimeout(2000).get()
@@ -48,6 +52,34 @@ trait DiscussionApi extends ExecutionContexts with Logging {
       }
     }
   }
+
+
+  def highlightedComments() = {
+
+    val apiUrl = s"http://discussion.guardianapis.com/discussion-api/recent/highlighted"
+
+    val start = currentTimeMillis
+
+    GET(apiUrl).map{ response =>
+
+      DiscussionHttpTimingMetric.recordTimeSpent(currentTimeMillis - start)
+
+      response.status match {
+
+        case 200 =>
+          val json = Json.parse(response.body)
+
+          val comments = (json \\ "comments")(0).asInstanceOf[JsArray].value.map{ commentJson =>
+            Comment(commentJson, Nil)
+          }
+          HighlightedComments(comments)
+        case other =>
+          log.error(s"Error loading highlighted comments status: $other message: ${response.statusText}")
+          throw new RuntimeException("Error from discussion API")
+      }
+    }
+  }
+
 
   def commentsFor(id: String, page: String) = {
 

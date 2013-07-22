@@ -9,3 +9,4 @@ GET     /discussion/comment-counts                          controllers.CommentC
 GET     /discussion/comment-counts.json                     controllers.CommentCountController.render(shortUrls: String)
 GET     /discussion/*shortUrl.json                          controllers.CommentPageController.render(shortUrl)
 GET     /discussion/*shortUrl                               controllers.CommentPageController.render(shortUrl)
+GET     /discussion/highlighted                             controllers.HighlightedCommentsController.render()
