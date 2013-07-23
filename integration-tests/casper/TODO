@@ -1,0 +1,59 @@
+
+# Article
+
+Scenario: Article has no story package
+Given I am on an article without a story package
+Then "Related content" is displayed
+
+Scenario: Most read per section & pan-site
+When I open a "sport" article
+Then "most read" section tab show read "sport"
+
+Scenario: Open and close top story from top of page
+Scenario: Open and close sections from top of page
+Scenario: Search the Guardian 
+Scenario: High resolution image and caption is displayed
+Scenario: Expand and collapse expanders on more on this story
+        
+# Football
+    
+Scenario: Football table on league and Domestic competition page
+Scenario: Football table on team pages
+Scenario: Fixtures on team tag page
+Scenario: Results on team tag page
+Scenario: 5 row Football table on team tag page
+
+Scenario: Setting the typeface
+        
+# Hide
+Network Front: 12.7k clicks over 7 days
+    
+# Typography    
+Scenario: Setting the typeface
+
+# Football    
+Scenario Outline: Users can expand and hide the competition filter list
+        
+# --------- Move to scala
+Scenario: Back to top - 6k out of 18m
+Scenario: Page footer links
+Scenario: Articles should have the correct timezone for when they were published
+
+# Auto-refresh
+Scenario: The live match page has auto-update functionality - 12.5k of 18m = on, 5k = off
+
+# Cricket
+?
+
+# Discussion
+Scenario: Read top level comments
+
+# Move to Jasmine -> Karma (@phamann) 
+Scenario: JS unit tests pass
+        
+# Adverts - move to RUM (OAS)
+Scenario: Adverts will appear at top of all pages
+Scenario: Adverts will appear at the foot of all pages
+
+# Football
+        
