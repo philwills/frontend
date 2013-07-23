@@ -33,7 +33,16 @@ Scenario: Setting the typeface
 
 # Football    
 Scenario Outline: Users can expand and hide the competition filter list
-        
+
+# Video
+ - play + video
+
+# Routing
+
+# Comments count
+# relativedates
+# Gallery 
+# Interactive
 # --------- Move to scala
 Scenario: Back to top - 6k out of 18m
 Scenario: Page footer links
