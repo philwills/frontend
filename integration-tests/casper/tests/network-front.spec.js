@@ -6,6 +6,7 @@
  * Network front feature tests 
  *
  **/
+casper.test.begin('Network front feature tests', function suite(test){
 casper.start(host);
 
 var clearLocalStorage = function() {
@@ -135,7 +136,8 @@ casper.then(function() {
 
 });
 
-casper.run(function() {
+    casper.run(function() {
     this.test.done();
     this.test.renderResults(true, 0, this.cli.get('save') || false);
+    });
 });
