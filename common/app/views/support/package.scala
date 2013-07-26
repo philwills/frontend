@@ -2,6 +2,7 @@ package views.support
 
 import common._
 import java.net.URLEncoder._
+import java.util.UUID
 import model._
 import org.jsoup.nodes.{ Element, Document }
 import org.jsoup.Jsoup
@@ -141,7 +142,12 @@ object VideoEmbedCleaner extends HtmlCleaner {
   override def clean(document: Document): Document = {
     document.getElementsByClass("element-video").foreach { element: Element =>
       if(element.child(0).attr("src").contains("youtube")) {
+        val node = element.child(0)
+        val src  = node.attr("src")
+        val paramSeparator = if (src.indexOf('?') == -1) "?" else "&"
 
+        node.attr("id", "yt-" + UUID.randomUUID().toString)
+        node.attr("src", src + paramSeparator + "enablejsapi=1&version=3")
       }
 
       element.child(0).wrap("<div class=\"element-video__wrap\"></div>")
