@@ -140,6 +140,10 @@ object VideoEmbedCleaner extends HtmlCleaner {
 
   override def clean(document: Document): Document = {
     document.getElementsByClass("element-video").foreach { element: Element =>
+      if(element.child(0).attr("src").contains("youtube")) {
+
+      }
+
       element.child(0).wrap("<div class=\"element-video__wrap\"></div>")
     }
     document
@@ -251,8 +255,8 @@ case class Summary(amount: Int) extends HtmlCleaner {
     val para: Option[Element] = children.filter(_.nodeName() == "p").take(amount).lastOption
     // if there is are no p's, just take the first n things (could be a blog)
     para match {
-      case Some(p) => children.drop(children.indexOf(p)).foreach(_.remove()) 
-      case _ => children.drop(amount).foreach(_.remove()) 
+      case Some(p) => children.drop(children.indexOf(p)).foreach(_.remove())
+      case _ => children.drop(amount).foreach(_.remove())
     }
     document
   }
