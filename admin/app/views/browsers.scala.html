@@ -17,6 +17,11 @@
     <p>
         Page views over 10k broken down by operating system version
     </p>
+   <p> <i>Wondering what those Windows version numbers are?</i> See <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ms724832%28v=vs.85%29.aspx">Key of Windows Operating System Versions</a></p>
+   <p>We don't break down Windows versions by the minor number but you can consult an <a href="http://en.wikipedia.org/wiki/Microsoft_Windows#Usage_share">estimate of global market share</a>.</p>
+
+
+
     
     <table border="1" cellpadding="5">
         @os.toList.sortBy{_._2}.reverse.filter { _._2 >= 10000 }.zipWithIndex.map { case (row, index) =>
