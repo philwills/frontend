@@ -6,7 +6,7 @@
  * Discussion feature tests 
  *
  **/
-casper.test.begin('Discussion feature tests', function suite(test) {
+ -casper.test.begin('Discussion feature tests', function suite(test) {
 casper.start(host + 'world/2013/jun/06/obama-administration-nsa-verizon-records');
 
 /**
@@ -26,7 +26,7 @@ casper.then(function() {
     },function timeout(){
 
     casper.captureSelector('body.png', 'body');
-    casper.test.fail('failed to find comment bubble');
+casper.test.fail('failed to find comment bubble');
 
     });
 
@@ -83,8 +83,8 @@ casper.then(function() {
 });
 
 casper.run(function() {
-     this.test.done();
-     this.test.renderResults(true, 0, this.cli.get('save') || false);
-    });
+    this.test.done();
+    this.test.renderResults(true, 0, this.cli.get('save') || false);
+});
 });
 
