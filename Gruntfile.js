@@ -118,6 +118,21 @@ module.exports = function (grunt) {
             ]
         },
 
+        "hash-manifest": {
+            public: {
+                options: {
+                    algo: "md5",
+                    scss: true,
+                    cssDest: 'common/app/assets/stylesheets'
+                },
+                src: [
+                    'common/app/public/images/*.png',
+                    'common/app/public/images/**/*.png'
+                ],
+                dest: 'project/target/hashmap.json'
+            }
+        },
+
         // Create JSON web font files from fonts.
         // Docs here: https://github.com/ahume/grunt-webfontjson
         webfontjson: {
@@ -237,6 +252,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-casper');
+    grunt.loadNpmTasks('grunt-hash-manifest');
 
     // Standard tasks
     grunt.registerTask('test:integration', ['casper:common']);
@@ -249,6 +265,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('analyse:common:css', ['cssmetrics:common']);
     grunt.registerTask('analyse', ['analyse:common:css']);
+
+    grunt.registerTask('hash:images', ['hash-manifest:public']);
 
     grunt.registerTask('default', ['test', 'compile', 'analyse']);
 
