@@ -38,3 +38,27 @@
     max-height: 50px;
     padding: 5px 0 10px 0;
 }
+
+.ad-slot--placeholder .ad-container {
+    background-color: #1B9BE0;
+    color: #FFFFFF;
+
+    @include mq(mobile) {
+        width: 300px;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    @include mq(tablet) {
+        width: 300px;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    @include mq(desktop) {
+        width: 728px;
+        height: 90px;
+        line-height: 90px;
+    }
+
+}

@@ -10,7 +10,9 @@ define([
     'modules/adverts/documentwriteslot',
     'modules/adverts/dimensionMap',
     'modules/adverts/audience-science',
-    'modules/adverts/quantcast'
+    'modules/adverts/quantcast',
+
+    'modules/adverts/ad-placement-test'
 ],
 function (
     common,
@@ -24,7 +26,9 @@ function (
     DocumentWriteSlot,
     dimensionMap,
     audienceScience,
-    quantcast
+    quantcast,
+
+    AdPlacementTest
 ) {
     
     var currConfig,
@@ -81,6 +85,11 @@ function (
             config: currConfig,
             slots: slots
         });
+
+        //Load the ad tester
+        if (config.page.contentType === 'Article') {
+            var adTester = new AdPlacementTest(config, context);
+        }
     }
 
     function loadAds() {
