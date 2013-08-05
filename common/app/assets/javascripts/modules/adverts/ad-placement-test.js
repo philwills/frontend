@@ -6,6 +6,8 @@ define(['common', 'bean', 'modules/userPrefs'], function (common, bean, userPref
      */
 
     function AdPlacementTest(config, context) {
+        userPrefs.setPrefs(window.location); // Run this to ensure the prefs are set first
+
         var adplacement = userPrefs.get('adplacement').split('-'),
             adType      = adplacement[0];
 
