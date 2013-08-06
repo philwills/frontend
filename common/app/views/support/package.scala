@@ -45,16 +45,19 @@ object SectionFront extends Style { val className = "section-front" }
 
 object MetadataJson {
 
-  def apply(data: (String, Any)): String = data match {
+  def apply(data: Any): String = data match {
     // thank you erasure
-    case (key, value) if value.isInstanceOf[Map[_, _]] =>
-      val valueJson = value.asInstanceOf[Map[String, Any]].map(MetadataJson(_)).mkString(",")
-      s""""$key": {$valueJson}"""
-    case (key, value) if value.isInstanceOf[Seq[_]] =>
-      val valueJson = value.asInstanceOf[Seq[(String, Any)]].map(v => s"{${MetadataJson(v)}}").mkString(",")
-      s""""$key": [${valueJson}]""".format(key, valueJson)
+    case value: Map[_, _]=>
+      val valueJson = value.map(MetadataJson(_)).mkString(",")
+      s"""{$valueJson}"""
     case (key, value) =>
-      s""""${JavaScriptVariableName(key)}": ${JavaScriptValue(value)}"""
+      val valueJson = MetadataJson(value)
+      s"""$key":$valueJson"""
+    case value: Seq[_] =>
+      val valueJson = value.map(v => s"${MetadataJson(v)}").mkString(",")
+      s"""[${valueJson}]"""
+    case value =>
+      s"""${JavaScriptValue(value)}"""
   }
 }
 

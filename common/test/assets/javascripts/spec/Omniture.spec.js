@@ -61,7 +61,8 @@ define(['analytics/omniture', 'common'], function(Omniture, common) {
                     buildNumber: "build-73",
                     edition: "US",
                     webPublicationDate: "2012-02-22T16:58:00.000Z",
-                    analyticsName: "GFE:theworld:a-really-long-title-a-really-long-title-a-really-long-title-a-really-long"
+                    analyticsName: "GFE:theworld:a-really-long-title-a-really-long-title-a-really-long-title-a-really-long",
+                    analyticsEvents : [ "event1", "event3"]
             };
 
             var o = new Omniture(s, w);
@@ -87,7 +88,8 @@ define(['analytics/omniture', 'common'], function(Omniture, common) {
             expect(s.cookieDomainPeriods).toBe("2")
             expect(s.trackingServer).toBe("hits.theguardian.com");
             expect(s.trackingServerSecure).toBe('hits-secure.theguardian.com');
-
+            expect(s.apl.withArgs(s.events,"event1",",")).toHaveBeenCalledOnce();
+            expect(s.apl.withArgs(s.events,"event3",",")).toHaveBeenCalledOnce();
         });
 
         it("should correctly set cookieDomainPeriods for UK edition", function(){

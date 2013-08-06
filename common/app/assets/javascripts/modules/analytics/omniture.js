@@ -153,6 +153,12 @@ define([
                 s.prop30 = 'non-content';
             }
 
+            if (config.page.analyticsEvents) {
+                for(var i= 0, l = config.page.analyticsEvents.length; i < l; i++ ) {
+                    s.events = s.apl(s.events,config.page.analyticsEvents[i],',');
+                }
+            }
+
             /* Retrieve navigation interaction data, incl. swipe */
             var ni = storage.get('gu.analytics.referrerVars');
             if (ni) {
@@ -160,14 +166,14 @@ define([
                 if (d - ni.time < 60 * 1000) { // One minute
                     s.eVar24 = ni.pageName;
                     s.eVar37 = ni.tag;
-                    s.events   = 'event37';
+                    s.events   = s.apl(s.events,'event37',',');
                 }
                 storage.remove('gu.analytics.referrerVars');
             } else if (config.swipe) {
                 s.referrer = config.swipe.referrer;
                 s.eVar24   = config.swipe.referrerPageName;
                 s.eVar37   = config.swipe.initiatedBy;
-                s.events   = 'event37';
+                s.events   = s.apl(s.events,'event37',',');
             }
         };
 
