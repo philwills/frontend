@@ -14,6 +14,7 @@ GET        /identity/signin                                                     
 # Discussion
 GET        /discussion/comment-counts                                                                     controllers.CommentCountController.render(shortUrls: String)
 GET        /discussion/comment-counts.json                                                                controllers.CommentCountController.render(shortUrls: String)
+GET        /discussion/highlighted.json                                                                   controllers.HighlightedCommentsController.renderJson()
 GET        /discussion/highlighted                                                                        controllers.HighlightedCommentsController.render()
 GET        /discussion/*shortUrl.json                                                                     controllers.CommentPageController.render(shortUrl)
 GET        /discussion/*shortUrl                                                                          controllers.CommentPageController.render(shortUrl)
