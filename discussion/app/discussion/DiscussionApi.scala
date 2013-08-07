@@ -20,7 +20,7 @@ case class CommentPage(
   lazy val hasMore: Boolean = currentPage < pages
 }
 
-case class HighlightedCommentsPage(comments: Seq[Comment]) extends Page(canonicalUrl = None,
+case class HighlightedCommentsPage(comments: Seq[Comment]) extends Page(
   id = "discussion/highlighted", section = "Global", webTitle = "Highlighted Comments",
   analyticsName = s"GFE:Discussion: Highlighted Comments")
 
@@ -112,6 +112,7 @@ trait DiscussionApi extends ExecutionContexts with Logging {
             currentPage =  (json \ "currentPage").as[Int],
             pages = (json \ "pages").as[Int]
           )
+
 
         case other =>
           log.error(s"Error loading comments id: $id status: $other message: ${response.statusText}")
