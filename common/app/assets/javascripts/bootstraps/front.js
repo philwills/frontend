@@ -7,7 +7,8 @@ define([
     "modules/trailblocktoggle",
     "modules/trailblock-show-more",
     "modules/footballfixtures",
-    "modules/cricket"
+    "modules/cricket",
+    "modules/highlighted-comments"
 ], function (
     common,
     bonzo,
@@ -15,7 +16,8 @@ define([
     TrailblockToggle,
     TrailblockShowMore,
     FootballFixtures,
-    Cricket
+    Cricket,
+    HighlightedComments
 ) {
 
     var modules = {
@@ -37,6 +39,13 @@ define([
             var trailblockShowMore = new TrailblockShowMore();
             common.mediator.on('page:front:ready', function(config, context) {
                 trailblockShowMore.init(context);
+            });
+        },
+
+        showHighlightedComments: function () {
+
+            common.mediator.on('page:front:ready', function(config, context) {
+                var showHighlighted = new HighlightedComments(config, context);
             });
         },
 
@@ -98,6 +107,7 @@ define([
             modules.showTrailblockShowMore();
             modules.showFootballFixtures();
             modules.showCricket();
+            modules.showHighlightedComments();
         }
         common.mediator.emit("page:front:ready", config, context);
     };
