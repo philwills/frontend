@@ -85,7 +85,7 @@ module.exports = function (grunt) {
             includes : 'integration-tests/casper/tests/shared.js',
             'log-level' : 'info',
             host: 'http://localhost:9000/'
-          },           
+          },
           common : {
             src: ['integration-tests/casper/tests/*.spec.js'],
             dest : function(input) {
@@ -123,7 +123,7 @@ module.exports = function (grunt) {
                 options: {
                     algo: "md5",
                     scss: true,
-                    cssDest: 'common/app/assets/stylesheets'
+                    scssSrc: 'common/app/assets/stylesheets'
                 },
                 src: [
                     'common/app/public/images/*.png',
