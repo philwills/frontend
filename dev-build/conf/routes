@@ -32,6 +32,7 @@ GET    /top-stories/trails                                  controllers.TopStori
 GET    /top-stories/trails.json                             controllers.TopStoriesController.renderJsonTrails()
 GET    /related/*path.json                                  controllers.RelatedController.render(path)
 GET    /related/*path                                       controllers.RelatedController.render(path)
+
 # more stories for swipe
 GET    /most-viewed                                         controllers.MoreStoriesController.renderMostViewed(path = "")
 GET    /most-viewed.json                                    controllers.MoreStoriesController.renderMostViewed(path = "")
@@ -41,6 +42,10 @@ GET    /front-trails                                        controllers.MoreStor
 GET    /front-trails.json                                   controllers.MoreStoriesController.renderFrontTrails(path = "")
 GET    /front-trails/*path.json                             controllers.MoreStoriesController.renderFrontTrails(path)
 GET    /front-trails/*path                                  controllers.MoreStoriesController.renderFrontTrails(path)
+
+# Experimental
+GET    /cards/opengraph/*path                               controllers.CardController.opengraph(path)
+GET    /cards/wikipedia/*path                               controllers.CardController.wikipedia(path)
 
 #Style-guide
 GET     /style-guide                                        controllers.StyleGuideController.renderIndex
