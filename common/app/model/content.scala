@@ -120,7 +120,7 @@ class Article(private val delegate: ApiContent) extends Content(delegate) {
     .getOrElse(false)
 
   override def schemaType = if (isReview) Some("http://schema.org/Review")
-    else if Some("http://schema.org/Recipe")
+    else if (isRecipe) Some("http://schema.org/Recipe")
     else Some("http://schema.org/Article")
 }
 
