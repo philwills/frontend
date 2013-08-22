@@ -17,13 +17,17 @@ casper.start()
 casper.open(host + '/uk').then(function() {
     
     casper.test.comment('Comment counts on the front');
+    
     casper.waitForSelector('.trail__count--commentcount', function() {
         return this.test.assertEvalEquals(function () {
             // should read '812 comments'
-            return /^\d+\s+comments$/.test(document.querySelector('.trail__count--commentcount').textContent)
-        }, true, "See the number of comments in the page")
+            var hasCommentCount = /^\d+\s+comments$/.test(document.querySelector('.trail__count--commentcount').textContent)
+            // href should contain '#comments'
+            var hasCommentAnchor = /\#comments$/.test(document.querySelector('.trail__count--commentcount a').getAttribute('href'))
+            return (hasCommentCount && hasCommentAnchor)
+        }, true, "See the number of comments in the page and link through to the #comments article state")
     }, function () {
-        casper.test.fail('test timeout');
+        casper.test.fail('Comment count did not show');
     })
 
 });
