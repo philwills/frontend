@@ -48,6 +48,25 @@ casper.then(function() {
 
 });
 
+casper.then(function() {
+
+    casper.waitForSelector('.nav-popup-topstories.lazyloaded',function(){
+
+        casper.test.comment('Top stories is not visible before I click it');
+        this.test.assertNotVisible('.nav-popup-topstories', 'The top stories are not visible at page load');
+
+        casper.test.comment('Top stories is visible after click of top-stories button');
+        this.click('[data-control-for="nav-popup-topstories"]');
+        this.test.assertVisible('.nav-popup-topstories', 'The top stories are visible after clicking top stories button');
+
+        casper.test.comment('If active, Top stories is hidden after click of top-stories button');
+        this.click('[data-control-for="nav-popup-topstories"]');
+        this.test.assertNotVisible('.nav-popup-topstories', 'The top stories are visible after clicking top stories button');
+
+    });
+
+});
+
 casper.run(function() {
     this.test.renderResults(true, 0, this.cli.get('save') || false);
 });
