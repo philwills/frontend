@@ -4,7 +4,7 @@ import com.gu.fronts.endtoend.engine.TrailBlock;
 import com.gu.fronts.endtoend.engine.TrailBlockEditor;
 import com.gu.fronts.endtoend.engine.TrailBlockEditors;
 import com.gu.fronts.endtoend.engine.TrailBlocks;
-import com.gu.fronts.endtoend.engine.actions.PublishDraftAction;
+import com.gu.fronts.endtoend.engine.actions.api.PublishDraftAction;
 import cucumber.api.java.en.When;
 import hu.meza.aao.DefaultScenarioContext;
 

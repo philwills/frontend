@@ -4,7 +4,7 @@ import com.gu.fronts.endtoend.engine.Stories;
 import com.gu.fronts.endtoend.engine.Story;
 import com.gu.fronts.endtoend.engine.TrailBlock;
 import com.gu.fronts.endtoend.engine.TrailBlockEditors;
-import com.gu.fronts.endtoend.engine.actions.ViewTrailBlockAction;
+import com.gu.fronts.endtoend.engine.actions.api.ViewTrailBlockActionApi;
 import cucumber.api.java.en.Then;
 import hu.meza.aao.DefaultScenarioContext;
 import org.junit.Assert;
@@ -32,7 +32,7 @@ public class PositionAssertSteps {
 		Story storyA = stories.get(storyALabel);
 		Story storyB = stories.get(storyBLabel);
 
-		ViewTrailBlockAction action = new ViewTrailBlockAction(trailBlock);
+		ViewTrailBlockActionApi action = new ViewTrailBlockActionApi(trailBlock);
 
 		editors.anyone().execute(action);
 

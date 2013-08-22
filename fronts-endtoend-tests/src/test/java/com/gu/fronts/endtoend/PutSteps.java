@@ -7,7 +7,7 @@ import com.gu.fronts.endtoend.engine.TrailBlockEditor;
 import com.gu.fronts.endtoend.engine.TrailBlockEditors;
 import com.gu.fronts.endtoend.engine.TrailBlockMode;
 import com.gu.fronts.endtoend.engine.TrailBlocks;
-import com.gu.fronts.endtoend.engine.actions.AddStoryToTrailBlockAction;
+import com.gu.fronts.endtoend.engine.actions.api.AddStoryToTrailBlockAction;
 import cucumber.api.java.en.When;
 import hu.meza.aao.Actor;
 import hu.meza.aao.DefaultScenarioContext;

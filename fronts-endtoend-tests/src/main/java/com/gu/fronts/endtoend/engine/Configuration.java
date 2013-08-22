@@ -1,4 +1,4 @@
-package com.gu.fronts.endtoend.hooks;
+package com.gu.fronts.endtoend.engine;
 
 import hu.meza.tools.config.Config;
 import hu.meza.tools.config.Loaders.FileConfiguration;
@@ -23,12 +23,12 @@ public class Configuration {
 		system.add(systemPropertiesConfiguration);
 
 		String userHome = system.get("user.home");
-		String path = String.format("%s%s.gu%sfrontend.properties", userHome, File.separator,
-									File.separator);
+		String path = String.format("%s%s.gu%sfrontend.properties", userHome, File.separator, File.separator);
 		system = null;
 
 		File frontendConfigFile = new File(path);
 		config.add(new Optional(new FileConfiguration(frontendConfigFile)));
+		config.addOverriding(new Required(new ResourceConfiguration("execution.properties")));
 		config.addOverriding(new Required(new ResourceConfiguration("environment.properties")));
 		config.addOverriding(new Optional(new ResourceConfiguration("developer.properties")));
 		config.addHighOrder(systemPropertiesConfiguration);
@@ -39,6 +39,10 @@ public class Configuration {
 	}
 
 	public String cookieString() {
-		return config.get("userCookie");
+		return this.config.get("userCookie");
+	}
+
+	public ActionsType actionsType() {
+		return ActionsType.fromString(config.get("actionsType"));
 	}
 }

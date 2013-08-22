@@ -4,7 +4,7 @@ import com.gu.fronts.endtoend.engine.TrailBlock;
 import com.gu.fronts.endtoend.engine.TrailBlockEditors;
 import com.gu.fronts.endtoend.engine.TrailBlockMode;
 import com.gu.fronts.endtoend.engine.TrailBlocks;
-import com.gu.fronts.endtoend.engine.actions.ViewTrailBlockAction;
+import com.gu.fronts.endtoend.engine.actions.api.ViewTrailBlockActionApi;
 import cucumber.api.java.en.Then;
 import hu.meza.aao.DefaultScenarioContext;
 import org.junit.Assert;
@@ -53,7 +53,7 @@ public class ContentAssertionSteps {
 		TrailBlock trailBlock = trailBlocks.get(trailBlockLabel);
 		context.setSubject(trailBlock);
 
-		ViewTrailBlockAction action = new ViewTrailBlockAction(trailBlock);
+		ViewTrailBlockActionApi action = new ViewTrailBlockActionApi(trailBlock);
 
 		editors.anyone().execute(action);
 
@@ -85,7 +85,7 @@ public class ContentAssertionSteps {
 	private List<String> getContent(String trailBlockLabel, TrailBlockMode mode) {
 		TrailBlock trailBlock = trailBlocks.get(trailBlockLabel, context);
 
-		ViewTrailBlockAction action = new ViewTrailBlockAction(trailBlock);
+		ViewTrailBlockActionApi action = new ViewTrailBlockActionApi(trailBlock);
 
 		editors.anyone().execute(action);
 

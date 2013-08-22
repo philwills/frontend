@@ -1,4 +1,4 @@
-package com.gu.fronts.endtoend.engine.actions;
+package com.gu.fronts.endtoend.engine.actions.api;
 
 import com.gu.fronts.endtoend.engine.TrailBlock;
 import com.gu.fronts.endtoend.engine.TrailBlockAction;

@@ -1,8 +1,12 @@
-Feature: As an editor I want the prominent story block to collapse and be hidden when the live section is empty so that it does not disturb the display of other blocks on the front
+@ignore
+Feature: As an editor
+  I want the prominent story block to collapse and be hidden when the live section is empty
+  So that it does not disturb the display of other blocks on the front
+
   Scenario: Prominent-story block should not display when it is unpopulated
     Given Jane is a viewer looking at the front
     And the prominent-story block for that front has no stories
-    Then the prominent story block will not be displayed to Jane
+    Then the it will not be visible to Jane
     And the top-stories trailblock will display at the top of the front
 
   Scenario: Populating draft of prominent-story trailblock does not cause it to display
@@ -14,6 +18,7 @@ Feature: As an editor I want the prominent story block to collapse and be hidden
 
 
   Feature: As an editor I want to be able to add up to 5 stories to the prominent story block so that I can highlight news around an important subject where it will be most visible
+
   Scenario: 2.1 - Add X stories to the prominent-story block
     Given Bob is editing the prominent story block
     And Jane is Viewing the related front
@@ -24,6 +29,7 @@ Feature: As an editor I want the prominent story block to collapse and be hidden
   (where X = 1, 2, 3, 4, 5 )
 
   Feature: As an editor I want to be able to add stories to the top-stories block so that I can highlight news around an important subject where it will be most visible
+
   Scenario: 3.1 - Add X stories to the top-stories block
     Given Bob is editing the top-stories block
     And Jane is Viewing the related front
@@ -34,6 +40,7 @@ Feature: As an editor I want the prominent story block to collapse and be hidden
   (where X = 1, 2, 3, 4, 5, 6, 10 )
 
   Feature: As an editor I want the top-stories block to collapse And be hidden when the live section is empty so that it does not disturb the display of other blocks on the front
+
   Scenario: 4.1 - top-stories block should not display when it is unpopulated
     Given Jane is a viewer looking at the front
     And the top-stories block for that front has no stories

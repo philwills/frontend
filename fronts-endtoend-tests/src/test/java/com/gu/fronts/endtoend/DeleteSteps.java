@@ -7,8 +7,8 @@ import com.gu.fronts.endtoend.engine.TrailBlockEditor;
 import com.gu.fronts.endtoend.engine.TrailBlockEditors;
 import com.gu.fronts.endtoend.engine.TrailBlockMode;
 import com.gu.fronts.endtoend.engine.TrailBlocks;
-import com.gu.fronts.endtoend.engine.actions.DiscardDraftAction;
-import com.gu.fronts.endtoend.engine.actions.RemoveStoryFromTrailBlockAction;
+import com.gu.fronts.endtoend.engine.actions.api.DiscardDraftAction;
+import com.gu.fronts.endtoend.engine.actions.api.RemoveStoryFromTrailBlockAction;
 import cucumber.api.java.en.When;
 import hu.meza.aao.DefaultScenarioContext;
 

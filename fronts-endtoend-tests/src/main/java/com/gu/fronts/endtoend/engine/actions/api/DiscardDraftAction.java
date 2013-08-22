@@ -1,4 +1,4 @@
-package com.gu.fronts.endtoend.engine.actions;
+package com.gu.fronts.endtoend.engine.actions.api;
 
 import com.gu.fronts.endtoend.engine.TrailBlock;
 import com.gu.fronts.endtoend.engine.TrailBlockAction;
@@ -7,12 +7,12 @@ import hu.meza.tools.HttpClientWrapper;
 import org.apache.http.HttpStatus;
 import org.apache.http.cookie.Cookie;
 
-public class PublishDraftAction implements TrailBlockAction {
+public class DiscardDraftAction implements TrailBlockAction {
 	private final TrailBlock trailBlock;
 	private HttpClientWrapper client;
 	private HttpCall httpCall;
 
-	public PublishDraftAction(TrailBlock trailBlock) {
+	public DiscardDraftAction(TrailBlock trailBlock) {
 		this.trailBlock = trailBlock;
 	}
 
@@ -33,15 +33,15 @@ public class PublishDraftAction implements TrailBlockAction {
 
 	@Override
 	public void execute() {
-		String data = "{\"publish\":true}";
+		String data = "{\"discard\":true}";
 
 		final String requestUrl = String.format("/fronts/api/%s", trailBlock.uri());
 		httpCall = client.postJsonTo(requestUrl, data);
 	}
 
 	@Override
-	public PublishDraftAction copyOf() {
-		return new PublishDraftAction(trailBlock);
+	public DiscardDraftAction copyOf() {
+		return new DiscardDraftAction(trailBlock);
 	}
 
 }
