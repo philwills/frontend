@@ -9,17 +9,26 @@
 var casper = require('casper').create(),
     host = casper.cli.get('host') || "http://m.code.dev-theguardian.com/";
 
-casper.start(host + 'world/2013/jun/06/obama-administration-nsa-verizon-records');
 
-/**
- *   Scenario: Read top level comments
- *     Given I am on an article with comments
- *     When I choose to view the comments
- *     Then the main image has a toggle class applied to it
- *     Then I can see 10 top level comments
- *     And the first comment is authored by "tenacity"
- **/
-casper.then(function() {
+// Test that comment counts appear on the front
+    
+casper.start()
+    
+casper.open(host + '/uk').then(function() {
+    
+    casper.test.comment('Comment counts on the front');
+    casper.waitForSelector('.trail__count--commentcount', function() {
+        return this.test.assertEvalEquals(function () {
+            // should read '812 comments'
+            return /^\d+\s+comments$/.test(document.querySelector('.trail__count--commentcount').textContent)
+        }, true, "See the number of comments in the page")
+    }, function () {
+        casper.test.fail('test timeout');
+    })
+
+});
+
+casper.open(host + 'world/2013/jun/06/obama-administration-nsa-verizon-records').then(function() {
 
     casper.test.comment('Read top level comments');
 //wait for comment count to be visible
@@ -28,7 +37,7 @@ casper.then(function() {
     },function timeout(){
 
     casper.captureSelector('body.png', 'body');
-casper.test.fail('failed to find comment bubble');
+        casper.test.fail('failed to find comment bubble');
 
     });
 
@@ -50,13 +59,7 @@ casper.test.fail('failed to find comment bubble');
 
 });
 
-/**
- *   Scenario: Read top level comments
- *     Given I am on an article with comments
- *     When I show more comments
- *     Then I can see 20 top level comments
- **/
-casper.then(function() {
+casper.open(host + 'world/2013/jun/06/obama-administration-nsa-verizon-records').then(function() {
 
     casper.test.comment('Show more comments');
 
