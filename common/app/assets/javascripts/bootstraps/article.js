@@ -4,14 +4,16 @@ define([
     "modules/matchnav",
     "modules/analytics/reading",
     "modules/discussion/discussion",
-    "modules/cricket"
+    "modules/cricket",
+    "modules/affix"
 ], function (
     common,
     AutoUpdate,
     MatchNav,
     Reading,
     Discussion,
-    Cricket
+    Cricket,
+    Affix
 ) {
 
     var modules = {
@@ -98,6 +100,12 @@ define([
                     Cricket.cricketArticle(config, context, options);
                 }
             });
+        },
+
+        affixSocial: function(context) {
+            new Affix({
+                element: context.querySelector('.social-wrapper')
+            });
         }
     };
 
@@ -109,6 +117,7 @@ define([
             modules.logReading();
             modules.initDiscussion();
             modules.initCricket();
+            modules.affixSocial(context);
         }
         common.mediator.emit("page:article:ready", config, context);
     };
