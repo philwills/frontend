@@ -95,7 +95,10 @@ module.exports = function (grunt) {
             }
         },
         casperjs: {
-            files: ['integration-tests/casper/tests/network-front.spec.js']
+            files: [
+                'integration-tests/casper/tests/network-front.spec.js',
+                'integration-tests/casper/tests/section-front-culture.spec.js'
+            ]
         },
 
 //        casper: {
