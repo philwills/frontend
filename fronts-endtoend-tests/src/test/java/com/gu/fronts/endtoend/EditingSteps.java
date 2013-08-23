@@ -22,7 +22,8 @@ public class EditingSteps {
 	private final TrailBlockActionFactory actionFactory;
 
 	public EditingSteps(
-		TrailBlocks trailBlocks, TrailBlockEditors editors, DefaultScenarioContext context, ActionFactory actionFactory
+		TrailBlocks trailBlocks, TrailBlockEditors editors, DefaultScenarioContext context,
+		ActionFactory actionFactory
 	) {
 		this.trailBlocks = trailBlocks;
 		this.editors = editors;

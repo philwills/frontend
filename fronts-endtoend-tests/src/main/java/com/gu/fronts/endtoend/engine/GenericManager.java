@@ -8,52 +8,52 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class GenericManager<T extends Managable> implements Iterable<T> {
 
-    private Map<String, T> items;
-    private String lastLabel = "";
+	private Map<String, T> items;
+	private String lastLabel = "";
 
-    public GenericManager() {
-        items = new ConcurrentHashMap<>();
-    }
+	public GenericManager() {
+		items = new ConcurrentHashMap<>();
+	}
 
-    public T get(String label) {
+	public T get(String label) {
 
-        if (!items.containsKey(label)) {
-            throw new ItemNotFoundException(label);
-        }
+		if (!items.containsKey(label)) {
+			throw new ItemNotFoundException(label);
+		}
 
-        setLast(label);
-        return items.get(label);
-    }
+		setLast(label);
+		return items.get(label);
+	}
 
-    public T add(T trailBlock) {
+	public T add(T trailBlock) {
 
-        String label = trailBlock.getName();
-        items.put(label, trailBlock);
-        setLast(label);
-        return trailBlock;
-    }
+		String label = trailBlock.getName();
+		items.put(label, trailBlock);
+		setLast(label);
+		return trailBlock;
+	}
 
-    public T last() {
-        if (items.isEmpty()) {
-            throw new ManagerIsEmptyException();
-        }
-        return get(lastLabel);
-    }
+	public T last() {
+		if (items.isEmpty()) {
+			throw new ManagerIsEmptyException();
+		}
+		return get(lastLabel);
+	}
 
-    @Override
-    public Iterator<T> iterator() {
-        List<T> actorList = new ArrayList<>();
+	@Override
+	public Iterator<T> iterator() {
+		List<T> actorList = new ArrayList<>();
 
-        for (Map.Entry<String, T> entry : items.entrySet()) {
-            actorList.add(entry.getValue());
-        }
+		for (Map.Entry<String, T> entry : items.entrySet()) {
+			actorList.add(entry.getValue());
+		}
 
-        return actorList.iterator();
+		return actorList.iterator();
 
-    }
+	}
 
-    private synchronized void setLast(String label) {
-        lastLabel = label;
-    }
+	private synchronized void setLast(String label) {
+		lastLabel = label;
+	}
 
 }
