@@ -17,10 +17,6 @@ public class AddStoryToTrailBlockApiAction implements AddStoryToTrailBlockAction
 	private HttpClientWrapper client;
 	private HttpCall httpCall;
 
-	public AddStoryToTrailBlockApiAction(Story story, TrailBlock trailblock) {
-		this(story, trailblock, TrailBlockMode.LIVE);
-	}
-
 	public AddStoryToTrailBlockApiAction(Story storyA, TrailBlock trailBlock, Story storyB) {
 		this(storyA, trailBlock, storyB, TrailBlockMode.LIVE);
 	}
@@ -64,7 +60,7 @@ public class AddStoryToTrailBlockApiAction implements AddStoryToTrailBlockAction
 
 	@Override
 	public AddStoryToTrailBlockApiAction copyOf() {
-		return new AddStoryToTrailBlockApiAction(story, trailblock);
+		return new AddStoryToTrailBlockApiAction(story, trailblock, positionOf, mode);
 	}
 
 	private String requestBody() {
