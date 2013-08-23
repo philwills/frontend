@@ -1,7 +1,7 @@
 package com.gu.fronts.endtoend.engine.actions.api;
 
 import com.gu.fronts.endtoend.engine.TrailBlock;
-import com.gu.fronts.endtoend.engine.TrailBlockAction;
+import com.gu.fronts.endtoend.engine.actions.TrailBlockCreateAction;
 import hu.meza.tools.HttpCall;
 import hu.meza.tools.HttpClientWrapper;
 import org.apache.http.HttpStatus;
@@ -9,12 +9,12 @@ import org.apache.http.cookie.Cookie;
 
 import java.util.UUID;
 
-public class TrailBlockCreateAction implements TrailBlockAction {
+public class TrailBlockCreateApiAction implements TrailBlockCreateAction {
 	private final TrailBlock trailBlock;
 	private HttpClientWrapper client;
 	private HttpCall httpCall;
 
-	public TrailBlockCreateAction(TrailBlock trailBlock) {
+	public TrailBlockCreateApiAction(TrailBlock trailBlock) {
 		this.trailBlock = trailBlock;
 	}
 
@@ -36,8 +36,8 @@ public class TrailBlockCreateAction implements TrailBlockAction {
 	}
 
 	@Override
-	public TrailBlockCreateAction copyOf() {
-		return new TrailBlockCreateAction(trailBlock);
+	public TrailBlockCreateApiAction copyOf() {
+		return new TrailBlockCreateApiAction(trailBlock);
 	}
 
 	@Override

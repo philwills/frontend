@@ -7,8 +7,10 @@ import com.gu.fronts.endtoend.engine.TrailBlockEditor;
 import com.gu.fronts.endtoend.engine.TrailBlockEditors;
 import com.gu.fronts.endtoend.engine.TrailBlockMode;
 import com.gu.fronts.endtoend.engine.TrailBlocks;
-import com.gu.fronts.endtoend.engine.actions.api.DiscardDraftAction;
-import com.gu.fronts.endtoend.engine.actions.api.RemoveStoryFromTrailBlockAction;
+import com.gu.fronts.endtoend.engine.actions.ActionFactory;
+import com.gu.fronts.endtoend.engine.actions.DiscardDraftAction;
+import com.gu.fronts.endtoend.engine.actions.RemoveStoryFromTrailBlockAction;
+import com.gu.fronts.endtoend.engine.actions.TrailBlockActionFactory;
 import cucumber.api.java.en.When;
 import hu.meza.aao.DefaultScenarioContext;
 
@@ -18,16 +20,18 @@ public class DeleteSteps {
 	private final Stories stories;
 	private final TrailBlockEditors editors;
 	private final DefaultScenarioContext context;
+	private final TrailBlockActionFactory actionFactory;
 
 	public DeleteSteps(
-		TrailBlocks trailBlocks, Stories stories, TrailBlockEditors editors, DefaultScenarioContext context
+		TrailBlocks trailBlocks, Stories stories, TrailBlockEditors editors, DefaultScenarioContext context,
+		ActionFactory actionFactory
 	) {
 		this.trailBlocks = trailBlocks;
 		this.stories = stories;
 		this.editors = editors;
 		this.context = context;
+		this.actionFactory = actionFactory.actionFactory();
 	}
-
 
 	@When("^(.*) deletes ([\\w]*) from the draft of ([\\w]*)$")
 	public void deletesStoryFromTrailBlockDraft(
@@ -40,7 +44,7 @@ public class DeleteSteps {
 		Story story = stories.get(storyLabel);
 
 		RemoveStoryFromTrailBlockAction action =
-			new RemoveStoryFromTrailBlockAction(story, trailBlock, TrailBlockMode.DRAFT);
+			actionFactory.removeStory(story, trailBlock, TrailBlockMode.DRAFT);
 
 		editor.execute(action);
 	}
@@ -52,7 +56,7 @@ public class DeleteSteps {
 		TrailBlock trailBlock = trailBlocks.get(trailBlockLabel, context);
 		Story story = stories.get(storyLabel);
 
-		RemoveStoryFromTrailBlockAction action = new RemoveStoryFromTrailBlockAction(story, trailBlock);
+		RemoveStoryFromTrailBlockAction action = actionFactory.removeStory(story, trailBlock);
 
 		editor.execute(action);
 
@@ -62,7 +66,7 @@ public class DeleteSteps {
 	public void discardsTheDraftOfTrailBlock(String actorLabel, String trailBlockLabel) {
 		TrailBlockEditor editor = editors.getActor(actorLabel);
 		TrailBlock trailBlock = trailBlocks.get(trailBlockLabel, context);
-		DiscardDraftAction action = new DiscardDraftAction(trailBlock);
+		DiscardDraftAction action = actionFactory.discard(trailBlock);
 
 		editor.execute(action);
 	}

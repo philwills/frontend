@@ -13,19 +13,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewTrailBlockActionApi implements ViewTrailBlockAction {
+public class ViewTrailBlockApiAction implements ViewTrailBlockAction {
 	private final TrailBlock trailBlock;
 	private HttpClientWrapper client;
 	private HttpCall httpCall;
 	private Exception lastException;
 
-	public ViewTrailBlockActionApi(TrailBlock trailBlock) {
+	public ViewTrailBlockApiAction(TrailBlock trailBlock) {
 		this.trailBlock = trailBlock;
-	}
-
-	@Override
-	public ViewTrailBlockActionApi create(TrailBlock trailBlock) {
-		return new ViewTrailBlockActionApi(trailBlock);
 	}
 
 	@Override
@@ -50,8 +45,8 @@ public class ViewTrailBlockActionApi implements ViewTrailBlockAction {
 	}
 
 	@Override
-	public ViewTrailBlockActionApi copyOf() {
-		return new ViewTrailBlockActionApi(trailBlock);
+	public ViewTrailBlockApiAction copyOf() {
+		return new ViewTrailBlockApiAction(trailBlock);
 	}
 
 	public List<String> liveStories() {

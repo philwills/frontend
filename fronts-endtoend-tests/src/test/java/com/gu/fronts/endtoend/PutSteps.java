@@ -7,7 +7,9 @@ import com.gu.fronts.endtoend.engine.TrailBlockEditor;
 import com.gu.fronts.endtoend.engine.TrailBlockEditors;
 import com.gu.fronts.endtoend.engine.TrailBlockMode;
 import com.gu.fronts.endtoend.engine.TrailBlocks;
-import com.gu.fronts.endtoend.engine.actions.api.AddStoryToTrailBlockAction;
+import com.gu.fronts.endtoend.engine.actions.ActionFactory;
+import com.gu.fronts.endtoend.engine.actions.AddStoryToTrailBlockAction;
+import com.gu.fronts.endtoend.engine.actions.TrailBlockActionFactory;
 import cucumber.api.java.en.When;
 import hu.meza.aao.Actor;
 import hu.meza.aao.DefaultScenarioContext;
@@ -19,14 +21,17 @@ public class PutSteps {
 	private final Stories stories;
 	private final TrailBlockEditors editors;
 	private final DefaultScenarioContext context;
+	private final TrailBlockActionFactory actionFactory;
 
 	public PutSteps(
-		TrailBlocks trailBlocks, Stories stories, TrailBlockEditors editors, DefaultScenarioContext context
+		TrailBlocks trailBlocks, Stories stories, TrailBlockEditors editors, DefaultScenarioContext context,
+		ActionFactory actionFactory
 	) {
 		this.trailBlocks = trailBlocks;
 		this.stories = stories;
 		this.editors = editors;
 		this.context = context;
+		this.actionFactory = actionFactory.actionFactory();
 	}
 
 	@When("^(.*) puts (.*) into (.*) to the position of (.*)$")
@@ -40,7 +45,7 @@ public class PutSteps {
 		Story storyA = stories.get(storyALabel);
 		Story storyB = stories.get(storyBLabel);
 
-		AddStoryToTrailBlockAction action = new AddStoryToTrailBlockAction(storyA, trailBlock, storyB);
+		AddStoryToTrailBlockAction action = actionFactory.addStoryToTrailblock(storyA, trailBlock, storyB);
 		editor.execute(action);
 
 		Assert.assertTrue(action.success());
@@ -82,7 +87,7 @@ public class PutSteps {
 
 		Story story = stories.get(storyLabel);
 
-		AddStoryToTrailBlockAction action = new AddStoryToTrailBlockAction(story, trailBlock, mode);
+		AddStoryToTrailBlockAction action = actionFactory.addStoryToTrailblock(story, trailBlock, mode);
 
 		editor.execute(action);
 	}

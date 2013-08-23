@@ -47,7 +47,7 @@ public class TrailBlockEditor extends RestfulActor {
         return cookie;
     }
 
-    public void execute(TrailBlockAction action) {
+    public void execute(TrailBlockApiAction action) {
         action.useClient(client);
         action.setAuthenticationData(authenticationData());
         super.execute(action);

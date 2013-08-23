@@ -4,7 +4,9 @@ import com.gu.fronts.endtoend.engine.Stories;
 import com.gu.fronts.endtoend.engine.Story;
 import com.gu.fronts.endtoend.engine.TrailBlock;
 import com.gu.fronts.endtoend.engine.TrailBlockEditors;
-import com.gu.fronts.endtoend.engine.actions.api.ViewTrailBlockActionApi;
+import com.gu.fronts.endtoend.engine.actions.ActionFactory;
+import com.gu.fronts.endtoend.engine.actions.TrailBlockActionFactory;
+import com.gu.fronts.endtoend.engine.actions.ViewTrailBlockAction;
 import cucumber.api.java.en.Then;
 import hu.meza.aao.DefaultScenarioContext;
 import org.junit.Assert;
@@ -16,13 +18,17 @@ public class PositionAssertSteps {
 	private final Stories stories;
 	private final TrailBlockEditors editors;
 	private final DefaultScenarioContext context;
+	private final TrailBlockActionFactory actionFactory;
+
 
 	public PositionAssertSteps(
-		Stories stories, TrailBlockEditors editors, DefaultScenarioContext context
+		Stories stories, TrailBlockEditors editors, DefaultScenarioContext context,
+		ActionFactory actionFactory
 	) {
 		this.stories = stories;
 		this.editors = editors;
 		this.context = context;
+		this.actionFactory = actionFactory.actionFactory();
 	}
 
 	@Then("^(.*) should be above (.*)$")
@@ -32,7 +38,7 @@ public class PositionAssertSteps {
 		Story storyA = stories.get(storyALabel);
 		Story storyB = stories.get(storyBLabel);
 
-		ViewTrailBlockActionApi action = new ViewTrailBlockActionApi(trailBlock);
+		ViewTrailBlockAction action = actionFactory.view(trailBlock);
 
 		editors.anyone().execute(action);
 

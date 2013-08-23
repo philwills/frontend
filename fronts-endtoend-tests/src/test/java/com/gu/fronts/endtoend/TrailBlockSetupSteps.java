@@ -5,10 +5,10 @@ import com.gu.fronts.endtoend.engine.TrailBlock;
 import com.gu.fronts.endtoend.engine.TrailBlockEditors;
 import com.gu.fronts.endtoend.engine.TrailBlocks;
 import com.gu.fronts.endtoend.engine.actions.ActionFactory;
+import com.gu.fronts.endtoend.engine.actions.RemoveStoryFromTrailBlockAction;
 import com.gu.fronts.endtoend.engine.actions.TrailBlockActionFactory;
-import com.gu.fronts.endtoend.engine.actions.api.RemoveStoryFromTrailBlockAction;
-import com.gu.fronts.endtoend.engine.actions.api.TrailBlockCreateAction;
-import com.gu.fronts.endtoend.engine.actions.api.ViewTrailBlockActionApi;
+import com.gu.fronts.endtoend.engine.actions.TrailBlockCreateAction;
+import com.gu.fronts.endtoend.engine.actions.ViewTrailBlockAction;
 import cucumber.api.java.en.Given;
 import hu.meza.aao.DefaultScenarioContext;
 import org.junit.Assert;
@@ -37,24 +37,23 @@ public class TrailBlockSetupSteps {
 		context.setSubject(trailBlock);
 
 
-		ViewTrailBlockActionApi view = new ViewTrailBlockActionApi(trailBlock);
-
+		ViewTrailBlockAction view = actionFactory.view(trailBlock);
 		editors.anyone().execute(view);
 
 		for (String storyTitle : view.liveStories()) {
 			RemoveStoryFromTrailBlockAction remove =
-				new RemoveStoryFromTrailBlockAction(new Story(storyTitle), trailBlock);
+				actionFactory.removeStory(new Story(storyTitle), trailBlock);
 			editors.anyone().execute(remove);
 		}
 
 		for (String storyTitle : view.draftStories()) {
 			RemoveStoryFromTrailBlockAction remove =
-				new RemoveStoryFromTrailBlockAction(new Story(storyTitle), trailBlock);
+				actionFactory.removeStory(new Story(storyTitle), trailBlock);
 			editors.anyone().execute(remove);
 		}
 
 
-		TrailBlockCreateAction trailBlockCreateAction = new TrailBlockCreateAction(trailBlock);
+		TrailBlockCreateAction trailBlockCreateAction = actionFactory.createTrailBlock(trailBlock);
 
 		editors.anyone().execute(trailBlockCreateAction);
 

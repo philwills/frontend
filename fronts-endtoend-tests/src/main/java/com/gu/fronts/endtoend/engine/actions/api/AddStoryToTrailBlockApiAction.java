@@ -2,14 +2,14 @@ package com.gu.fronts.endtoend.engine.actions.api;
 
 import com.gu.fronts.endtoend.engine.Story;
 import com.gu.fronts.endtoend.engine.TrailBlock;
-import com.gu.fronts.endtoend.engine.TrailBlockAction;
 import com.gu.fronts.endtoend.engine.TrailBlockMode;
+import com.gu.fronts.endtoend.engine.actions.AddStoryToTrailBlockAction;
 import hu.meza.tools.HttpCall;
 import hu.meza.tools.HttpClientWrapper;
 import org.apache.http.HttpStatus;
 import org.apache.http.cookie.Cookie;
 
-public class AddStoryToTrailBlockAction implements TrailBlockAction {
+public class AddStoryToTrailBlockApiAction implements AddStoryToTrailBlockAction {
 	private final Story story;
 	private final TrailBlock trailblock;
 	private final TrailBlockMode mode;
@@ -17,21 +17,21 @@ public class AddStoryToTrailBlockAction implements TrailBlockAction {
 	private HttpClientWrapper client;
 	private HttpCall httpCall;
 
-	public AddStoryToTrailBlockAction(Story story, TrailBlock trailblock) {
+	public AddStoryToTrailBlockApiAction(Story story, TrailBlock trailblock) {
 		this(story, trailblock, TrailBlockMode.LIVE);
 	}
 
-	public AddStoryToTrailBlockAction(Story storyA, TrailBlock trailBlock, Story storyB) {
+	public AddStoryToTrailBlockApiAction(Story storyA, TrailBlock trailBlock, Story storyB) {
 		this(storyA, trailBlock, storyB, TrailBlockMode.LIVE);
 	}
 
-	public AddStoryToTrailBlockAction(Story story, TrailBlock trailBlock, TrailBlockMode mode) {
+	public AddStoryToTrailBlockApiAction(Story story, TrailBlock trailBlock, TrailBlockMode mode) {
 		this.story = story;
 		this.trailblock = trailBlock;
 		this.mode = mode;
 	}
 
-	public AddStoryToTrailBlockAction(
+	public AddStoryToTrailBlockApiAction(
 		Story storyA, TrailBlock trailBlock, Story storyB, TrailBlockMode mode
 	) {
 		story = storyA;
@@ -63,8 +63,8 @@ public class AddStoryToTrailBlockAction implements TrailBlockAction {
 	}
 
 	@Override
-	public AddStoryToTrailBlockAction copyOf() {
-		return new AddStoryToTrailBlockAction(story, trailblock);
+	public AddStoryToTrailBlockApiAction copyOf() {
+		return new AddStoryToTrailBlockApiAction(story, trailblock);
 	}
 
 	private String requestBody() {

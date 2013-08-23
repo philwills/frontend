@@ -2,14 +2,14 @@ package com.gu.fronts.endtoend.engine.actions.api;
 
 import com.gu.fronts.endtoend.engine.Story;
 import com.gu.fronts.endtoend.engine.TrailBlock;
-import com.gu.fronts.endtoend.engine.TrailBlockAction;
 import com.gu.fronts.endtoend.engine.TrailBlockMode;
+import com.gu.fronts.endtoend.engine.actions.RemoveStoryFromTrailBlockAction;
 import hu.meza.tools.HttpCall;
 import hu.meza.tools.HttpClientWrapper;
 import org.apache.http.HttpStatus;
 import org.apache.http.cookie.Cookie;
 
-public class RemoveStoryFromTrailBlockAction implements TrailBlockAction {
+public class RemoveStoryFromTrailBlockApiAction implements RemoveStoryFromTrailBlockAction {
 
 	private final Story story;
 	private final TrailBlockMode mode;
@@ -17,11 +17,11 @@ public class RemoveStoryFromTrailBlockAction implements TrailBlockAction {
 	private HttpClientWrapper client;
 	private HttpCall httpCall;
 
-	public RemoveStoryFromTrailBlockAction(Story story, TrailBlock trailblock) {
+	public RemoveStoryFromTrailBlockApiAction(Story story, TrailBlock trailblock) {
 		this(story, trailblock, TrailBlockMode.LIVE);
 	}
 
-	public RemoveStoryFromTrailBlockAction(Story story, TrailBlock trailBlock, TrailBlockMode mode) {
+	public RemoveStoryFromTrailBlockApiAction(Story story, TrailBlock trailBlock, TrailBlockMode mode) {
 		this.story = story;
 		this.mode = mode;
 		this.trailblock = trailBlock;
@@ -55,8 +55,8 @@ public class RemoveStoryFromTrailBlockAction implements TrailBlockAction {
 	}
 
 	@Override
-	public RemoveStoryFromTrailBlockAction copyOf() {
-		return new RemoveStoryFromTrailBlockAction(story, trailblock, mode);
+	public RemoveStoryFromTrailBlockApiAction copyOf() {
+		return new RemoveStoryFromTrailBlockApiAction(story, trailblock, mode);
 	}
 
 	private String isLive() {

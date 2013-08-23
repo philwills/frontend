@@ -1,18 +1,18 @@
 package com.gu.fronts.endtoend.engine.actions.api;
 
 import com.gu.fronts.endtoend.engine.TrailBlock;
-import com.gu.fronts.endtoend.engine.TrailBlockAction;
+import com.gu.fronts.endtoend.engine.actions.PublishDraftAction;
 import hu.meza.tools.HttpCall;
 import hu.meza.tools.HttpClientWrapper;
 import org.apache.http.HttpStatus;
 import org.apache.http.cookie.Cookie;
 
-public class PublishDraftAction implements TrailBlockAction {
+public class PublishDraftApiAction implements PublishDraftAction {
 	private final TrailBlock trailBlock;
 	private HttpClientWrapper client;
 	private HttpCall httpCall;
 
-	public PublishDraftAction(TrailBlock trailBlock) {
+	public PublishDraftApiAction(TrailBlock trailBlock) {
 		this.trailBlock = trailBlock;
 	}
 
@@ -40,8 +40,8 @@ public class PublishDraftAction implements TrailBlockAction {
 	}
 
 	@Override
-	public PublishDraftAction copyOf() {
-		return new PublishDraftAction(trailBlock);
+	public PublishDraftApiAction copyOf() {
+		return new PublishDraftApiAction(trailBlock);
 	}
 
 }

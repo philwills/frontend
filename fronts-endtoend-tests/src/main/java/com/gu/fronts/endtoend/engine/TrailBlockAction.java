@@ -8,8 +8,6 @@ public interface TrailBlockAction extends Action {
 
     void setAuthenticationData(Cookie cookie);
 
-    void useClient(HttpClientWrapper client);
-
     boolean success();
 
 }
