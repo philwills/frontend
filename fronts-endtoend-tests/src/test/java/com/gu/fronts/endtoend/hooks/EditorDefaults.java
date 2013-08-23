@@ -17,7 +17,9 @@ public class EditorDefaults {
 
 	@Before
 	public void createAnEditor() {
-		editors.addActor("an editor", new TrailBlockEditor(config.baseUrl(), config.cookieString()));
-		editors.addActor("the editor", new TrailBlockEditor(config.baseUrl(), config.cookieString()));
+		editors.addActor("an editor",
+						 new TrailBlockEditor(config.baseUrl(), config.cookieString(), config.actionsType()));
+		editors.addActor("the editor",
+						 new TrailBlockEditor(config.baseUrl(), config.cookieString(), config.actionsType()));
 	}
 }

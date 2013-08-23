@@ -1,13 +1,14 @@
 package com.gu.fronts.endtoend.engine.actions.api;
 
 import com.gu.fronts.endtoend.engine.TrailBlock;
+import com.gu.fronts.endtoend.engine.TrailBlockApiAction;
 import com.gu.fronts.endtoend.engine.actions.PublishDraftAction;
 import hu.meza.tools.HttpCall;
 import hu.meza.tools.HttpClientWrapper;
 import org.apache.http.HttpStatus;
 import org.apache.http.cookie.Cookie;
 
-public class PublishDraftApiAction implements PublishDraftAction {
+public class PublishDraftApiAction implements PublishDraftAction, TrailBlockApiAction {
 	private final TrailBlock trailBlock;
 	private HttpClientWrapper client;
 	private HttpCall httpCall;

@@ -13,16 +13,14 @@ public class TrailBlockEditor extends RestfulActor {
 
 	private final String baseUrl;
 	private final String cookieValue;
+	private final ActionsType actionsType;
 	private HttpClientWrapper client;
 
-	public TrailBlockEditor(String baseUrl, String cookieValue) {
+	public TrailBlockEditor(String baseUrl, String cookieValue, ActionsType actionsType) {
 		this.baseUrl = baseUrl;
 		this.cookieValue = cookieValue;
+		this.actionsType = actionsType;
 
-		client = new HttpClientWrapper();
-		client.dontCareAboutSSL();
-		client.followRedirects();
-		client.setHost(baseUrl);
 	}
 
 	@Override
@@ -47,9 +45,34 @@ public class TrailBlockEditor extends RestfulActor {
 		return cookie;
 	}
 
-	public void execute(TrailBlockApiAction action) {
-		action.useClient(client);
+	public void execute(TrailBlockAction action) {
+
+		switch (actionsType) {
+			case API:
+				client = setUpHttpClient(baseUrl);
+				((TrailBlockApiAction) action).useClient(client);
+				break;
+			case UI:
+				//				((TrailBlockUIAction) action).useDriver(client);
+				break;
+
+		}
 		action.setAuthenticationData(authenticationData());
+
+
 		super.execute(action);
 	}
+
+	private HttpClientWrapper setUpHttpClient(String baseUrl) {
+		if (client != null) {
+			return client;
+		}
+
+		HttpClientWrapper client = new HttpClientWrapper();
+		client.dontCareAboutSSL();
+		client.followRedirects();
+		client.setHost(baseUrl);
+		return client;
+	}
+
 }

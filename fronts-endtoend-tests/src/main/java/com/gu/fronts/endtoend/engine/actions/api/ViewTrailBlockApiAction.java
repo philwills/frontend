@@ -1,6 +1,7 @@
 package com.gu.fronts.endtoend.engine.actions.api;
 
 import com.gu.fronts.endtoend.engine.TrailBlock;
+import com.gu.fronts.endtoend.engine.TrailBlockApiAction;
 import com.gu.fronts.endtoend.engine.actions.ViewTrailBlockAction;
 import hu.meza.tools.HttpCall;
 import hu.meza.tools.HttpClientWrapper;
@@ -13,7 +14,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewTrailBlockApiAction implements ViewTrailBlockAction {
+public class ViewTrailBlockApiAction implements ViewTrailBlockAction, TrailBlockApiAction {
 	private final TrailBlock trailBlock;
 	private HttpClientWrapper client;
 	private HttpCall httpCall;

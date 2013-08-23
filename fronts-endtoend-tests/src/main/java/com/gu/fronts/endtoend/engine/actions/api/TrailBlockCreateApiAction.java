@@ -1,6 +1,7 @@
 package com.gu.fronts.endtoend.engine.actions.api;
 
 import com.gu.fronts.endtoend.engine.TrailBlock;
+import com.gu.fronts.endtoend.engine.TrailBlockApiAction;
 import com.gu.fronts.endtoend.engine.actions.TrailBlockCreateAction;
 import hu.meza.tools.HttpCall;
 import hu.meza.tools.HttpClientWrapper;
@@ -9,7 +10,7 @@ import org.apache.http.cookie.Cookie;
 
 import java.util.UUID;
 
-public class TrailBlockCreateApiAction implements TrailBlockCreateAction {
+public class TrailBlockCreateApiAction implements TrailBlockCreateAction, TrailBlockApiAction {
 	private final TrailBlock trailBlock;
 	private HttpClientWrapper client;
 	private HttpCall httpCall;

@@ -2,6 +2,7 @@ package com.gu.fronts.endtoend.engine.actions.api;
 
 import com.gu.fronts.endtoend.engine.Story;
 import com.gu.fronts.endtoend.engine.TrailBlock;
+import com.gu.fronts.endtoend.engine.TrailBlockApiAction;
 import com.gu.fronts.endtoend.engine.TrailBlockMode;
 import com.gu.fronts.endtoend.engine.actions.RemoveStoryFromTrailBlockAction;
 import hu.meza.tools.HttpCall;
@@ -9,7 +10,8 @@ import hu.meza.tools.HttpClientWrapper;
 import org.apache.http.HttpStatus;
 import org.apache.http.cookie.Cookie;
 
-public class RemoveStoryFromTrailBlockApiAction implements RemoveStoryFromTrailBlockAction {
+public class RemoveStoryFromTrailBlockApiAction
+	implements RemoveStoryFromTrailBlockAction, TrailBlockApiAction {
 
 	private final Story story;
 	private final TrailBlockMode mode;

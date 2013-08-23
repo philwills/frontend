@@ -19,7 +19,8 @@ public class EditorSetupSteps {
 
 	@Given("^(.*) is a trailblock editor$")
 	public void isATrailBlockEditor(String actorLabel) {
-		editors.addActor(actorLabel, new TrailBlockEditor(config.baseUrl(), config.cookieString()));
+		editors.addActor(actorLabel,
+						 new TrailBlockEditor(config.baseUrl(), config.cookieString(), config.actionsType()));
 	}
 
 }

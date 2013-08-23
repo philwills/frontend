@@ -18,6 +18,7 @@ public class ActionFactory {
 			case API:
 				return new ApiActionsFactory();
 			case UI:
+				return new UIActionsFactory();
 			default:
 				throw new RuntimeException(
 					String.format("Can't identify actions type factory for type: %s", actionsType));
