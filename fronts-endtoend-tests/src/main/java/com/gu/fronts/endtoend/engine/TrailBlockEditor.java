@@ -1,10 +1,13 @@
 package com.gu.fronts.endtoend.engine;
 
+import com.gu.fronts.endtoend.engine.actions.TrailBlockUIAction;
 import hu.meza.aao.RestfulActor;
 import hu.meza.tools.HttpClientWrapper;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.cookie.BasicClientCookie2;
 import org.joda.time.DateTime;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,6 +18,7 @@ public class TrailBlockEditor extends RestfulActor {
 	private final String cookieValue;
 	private final ActionsType actionsType;
 	private HttpClientWrapper client;
+	private WebDriver driver;
 
 	public TrailBlockEditor(String baseUrl, String cookieValue, ActionsType actionsType) {
 		this.baseUrl = baseUrl;
@@ -53,7 +57,10 @@ public class TrailBlockEditor extends RestfulActor {
 				((TrailBlockApiAction) action).useClient(client);
 				break;
 			case UI:
-				//				((TrailBlockUIAction) action).useDriver(client);
+				driver = new FirefoxDriver();
+				driver.get(String.format("%s/%s", baseUrl, "logout"));
+
+				((TrailBlockUIAction) action).useDriver(driver, baseUrl);
 				break;
 
 		}

@@ -4,9 +4,12 @@ import com.gu.fronts.endtoend.engine.TrailBlock;
 import com.gu.fronts.endtoend.engine.actions.PublishDraftAction;
 import com.gu.fronts.endtoend.engine.actions.TrailBlockUIAction;
 import org.apache.http.cookie.Cookie;
+import org.openqa.selenium.WebDriver;
 
 public class PublishDraftUIAction implements PublishDraftAction, TrailBlockUIAction {
 	private final TrailBlock trailBlock;
+	private WebDriver driver;
+	private String baseUrl;
 
 	public PublishDraftUIAction(TrailBlock trailBlock) {
 		this.trailBlock = trailBlock;
@@ -19,6 +22,7 @@ public class PublishDraftUIAction implements PublishDraftAction, TrailBlockUIAct
 
 	@Override
 	public void setAuthenticationData(Cookie cookie) {
+		driver.manage().addCookie((org.openqa.selenium.Cookie) cookie);
 	}
 
 	@Override
@@ -28,6 +32,12 @@ public class PublishDraftUIAction implements PublishDraftAction, TrailBlockUIAct
 	@Override
 	public PublishDraftUIAction copyOf() {
 		return new PublishDraftUIAction(trailBlock);
+	}
+
+	@Override
+	public void useDriver(WebDriver driver, String baseUrl) {
+		this.driver = driver;
+		this.baseUrl = baseUrl;
 	}
 
 }

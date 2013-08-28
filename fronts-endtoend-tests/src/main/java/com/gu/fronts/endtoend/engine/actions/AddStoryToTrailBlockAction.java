@@ -1,4 +1,6 @@
 package com.gu.fronts.endtoend.engine.actions;
 
-public interface AddStoryToTrailBlockAction {
+import com.gu.fronts.endtoend.engine.TrailBlockAction;
+
+public interface AddStoryToTrailBlockAction extends TrailBlockAction {
 }

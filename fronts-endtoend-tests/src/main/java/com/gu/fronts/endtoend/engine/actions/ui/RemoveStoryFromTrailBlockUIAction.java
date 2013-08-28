@@ -5,9 +5,8 @@ import com.gu.fronts.endtoend.engine.TrailBlock;
 import com.gu.fronts.endtoend.engine.TrailBlockMode;
 import com.gu.fronts.endtoend.engine.actions.RemoveStoryFromTrailBlockAction;
 import com.gu.fronts.endtoend.engine.actions.TrailBlockUIAction;
-import hu.meza.tools.HttpCall;
-import hu.meza.tools.HttpClientWrapper;
 import org.apache.http.cookie.Cookie;
+import org.openqa.selenium.WebDriver;
 
 public class RemoveStoryFromTrailBlockUIAction
 	implements RemoveStoryFromTrailBlockAction, TrailBlockUIAction {
@@ -15,8 +14,8 @@ public class RemoveStoryFromTrailBlockUIAction
 	private final Story story;
 	private final TrailBlockMode mode;
 	private final TrailBlock trailblock;
-	private HttpClientWrapper client;
-	private HttpCall httpCall;
+	private WebDriver driver;
+	private String baseUrl;
 
 	public RemoveStoryFromTrailBlockUIAction(Story story, TrailBlock trailblock) {
 		this(story, trailblock, TrailBlockMode.LIVE);
@@ -35,6 +34,7 @@ public class RemoveStoryFromTrailBlockUIAction
 
 	@Override
 	public void setAuthenticationData(Cookie cookie) {
+		driver.manage().addCookie((org.openqa.selenium.Cookie) cookie);
 	}
 
 	@Override
@@ -44,6 +44,12 @@ public class RemoveStoryFromTrailBlockUIAction
 	@Override
 	public RemoveStoryFromTrailBlockUIAction copyOf() {
 		return new RemoveStoryFromTrailBlockUIAction(story, trailblock, mode);
+	}
+
+	@Override
+	public void useDriver(WebDriver driver, String baseUrl) {
+		this.driver = driver;
+		this.baseUrl = baseUrl;
 	}
 
 	private String isLive() {

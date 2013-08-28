@@ -107,6 +107,8 @@ object Frontend extends Build with Prototypes {
       "info.cukes" % "cucumber-java" % "1.1.3",
       "info.cukes" % "cucumber-junit" % "1.1.3",
       "info.cukes" % "cucumber-picocontainer" % "1.1.3",
+      "org.seleniumhq.selenium" % "selenium-java" % "2.35.0",
+      "org.seleniumhq.selenium" % "selenium-server" % "2.35.0",
       "junit" % "junit" % "4.11" % "test",
       "com.novocode" % "junit-interface" % "0.10" % "test->default"
     ),
