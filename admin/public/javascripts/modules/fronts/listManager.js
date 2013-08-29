@@ -83,7 +83,9 @@ define([
             });
 
             chosen.forEach(function(id){
-                model.listsDisplayed.push(new List(id));
+                if(common.util.isValidCollectionId(id)) {
+                    model.listsDisplayed.push(new List(id));
+                }
             });
 
             if(opts.inferDefaults && chosen[0]) {
@@ -208,8 +210,9 @@ define([
             }).then(
                 function(resp) {
                     resp.forEach(function(id){
-                        // Only use "first/three/levels" of the collection id path
-                        treeAdd(_.first(id.split('/'), 3), collections);
+                        if(common.util.isValidCollectionId(id)) {
+                            treeAdd(id.split('/'), collections);
+                        }
                     });                    
                     model.editions(_.keys(collections));
                     if (_.isFunction(callback)) { callback(); }
@@ -240,6 +243,42 @@ define([
             })
         };
 
+        function createNewCollection() {
+            if (common.util.isValidCollectionId(model.newCollection())) {
+                addList(model.newCollection());
+            } else {
+                alert('Use lowercase letters, numbers, hyphens, and TWO slashes, e.g. "uk/news/extra"')
+            }
+        };
+
+        function flushClipboard() {
+            model.clipboard.removeAll();
+            clipboardEl.innerHTML = '';
+        };
+
+        function onDragOver(event) {
+            event.preventDefault();
+        }
+
+        function onDrop(event) {
+            var url = event.testData ? event.testData : event.dataTransfer.getData('Text');
+
+            if(!url) { return true; }
+
+            event.preventDefault();
+
+            if (common.util.urlHost(url).indexOf('google') > -1) {
+                url = decodeURIComponent(common.util.parseQueryParams(url).url);
+            };
+
+            model.clipboard.unshift(new Article({
+                id: common.util.urlAbsPath(url)
+            }));
+
+            contentApi.decorateItems(model.clipboard());
+            ophanApi.decorateItems(model.clipboard());
+        }
+
         this.init = function(callback) {
             model.latestArticles  = new LatestArticles();
             model.listsDisplayed  = knockout.observableArray();
@@ -254,9 +293,13 @@ define([
             model.blocks   = knockout.observableArray();
             model.block    = knockout.observable();
 
+            model.advancedMode = common.util.queryParams().hasOwnProperty('advancedMode');
+            model.newCollection = knockout.observable();
+
             model.actions = {
                 displaySelectedBlocks: displaySelectedBlocks,
                 displayInAllEditions: displayInAllEditions,
+                createNewCollection: createNewCollection,
                 dropList: dropList,
                 clearAll: clearAll,
                 flushClipboard: flushClipboard
@@ -284,34 +327,6 @@ define([
                     model.latestArticles.section(common.config.sectionSearches[section] || section);
                 }
             });
-
-            function flushClipboard() {
-                model.clipboard.removeAll();
-                clipboardEl.innerHTML = '';
-            };
-
-            function onDragOver(event) {
-                event.preventDefault();
-            }
-
-            function onDrop(event) {
-                var url = event.testData ? event.testData : event.dataTransfer.getData('Text');
-
-                if(!url) { return true; }
-
-                event.preventDefault();
-
-                if (common.util.urlHost(url).indexOf('google') > -1) {
-                    url = decodeURIComponent(common.util.parseQueryParams(url).url);
-                };
-
-                model.clipboard.unshift(new Article({
-                    id: common.util.urlAbsPath(url)
-                }));
-
-                contentApi.decorateItems(model.clipboard());
-                ophanApi.decorateItems(model.clipboard());
-            }
 
             knockout.bindingHandlers.makeDropabble = {
                 init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {

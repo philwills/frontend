@@ -70,6 +70,13 @@ define([
                 return str ? str.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,'').replace(/\s+/g,' ') : undefined;
             },
 
+            isValidCollectionId: function(id) {
+                var parts = id.split('/');
+                return (parts.length === 3 && parts.every(function(p){
+                    return /^[a-z0-9]+(-?[a-z0-9]+){0,}$/.test(p) 
+                }));
+            },
+
             numberWithCommas: function(x) {
                 var pattern = /(-?\d+)(\d{3})/;
 

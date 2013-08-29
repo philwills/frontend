@@ -6,7 +6,9 @@
 
     <div class="fronts" data-bind="visible: true, makeDropabble: true" style="display: none">
         <header>
-            <div class="tool-title">Collections Editor</div>
+            <div class="tool-title">
+                Collections Editor <span data-bind="visible: advancedMode">- Advanced Mode</span>
+            </div>
             <div class="list-picker">
                 <span class="list-picker__title">Choose collections:</span>
 
@@ -17,12 +19,13 @@
                 <select data-bind="options: blocks, value: block, enable: section, optionsCaption: 'all collections'"></select>
 
                 <button class="strong" data-bind="enable: section, click: actions.displaySelectedBlocks">Show</button>
-                
-                <!--
-                <button data-bind="enable: block,   click: actions.displayInAllEditions">in all editions</button>
-                -->
-
                 <button data-bind="enable: listsDisplayed().length, click: actions.clearAll">Hide all</button>
+
+                <div class="form-new-collection" data-bind="visible: advancedMode">
+                    <span class="list-picker__title">Create a collection:</span>
+                    <input type="text" placeholder="eg. uk/news/extra" data-bind='value: newCollection'/>
+                    <button data-bind="click: actions.createNewCollection">Create</button>
+                </div>
             </div>
         </header>
 
@@ -72,7 +75,9 @@
         <div id="trailblocks" data-bind="foreach: listsDisplayed">
             <div class="trailblock">
                 <div class="list-header">
-                    <i class="icon-cog icon-white list-tool" data-bind="click: toggleEditingConfig"></i>
+                    <i class="icon-cog icon-white list-tool" data-bind="
+                        visible: $root.advancedMode,
+                        click: toggleEditingConfig"></i>
 
                     <a data-bind="click: $root.actions.dropList" class="list-header__hide" title="Hide this block">HIDE</a>
                     <div class="list-header__title" data-bind="foreach: crumbs">
@@ -88,7 +93,7 @@
                                     "></a>
                             <!-- /ko -->
                             <!-- ko ifnot: state.timeAgo -->
-                                Empty
+                                Drag in an article to create this collection
                             <!-- /ko -->
                         </div>
                         <div class="list-header__status">
