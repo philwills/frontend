@@ -56,5 +56,8 @@ GET     /metrics/fastly                  controllers.metrics.FastlyController.re
 GET     /radiator                        controllers.RadiatorController.render()
 GET     /radiator/pingdom                controllers.RadiatorController.pingdom()
 
+# Streamview
+GET     /streamview                      controllers.StreamViewController.render()
+
 # Football Troubleshooter
 GET     /troubleshoot/football           controllers.FootballTroubleshooterController.render()

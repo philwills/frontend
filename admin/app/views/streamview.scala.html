@@ -1,0 +1,58 @@
+@(env: String, metricsCharts: Seq[tools.Chart], fastlyCharts: Seq[tools.Chart])
+
+@import tools.Chart
+
+@admin_main("Streamview", env, isAuthed = true) {
+
+    <script>
+        var chartData = [
+            @metricsCharts.map{ chart =>
+                {
+                  'title' : '@chart.name',
+                  'data'  : @Html(chart.asDataset)
+                },
+            }
+
+            @fastlyCharts.map{ chart =>
+                {
+                  'title' : '@chart.name',
+                  'data'  : @Html(chart.asDataset)
+                },
+            }
+        ]
+    </script>
+
+
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawCharts);
+
+
+    function drawCharts() {
+    /*
+        @metricsCharts.map{ chart =>
+            new google.visualization.LineChart(document.getElementById('@chart.id'))
+                    .draw(google.visualization.arrayToDataTable(@Html(chart.asDataset)), {
+                        title: '@chart.name',
+                        legend: 'none' @chart.yAxis.map{ title =>, vAxis: {title: "@title"} }
+            });
+        }
+
+        /*
+        @fastlyCharts.map{ chart =>
+            new google.visualization.LineChart(document.getElementById('@chart.id'))
+                    .draw(google.visualization.arrayToDataTable(@Html(chart.asDataset)), {
+                        title: '@chart.name', @chart.yAxis.map{ title =>, vAxis: {title: "@title"} }
+            });
+        }
+
+    */
+    }
+</script>
+
+@fastlyCharts.map{ chart => <div id="@chart.id" style="max-width: 900px"></div> }
+@metricsCharts.map{ chart => <div id="@chart.id" style="max-width: 900px"></div> }
+
+}
