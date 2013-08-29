@@ -8,21 +8,16 @@
 
     curl(['@routes.Assets.at("javascripts/streamview/main")'], function(StreamView) {
         StreamView.init({
-            chartData: [
+            serverMetrics: {
                 @metricsCharts.map{ chart =>
-                    {
-                        'title' : '@chart.name',
-                        'data'  : @Html(chart.asDataset)
-                    },
+                    '@chart.name': @Html(chart.asDataset),
                 }
-
+            },
+            fastlyMetrics: {
                 @fastlyCharts.map{ chart =>
-                    {
-                        'title' : '@chart.name',
-                        'data'  : @Html(chart.asDataset)
-                    },
+                    '@chart.name' : @Html(chart.asDataset),
                 }
-            ]
+            }
         });
     });
 </script>
