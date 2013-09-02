@@ -66,6 +66,7 @@ class SigninControllerTest extends path.FreeSpec with ShouldMatchers with Mockit
           verify(api).authBrowser(auth, clientAuth, omnitureData)
         }
 
+
         "should redirect the user to the returnUrl" in Fake {
           when(returnUrlVerifier.getVerifiedReturnUrl(fakeRequest)).thenReturn(Some("http://example.com/return"))
           val result = signinController.processForm()(fakeRequest)

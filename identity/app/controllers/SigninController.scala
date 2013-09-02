@@ -2,6 +2,7 @@ package controllers
 
 import play.api.mvc._
 import play.api.data._
+import play.api.data.validation.Constraints
 import model.IdentityPage
 import common.{Logging, ExecutionContexts}
 import services.{IdentityUrlBuilder, IdRequestParser, ReturnUrlVerifier}
@@ -31,8 +32,10 @@ class SigninController @Inject()(returnUrlVerifier: ReturnUrlVerifier,
 
   val form = Form(
     Forms.tuple(
-      "email" -> idEmail,
-      "password" -> idPassword,
+      "email" -> idEmail
+        .verifying(Constraints.nonEmpty),
+      "password" -> idPassword
+        .verifying(Constraints.nonEmpty),
       "keepMeSignedIn" -> Forms.boolean
     )
   )
