@@ -1,6 +1,7 @@
 {
   "name": "frontend-admin-js",
   "version": "0.1.0 ",
+  "directory": "components/",
   "dependencies": {
     "reqwest": "0.8",
     "bean": "1.0",
@@ -15,6 +16,8 @@
     "sinon": "1.7",
     "underscore": "1.4",
     "bootstrap.css": "2.1",
-    "js_humanized_time_span": "git@github.com:layam/js_humanized_time_span.git"
+    "js_humanized_time_span": "git@github.com:layam/js_humanized_time_span.git",
+    "threejs": "*",
+    "sparks": "git@github.com:zz85/sparks.js.git"
   }
 }
