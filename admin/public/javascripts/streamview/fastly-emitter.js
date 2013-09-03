@@ -16,7 +16,7 @@ define(function () {
 
         particle = new THREE.Particle( material );
 
-        particle.scale.x = particle.scale.y = 1.4;
+        particle.scale.x = particle.scale.y = 1.8;
 
         group.add( particle );
 
