@@ -10,7 +10,7 @@
 
 
 <!--script type="text/javascript" src="js/Three.js"></script-->
-
+<!--script type="text/javascript" src="@routes.Assets.at("javascripts/components/sparks/examples/CanvasShaders.js")"></script-->
 <script type="text/javascript" src="@routes.Assets.at("javascripts/components/sparks/Sparks.js")"></script>
 <script type="text/javascript" src="@routes.Assets.at("javascripts/components/sparks/examples/js/RequestAnimationFrame.js")"></script>
 <script type="text/javascript" src="@routes.Assets.at("javascripts/components/sparks/examples/js/Stats.js")"></script>
@@ -30,8 +30,48 @@
         height: 500px;
     }
 </style>
-<div class="streamview"></div>
 
+
+        <script type="x-shader/x-vertex" id="vertexshader">
+
+            uniform float amplitude;
+            attribute float size;
+            attribute vec3 customColor;
+
+            varying vec3 vColor;
+
+            void main() {
+
+                vColor = customColor;
+
+                vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+                //gl_PointSize = size;
+                gl_PointSize = size * ( 100.0 / length( mvPosition.xyz ) );
+
+                gl_Position = projectionMatrix * mvPosition;
+
+            }
+
+        </script>
+
+        <script type="x-shader/x-fragment" id="fragmentshader">
+
+            uniform vec3 color;
+            uniform sampler2D texture;
+
+            varying vec3 vColor;
+
+            void main() {
+
+                gl_FragColor = vec4( color * vColor, 1.0 );
+                gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+
+            }
+
+        </script>
+
+<div class="streamview"></div>
 
 <script>
     curl(['@routes.Assets.at("javascripts/streamview/main")'], function(StreamView) {

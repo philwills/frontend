@@ -14,7 +14,10 @@ trait CloudWatch {
     "frontend-RouterLo-1HHMP4C9L33QJ" -> "Router",
     "frontend-ArticleL-T0BUR121RZIG" -> "Article",
     "frontend-FrontLoa-L86HJF9PG40T" -> "Front",
-    "frontend-Applicat-V36EHVHAEI15" -> "Applications"
+    "frontend-Applicat-V36EHVHAEI15" -> "Applications",
+    "frontend-Discussi-KC65SADEVHIE" -> "Discussion",
+    "frontend-ImageLoa-Y3FM3W6ZRJC1" -> "Image",
+    "frontend-Football-BQSFTF2THRGT" -> "Football"
   )
 
   private val fastlyMetrics = List(
