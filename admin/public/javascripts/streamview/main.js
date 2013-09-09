@@ -261,6 +261,8 @@ define([
                     self.shaderMaterial.attributes.size.value[ i ] = 55 + 13 * Math.sin( 0.1 * i + time );
                 }
 
+                //particleCloud.rotation.y += 0.001;
+
                 particleCloud.geometry.verticesNeedUpdate = true;
                 particleCloud.geometry.colorsNeedUpdate = true;
                 self.shaderMaterial.attributes.size.needsUpdate = true; //attributes.size.needsUpdate = true;

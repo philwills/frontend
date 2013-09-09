@@ -71,7 +71,7 @@ define([], function () {
 
             }));
 
-            sparksEmitter.addInitializer(new SPARKS.Velocity(new SPARKS.PointZone(new THREE.Vector3(200,0,0))));
+            sparksEmitter.addInitializer(new SPARKS.Velocity(new SPARKS.PointZone(new THREE.Vector3(150,0,0))));
 
             sparksEmitter.addAction(new SPARKS.Age());
             sparksEmitter.addAction(new SPARKS.Move());

@@ -77,7 +77,7 @@ define(function () {
 
             sparksEmitter.addAction(new SPARKS.Age());
             sparksEmitter.addAction(new SPARKS.Move());
-            sparksEmitter.addAction(new SPARKS.RandomDrift(500,500,0));
+            sparksEmitter.addAction(new SPARKS.RandomDrift(400,400,0));
             //sparksEmitter.addAction(new SPARKS.Accelerate(0,-100,0));
 
             sparksEmitter.addCallback("created", onParticleCreated);
