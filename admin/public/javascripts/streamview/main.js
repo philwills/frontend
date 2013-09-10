@@ -33,6 +33,26 @@ define([
                 }
             });
 
+            // Process loadbalancer instances
+            var healthyInstances = {};
+            _.each(opts.healthyHostMetrics, function(vals, availabilityZone, list) {
+
+                _.each(vals, function(instances, serverName){
+                    if (healthyInstances[serverName]) {
+                        healthyInstances[serverName] += _.last(instances)[1];
+                    } else {
+                        healthyInstances[serverName] = _.last(instances)[1];
+                    }
+
+                });
+                //healthyInstances[val]
+                //serverMetrics[key] = _.object(_.first(vals), _.last(vals));
+            });
+
+            $('.instances').html(JSON.stringify(healthyInstances));
+
+            console.log(healthyInstances);
+
             console.log(fastlyMetrics, serverMetrics);
 
             this.start3D();

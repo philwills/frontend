@@ -1,4 +1,4 @@
-@(env: String, metricsCharts: Seq[tools.Chart], fastlyCharts: Seq[tools.Chart])
+@(env: String, metricsCharts: Seq[tools.Chart], fastlyCharts: Seq[tools.Chart], healthyHostChartsA: Seq[tools.Chart], healthyHostChartsB: Seq[tools.Chart])
 
 @import tools.Chart
 
@@ -28,6 +28,11 @@
         background-color: #111;
         width: 100%;
         height: 500px;
+        margin-bottom: 40px;
+    }
+
+    .streamview canvas {
+        background-color: #000;
     }
 </style>
 
@@ -73,6 +78,9 @@
 
 <div class="streamview"></div>
 
+Alleged instances:
+<div class="instances"></div>
+
 <script>
     curl(['@routes.Assets.at("javascripts/streamview/main")'], function(StreamView) {
         StreamView.init({
@@ -85,6 +93,19 @@
                 @fastlyCharts.map{ chart =>
                     '@chart.name' : @Html(chart.asDataset),
                 }
+            },
+            healthyHostMetrics: {
+                'eu-west-1a' : {
+                    @healthyHostChartsA.map {chart =>
+                        '@chart.name' : @Html(chart.asDataset),
+                    }
+                },
+
+                'eu-west-1b' : {
+                    @healthyHostChartsB.map {chart =>
+                        '@chart.name' : @Html(chart.asDataset),
+                    }
+                },
             }
         });
     });

@@ -67,6 +67,19 @@ case class Request2xxGraph(name: String, private val metrics: Future[GetMetricSt
   )
 }
 
+case class HostGraph(name: String, private val metrics: Future[GetMetricStatisticsResult]) extends Chart {
+
+  lazy val labels = Seq("Time", "average")
+
+  private lazy val datapoints = metrics.get().getDatapoints.sortBy(_.getTimestamp.getTime).toSeq
+
+  lazy val dataset = datapoints.map(d => DataPoint(
+    new DateTime(d.getTimestamp.getTime).toString("HH:mm"),
+    Seq(d.getAverage)
+  )
+  )
+}
+
 object PageviewsByDayGraph extends Chart with implicits.Tuples with implicits.Dates {
   val name = "Pageviews"
   lazy val labels = Seq("Date", "pageviews")

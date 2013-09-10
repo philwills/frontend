@@ -43,7 +43,8 @@ define(function () {
     function onParticleDead(p) {
         //particle.target.visible = false; // is this a work around?
         //group.remove(particle.target);
-        particles.vertices[p.target].set(Number.POSITIVE_INFINITY,Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY);
+        //particles.vertices[p.target].set(Number.POSITIVE_INFINITY,Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY);
+        shaderMaterial.attributes.customColor.value[p.target].setHSL(0, 0, 0);
         Pool.add(p.target);
     };
 

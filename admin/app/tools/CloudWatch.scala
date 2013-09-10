@@ -20,6 +20,11 @@ trait CloudWatch {
     "frontend-Football-BQSFTF2THRGT" -> "Football"
   )
 
+  private val availabilityZones = List(
+    ("eu-west-1a", "1a"),
+    ("eu-west-1b", "1b")
+  )
+
   private val fastlyMetrics = List(
     ("Fastly Errors (Europe) - errors per minute, average", "errors", "europe", "2eYr6Wx3ZCUoVPShlCM61l"),
     ("Fastly Errors (USA) - errors per minute, average", "errors", "usa", "2eYr6Wx3ZCUoVPShlCM61l")
@@ -61,6 +66,36 @@ trait CloudWatch {
         .withNamespace("AWS/ELB")
         .withMetricName("HTTPCode_Backend_2XX")
         .withDimensions(new Dimension().withName("LoadBalancerName").withValue(loadBalancer)),
+        asyncHandler)
+    )
+  }.toSeq
+
+  def healthyHostEuWest1aCount = loadBalancers.map{ case (loadBalancer, name) =>
+    new HostGraph(name,
+      cloudClient.getMetricStatisticsAsync(new GetMetricStatisticsRequest()
+        .withStartTime(new DateTime().minusMinutes(5).toDate)
+        .withEndTime(new DateTime().toDate)
+        .withPeriod(60)
+        .withStatistics("Average")
+        .withNamespace("AWS/ELB")
+        .withMetricName("HealthyHostCount")
+        .withDimensions(new Dimension().withName("LoadBalancerName").withValue(loadBalancer))
+        .withDimensions(new Dimension().withName("AvailabilityZone").withValue("eu-west-1a")),
+        asyncHandler)
+    )
+  }.toSeq
+
+  def healthyHostEuWest1bCount = loadBalancers.map{ case (loadBalancer, name) =>
+    new HostGraph(name,
+      cloudClient.getMetricStatisticsAsync(new GetMetricStatisticsRequest()
+        .withStartTime(new DateTime().minusMinutes(5).toDate)
+        .withEndTime(new DateTime().toDate)
+        .withPeriod(60)
+        .withStatistics("Average")
+        .withNamespace("AWS/ELB")
+        .withMetricName("HealthyHostCount")
+        .withDimensions(new Dimension().withName("LoadBalancerName").withValue(loadBalancer))
+        .withDimensions(new Dimension().withName("AvailabilityZone").withValue("eu-west-1b")),
         asyncHandler)
     )
   }.toSeq

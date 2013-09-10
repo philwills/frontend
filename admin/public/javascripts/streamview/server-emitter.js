@@ -4,7 +4,8 @@ define([], function () {
         hue = 0,
         group,
         Pool,
-        particles;
+        particles,
+        shaderMaterial;
 
     var ran = 0;
 
@@ -22,6 +23,7 @@ define([], function () {
     function onParticleDead(p) {
         //particle.target.visible = false; // is this a work around?
         //group.remove(particle.target);
+        shaderMaterial.attributes.customColor.value[p.target].setHSL(0, 0, 0);
         Pool.add(p.target);
     };
 
@@ -31,6 +33,7 @@ define([], function () {
             this.opts = opts;
             group = opts.group;
             self.hue = opts.hue;
+            shaderMaterial = opts.shaderMaterial;
 
             //console.log(opts);
 
