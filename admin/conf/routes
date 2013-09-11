@@ -59,6 +59,7 @@ GET     /radiator/pingdom                controllers.RadiatorController.pingdom(
 
 # Streamview
 GET     /streamview                      controllers.StreamViewController.render()
+GET     /streamview.json                 controllers.StreamViewController.renderJson()
 
 # Football Troubleshooter
 GET     /troubleshoot/football           controllers.FootballTroubleshooterController.render()
