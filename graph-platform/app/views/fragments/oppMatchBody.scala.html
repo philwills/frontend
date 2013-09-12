@@ -1,0 +1,87 @@
+@(page: MatchPage)(implicit request: RequestHeader)
+
+<div class="article-wrapper monocolumn-wrapper" >
+    <div class="article__main-column">
+        <h2 class="article-zone type-1">
+            <a class="zone-color" data-link-name="article section" href="@LinkTo{/football}">Football</a>
+        </h2>
+
+        <article class="article football-article" role="main">
+            <div class="sport-oppm">
+                <header class="article-head sport-oppm__head">
+                    <p class="sport-oppm-head__date dateline type-11">
+                        <time data-timestamp="@page.theMatch.date.getMillis">
+                            @Format(page.theMatch.date, "EEEE d MMMM y")
+                        </time>
+                    </p>
+                    <div class="sport-oppm-head__summary" data-match-id="@page.theMatch.id">
+                        @fragments.oppMatchSummary(page.theMatch)
+                    </div>
+                </header>
+                <div class="sport-oppm__body">
+                    @* @if(page.theMatch.isLive) {
+                    <div class="update update-live-matches update-match-stats" data-link-name="autoupdate"></div>
+                    }
+                    <div class="match-stats">
+                        @fragments.matchStats(page)
+                    </div>*@
+
+
+                    <div class="tabs">
+                        <ol class="tabs__container js-tabs">
+
+                            <li class="tabs__tab tabs__tab--selected sport-oppm__tab">
+                                <a href="#tabs-oppm-1" class="type-6" data-link-name="tab Reports">Reports</a>
+                            </li>
+
+                            <li class="tabs__tab sport-oppm__tab">
+                                <a href="#tabs-oppm-2" class="type-6" data-link-name="tab Statistics">Statistics</a>
+                            </li>
+
+                            <li class="tabs__tab sport-oppm__tab">
+                                <a href="#tabs-oppm-3" class="type-6" data-link-name="tab Scores-Table">Scores/table</a>
+                            </li>
+
+                        </ol>
+                        <div class="tabs__content">
+                            <div id="tabs-oppm-1" class="tabs__pane sport-oppm__report" data-link-name="Reports" data-link-context="sport/reports">
+                                @page.report.map{ article =>
+                                    <h1 class="type-3 sport-oppm-report__headline">@Html(article.headline)</h1>
+                                    @Html(article.body)
+                                }
+                            </div>
+                            <div id="tabs-oppm-2" class="tabs__pane sport-oppm__statistics js-hidden" data-link-name="Statistics" data-link-context="sport/statistics">
+                                <p>Some stats</p>
+                            </div>
+                            <div id="tabs-oppm-3" class="tabs__pane sport-oppm__scores-table js-hidden" data-link-name="Scores-Table" data-link-context="sport/scores-table">
+
+
+                                <a class="sport-oppm-scores-table__competition zone-color type-7" href="/football/premierleague">
+                                    Premier League
+                                </a>
+
+                                <ol class="sport-oppm-scores-table__matches">
+
+                                    @page.otherRes.map{ otherMatch =>
+                                        <li class="match sport-oppm-scores-table__match">
+                                            <a href=@otherMatch.url>
+                                                <p class="match-desc type-10">
+                                                    <span class="match-desc__team match-desc__team--home">@otherMatch.homeTeam</span>
+                                                    <span class="match-desc__result">@otherMatch.homeScore-@otherMatch.awayScore</span>
+                                                    <span class="match-desc__team match-desc__team--away">@otherMatch.awayTeam</span>
+                                                </p>
+                                                <p class="match-status type-12">
+                                                    <abbr class="match-FT">FT</abbr>
+                                                </p>
+                                            </a>
+                                        </li> }
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </article>
+    </div>
+</div>

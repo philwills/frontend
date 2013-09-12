@@ -1,0 +1,75 @@
+/* ==========================================================================
+   One-per-page-per-match object
+   ========================================================================== */
+
+.sport-oppm {
+    width: 100%;
+    margin-bottom: $baseline*4;
+}
+
+.sport-oppm__head {
+    @extend %type-7;
+    //background-color: $mushroom;
+    display: block;
+    font-weight: bold;
+    color: #666;
+    margin-top: $baseline*2;
+    margin-bottom: 0;
+    padding: 10px $gutter/2 $baseline*2;
+}
+
+.sport-oppm__match-score, .sport-oppm__match-details {
+    display: table;
+    width: 100%;
+
+
+    .home {
+        display: table-cell;
+        width: 35%;
+        text-align: right;
+    }
+    .score {
+        display: table-cell;
+        width: 25%;
+        text-align: center;
+    }
+    .away {
+        display: table-cell;
+        width: 35%;
+        text-align: left;
+    }
+    .info {
+        display: table-cell;
+        width: 5%;
+        text-align: left;
+    }
+}
+
+.sport-oppm-report__headline {
+    margin-top: $baseline*2;
+    margin-bottom: $baseline*4;
+}
+
+.sport-oppm__tab a {
+    text-align: left;
+}
+
+.sport-oppm-scores-table__matches {
+    list-style: none;
+    margin: 0;
+}
+
+.sport-oppm-scores-table__competition {
+    background-color: $mushroom;
+    border-bottom: 1px solid #DEDEDD;
+    padding: $baseline*2;
+    display: block;
+}
+
+.sport-oppm-scores-table__match {
+    background-color: $mushroom;
+}
+
+.sport-oppm__body {
+ /*   background-color: $mushroom;*/
+}

@@ -1,0 +1,13 @@
+@(page: MatchPage)(implicit request: RequestHeader)
+
+@main(page, Switches.all){ } {
+
+    @fragments.oppMatchBody(page)
+
+
+    <div id="js-related"></div>
+
+    @* @fragments.footballNav("/football", None, None)
+
+    @fragments.mostPopularPlaceholder("sport") *@
+}

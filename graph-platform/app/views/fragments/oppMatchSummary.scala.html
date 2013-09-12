@@ -1,0 +1,37 @@
+@(theMatch: feed.FootballMatch)
+
+@cleanScorers(teamScorers: String) = {
+    @teamScorers.replace("(", "").replace(")", "").replace(",", ", ")
+}
+
+@if(theMatch.isResult){
+<h1 class="type-3 sport-oppm__match-score">
+    <span class="home">@theMatch.homeTeam</span>
+    <span class="score">@theMatch.homeScore - @theMatch.awayScore</span>
+    <span class="away">@theMatch.awayTeam</span>
+    <span class="info">FT</span>
+</h1>
+<p class="sport-oppm__match-details">
+    @if(theMatch.homeTeamHasScored){
+        <span class="home type-11">@cleanScorers(theMatch.homeScorers)</span>
+    } else {
+        <span class="home">&nbsp</span>
+    }
+    <span class="score">&nbsp</span>
+    @if(theMatch.awayTeamHasScored){
+        <span class="away type-11">@cleanScorers(theMatch.awayScorers)</span>
+    } else {
+    <span class="away">&nbsp</span>
+    }
+    <span class="info">&nbsp</span>
+</p>
+}
+
+@* ---HTML for aggregate scores and for comments.---
+
+@if(theMatch.homeTeam.aggregateScore){
+    <p class="match-aggregate type-10"><span>(agg. <span>@theMatch.homeTeam.aggregateScore-@theMatch.awayTeam.aggregateScore</span>)</span></p>
+}
+
+@theMatch.comments.map{ comments => <h5 class="match-comment type-5">@comments.replace("(", "").replace(")", "")</h5>}*@
+

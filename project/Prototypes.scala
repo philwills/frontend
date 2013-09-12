@@ -39,7 +39,8 @@ trait Prototypes {
       Resolver.url("Typesafe Ivy Releases", url("http://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns),
       "JBoss Releases" at "http://repository.jboss.org/nexus/content/repositories/releases",
       "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/",
-      "Akka" at "http://repo.akka.io/releases"
+      "Akka" at "http://repo.akka.io/releases",
+      "Neo4j Releases" at "http://m2.neo4j.org/content/groups/everything"
     )
   )
 

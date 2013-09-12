@@ -12,7 +12,8 @@ define([
     "modules/more-matches",
     "modules/autoupdate",
     "modules/pad",
-    "modules/matchnav"
+    "modules/matchnav",
+    "modules/tabs"
 ], function (
     common,
     bonzo,
@@ -24,10 +25,17 @@ define([
     MoreMatches,
     AutoUpdate,
     Pad,
-    MatchNav
+    MatchNav,
+    Tabs
 ) {
 
     var modules = {
+
+        showTabs:  function(){
+            var tabs = new Tabs();
+            tabs.init(el);
+        },
+
         matchNav: function(config, context){
             if (config.page.footballMatch) {
                 var url =  "/football/api/match-nav/" + config.page.footballMatch.id;
@@ -161,6 +169,8 @@ define([
                         );
                     }
                 }
+                alert("something")
+                modules.showTabs();
                 break;
         }
 

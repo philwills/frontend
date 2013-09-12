@@ -125,6 +125,14 @@ object Frontend extends Build with Prototypes {
     unmanagedResourceDirectories in Runtime <+= baseDirectory(_ / "src" / "test" / "resources")
   )
 
+  val graphPlatform = application("graph-platform").dependsOn(commonWithTests).settings(
+    libraryDependencies ++= Seq(
+//      "org.neo4j.app" % "neo4j-server" % "1.9.RC2",
+      "com.gu" %% "pa-client" % "4.0",
+      "org.neo4j" % "neo4j-rest-graphdb" % "1.8.1"
+    )
+  )
+
   val dev = base("dev-build")
     .dependsOn(front)
     .dependsOn(facia)
@@ -140,6 +148,7 @@ object Frontend extends Build with Prototypes {
     .dependsOn(diagnostics)
     .dependsOn(styleGuide)
     .dependsOn(identity)
+    .dependsOn(graphPlatform)
 
   val faciaDev = application("facia-dev-build")
     .dependsOn(facia)
@@ -167,6 +176,7 @@ object Frontend extends Build with Prototypes {
     styleGuide,
     admin,
     porter,
-    identity
+    identity,
+    graphPlatform
   )
 }

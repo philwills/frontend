@@ -19,7 +19,8 @@ define('bootstraps/app', [
     "bootstraps/interactive",
     "modules/experiments/ab",
     "modules/pageconfig",
-    "bootstraps/tag"
+    "bootstraps/tag",
+    "bootstraps/sport"
 ], function (
     qwery,
     common,
@@ -41,7 +42,8 @@ define('bootstraps/app', [
     Interactive,
     ab,
     pageConfig,
-    Tag
+    Tag,
+    Sport
 ) {
 
     var modules = {
@@ -119,6 +121,8 @@ define('bootstraps/app', [
                 r.get('/football/:action/:year/:month/:day', function(req) {      Football.init(req, config, context); });
                 r.get('/football/:tag/:action', function(req) {                   Football.init(req, config, context); });
                 r.get('/football/:tag/:action/:year/:month/:day', function(req) { Football.init(req, config, context); });
+
+                r.get('/sport/oppm/:year/:month/:day/:match', function(req) {     Sport.init(req, config, context); });
 
                 if(config.page.contentType === "Article") {
                     Article.init(config, context);
