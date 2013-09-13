@@ -61,7 +61,7 @@
 
                 <span class="savingIndicator" data-bind="visible: state.loadIsPending">SAVING</span>
 
-                <div class="list-header" data-bind="if: !state.editingConfig()">
+                <div class="list-header" data-bind="visible: !state.editingConfig()">
 
                     <div class="list-header__title">
                         <span class="list-header__edition" data-bind="text: edition"></span>
@@ -71,7 +71,7 @@
                         <span>
                             <a class="list-header__display" data-bind="
                                 css: { 'list-header__display--is-set': !!collectionMeta.displayName() },
-                                text: collectionMeta.displayName() || 'Add Title',
+                                text: collectionMeta.displayName() || 'Add title',
                                 click: toggleEditingConfig"></a></span>
 
                         <span class="list-header__role__description">
@@ -113,10 +113,8 @@
                 </div>
 
                 <div class="list-config" data-bind="visible: state.editingConfig">
-                    <div class="list-header__display">Title:</div>
-                    <div>
-                        <input type="text" data-bind="value: collectionMeta.displayName"/>
-                    </div>
+                    <span class="list-header__display">Title:</span>
+                    <input type="text" data-bind="value: collectionMeta.displayName"/>
                     <input type="submit" class="btn" value="Save" data-bind="click: saveConfig"/>
                     <button class="btn" value="Cancel" data-bind="click: cancelEditingConfig">Cancel</button>
                 </div>
@@ -144,20 +142,10 @@
                 css: {redundant: $parent.collectionMeta && $parent.collectionMeta.max ? (0 + $index()) >= (0 + $parent.collectionMeta.max()) : false}
             ">
 
-            <div class="trail_tweaks u-cf" data-bind="visible: state.editingConfig">
-                <div>
-                    Headline override:
-                    <input type="text" data-bind="value: config.webTitle"/>
-                </div>
-                <input type="submit" class="btn" value="Save" data-bind="click: $parent.saveItemConfig"/>
-                <button class="btn" value="Cancel" data-bind="click: $parent.forceRefresh">Cancel</button>
-            </div>
-
             <img data-bind="attr: {src: fields.thumbnail}" />
 
             <div class="trail__meta">
-                <span data-bind="html: humanDate() ? humanDate : 'Loading...'"></span>
-                <!--a class="trail__meta__tweak"  data-bind="click: toggleEditingConfig">tweak</a-->
+                <span data-bind="html: humanDate"></span>
             </div>
 
             <div class="trail__actions">
@@ -169,14 +157,26 @@
                 <div class="pageviews-graph" data-bind="if: state.pageViewsSeries(), sparkline: state.pageViewsSeries"></div>
             </a>
 
-            <!-- ko if: (config.webTitle() && (meta.webTitle() !== config.webTitle())) -->
-            <span class="webTitle webTitle--override" data-bind="html: config.webTitle"></span>
-            <!-- /ko -->
+            <div class="webTitle">
+                <a  class="webTitle__override" target="_blank" data-bind="
+                    visible: config.webTitle() && (config.webTitle() !== meta.webTitle()),
+                    html: config.webTitle,
+                    attr: {href: 'http://www.theguardian.com/' + meta.id()}"></a>
+ 
+                <div class="trail_tweaks" data-bind="visible: state.editingConfig">
+                    <input type="text" data-bind="value: config.webTitle"/>
+                    <input type="submit" class="btn" value="Save" data-bind="click: $parent.saveItemConfig"/>
+                    <button class="btn" value="Cancel" data-bind="click: $parent.forceRefresh">Cancel</button>
+                </div>
 
-            <a class="webTitle" target="_blank" data-bind="
-                html: meta.webTitle, 
-                attr: {href: 'http://www.theguardian.com/' + meta.id()}"></a>
+                <a class="webTitle__actual" target="_blank" data-bind="
+                    html: meta.webTitle, 
+                    attr: {href: 'http://www.theguardian.com/' + meta.id()}"></a>
 
+                <a class="webTitle__override-edit" data-bind="
+                    visible: !state.editingConfig(),
+                    click: toggleEditingConfig">Override</a>
+            </div>
         </div>
     </script>
     

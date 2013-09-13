@@ -23,6 +23,7 @@ body {
 
 input[type="text"] {
     background-color: #DFF0D8;
+    margin: 0;
 }
 
 input.invalid {
@@ -354,6 +355,10 @@ a.cta, .cta a {
     color: #000000;
 }
 
+.fronts a {
+    color: #005580;
+}
+
 .fronts .finder {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -637,6 +642,9 @@ a.cta, .cta a {
     text-decoration: none;
     font-size: 13px;
     line-height: 16px;
+}
+
+.fronts .trail .webTitle__actual {
     color: #000000;
 }
 
@@ -645,8 +653,19 @@ a.cta, .cta a {
     margin-right: 140px;
 }
 
-.fronts .trail .webTitle--override {
-    color: #f89406;
+.fronts .trail .webTitle__override {
+    display: block;
+    color: #47ae38;
+}
+
+.fronts .trail .webTitle__edit-override {
+    display: none;
+}
+
+.fronts .collection .trail:hover .webTitle__edit-override {
+    font-size: 10px;
+    display: inline;
+    color: #005580;
 }
 
 .fronts .trail .trailText {
@@ -700,8 +719,7 @@ a.cta, .cta a {
 }
 
 .fronts .trail_tweaks {
-    clear: both;
-    margin: 0 0 10px 0;
+    margin: 4px 0 2px 0;
 }
 
 .fronts input[type="text"] {
@@ -764,7 +782,7 @@ a.cta, .cta a {
 }
 
 .fronts .list-config {
-    padding: 2px 7px 7px 7px;
+    padding: 3px 7px 3px 7px;
     font-size: 10px;
     background: #CCCCCC;
     color: #000000;

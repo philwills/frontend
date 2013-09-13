@@ -50,10 +50,8 @@ function (
     Article.prototype.populate = function(opts) {
         common.util.populateObservables(this.meta, opts)
         common.util.populateObservables(this.fields, opts.fields)
-
-        if (opts.index < 3) {
-            //this.fetchPageViews();
-        }
+        
+        this.config.webTitle(this.meta.webTitle()); // TEMP
     }
 
     Article.prototype.toggleEditingConfig = function() {
@@ -68,12 +66,13 @@ function (
         var self = this;
         // If a config property (a) is set and (b) differs from the meta value, include it in post.
         reqwest({
-            url: common.config.apiBase + '/collection/' + listId + '/' + this.meta.id(),
+            url: common.config.apiBase + '/collection/item-meta/' + listId,
             method: 'post',
             type: 'json',
             contentType: 'application/json',
             data: JSON.stringify({
-                config: _.chain(this.config)
+                item: this.meta.id(),
+                meta: _.chain(this.config)
                         .pairs()
                         .filter(function(p){ return p[1]() && p[1]() !== self.meta[p[0]](); })
                         .map(function(p){ return [p[0], p[1]()]; })
