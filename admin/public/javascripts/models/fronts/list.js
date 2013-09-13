@@ -175,6 +175,7 @@ define([
                 if (!self.state.editingConfig()) {
                     common.util.populateObservables(self.collectionMeta, resp)
                     self.state.timeAgo(self.getTimeAgo(resp.lastUpdated));
+                    self.decorate();
                 }
 
                 if (_.isFunction(opts.callback)) { opts.callback(); } 
@@ -196,8 +197,6 @@ define([
 
         this.importList(opts, 'live', 'live');
         this.importList(opts, this.state.hasDraft() ? 'draft' : 'live', 'draft');
-
-        this.decorate();
     };
 
     List.prototype.importList = function(opts, from, to) {
