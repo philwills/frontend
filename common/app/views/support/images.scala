@@ -1,6 +1,6 @@
 package views.support
 
-import model.ImageAsset
+import model.Image
 import conf.Switches.ImageServerSwitch
 import java.net.URI
 import conf.Configuration
@@ -25,15 +25,11 @@ object GallerySmallTrail extends ImageType {
   val prefix = "gst"
 }
 
-object FeaturedTrail extends ImageType {
-  val prefix = "f"
-}
-
 object ImgSrc {
 
   val imageHost = Configuration.images.path
 
-  def apply(image: ImageAsset, imageType: ImageType): String = image.url.map{ url => apply(url, imageType) }.getOrElse("")
+  def apply(image: Image, imageType: ImageType): String = image.url.map{ url => apply(url, imageType) }.getOrElse("")
 
   def apply(url: String, imageType: ImageType): String = {
     val uri = new URI(url.trim)

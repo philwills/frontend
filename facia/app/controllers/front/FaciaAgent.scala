@@ -56,34 +56,39 @@ trait ParseCollection extends ExecutionContexts with Logging {
     val collectionUrl = s"${Configuration.frontend.store}/${S3FrontsApi.location}/collection/$id/collection.json"
     log.info(s"loading running order configuration from: $collectionUrl")
     val response: Future[Response] = WS.url(collectionUrl).withTimeout(2000).get()
-    for {
-      collectionList <- parseResponse(response, edition)
-      displayName    <- parseDisplayName(response).fallbackTo(Future.successful(None))
-      contentApiList <- executeContentApiQuery(config.contentApiQuery, edition)
-    } yield Collection(collectionList ++ contentApiList, displayName)
+    parseResponse(response, config, edition)
   }
 
-  private def parseDisplayName(response: Future[Response]): Future[Option[String]] = response.map {r =>
-    (parse(r.body) \ "displayName").asOpt[String].filter(_.nonEmpty)
-  }
-
-  private def parseResponse(response: Future[Response], edition: Edition): Future[List[Content]] = {
+  private def parseResponse(response: Future[Response], config: Config, edition: Edition): Future[Collection] = {
     response.flatMap { r =>
       r.status match {
         case 200 =>
           val bodyJson = parse(r.body)
+          val displayName = (bodyJson \ "displayName").asOpt[String].filter(_.nonEmpty)
 
           // extract the articles
           val articles: Seq[String] = (bodyJson \ "live").as[Seq[JsObject]] map { trail =>
             (trail \ "id").as[String]
           }
 
-          getArticles(articles, edition)
+          val idSearch = getArticles(articles, edition)
+
+          val contentApiQuery = executeContentApiQuery(config.contentApiQuery, edition)
+
+          val results = for {
+            idSearchResults <- idSearch
+            contentApiResults <- contentApiQuery
+          } yield (idSearchResults ++ contentApiResults)
+
+          results map {
+            case l: List[Content] => Collection(l.toSeq, displayName)
+          }
+          //TODO: Removal of fallback forces full chain to fail
 
         case _ =>
           log.warn(s"Could not load running order: ${r.status} ${r.statusText}")
           // NOTE: better way of handling fallback
-          Future(Nil)
+          Future(Collection(Nil))
       }
     }
   }

@@ -5,7 +5,8 @@ import java.net.URLEncoder._
 import model._
 import org.jsoup.nodes.{ Element, Document }
 import org.jsoup.Jsoup
-import org.jsoup.safety.{ Whitelist, Cleaner }
+import org.jsoup.safety.Whitelist
+import org.jsoup.safety.Cleaner
 import org.jboss.dna.common.text.Inflector
 import play.api.libs.json.Writes
 import play.api.libs.json.Json._
@@ -14,7 +15,7 @@ import scala.collection.JavaConversions._
 import play.api.mvc.RequestHeader
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
-import com.gu.openplatform.contentapi.model.Asset
+import com.gu.openplatform.contentapi.model.MediaAsset
 import play.Play
 import org.apache.commons.lang.StringEscapeUtils
 
@@ -164,7 +165,7 @@ object VideoEmbedCleaner extends HtmlCleaner {
   }
 }
 
-case class PictureCleaner(imageHolder: Elements) extends HtmlCleaner with implicits.Numbers {
+case class PictureCleaner(imageHolder: Images) extends HtmlCleaner with implicits.Numbers {
 
   def clean(body: Document): Document = {
     body.getElementsByTag("figure").foreach { fig =>
@@ -198,14 +199,14 @@ case class PictureCleaner(imageHolder: Elements) extends HtmlCleaner with implic
   }
 }
 
-case class VideoPosterCleaner(videos: Seq[VideoAsset]) extends HtmlCleaner {
+case class VideoPosterCleaner(videos: Seq[MediaAsset]) extends HtmlCleaner {
 
   def clean(body: Document): Document = {
     body.getElementsByTag("video").filter(_.hasClass("gu-video")).foreach { videoTag =>
       videoTag.getElementsByTag("source").headOption.foreach{ source =>
-        val file = Some(source.attr("src"))
-        videos.find(_.url == file).foreach{ video =>
-          video.stillImageUrl.foreach{ poster =>
+        val file = source.attr("src")
+        videos.find(_.encodings.exists(_.file == file)).foreach{ video =>
+          video.fields.getOrElse(Map.empty).get("stillImageUrl").foreach{ poster =>
             videoTag.attr("poster", poster)
           }
         }

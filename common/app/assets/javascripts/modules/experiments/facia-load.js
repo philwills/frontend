@@ -6,11 +6,12 @@ define([
 
     return function() {
         ajax({
-            url: '/facia' + window.location.pathname,
-            type: 'text' // don't parse
+            url: window.location.pathname,
+            type: 'text', // don't parse
+            headers: { 'X-Gu-Facia': 'true' }
         }).always(function(resp) {
-            resp = null; // help the garbage collector?
+            resp = null;  // help the garbage collector?
         });
-    };
+    }
 
 });

@@ -20,7 +20,6 @@ object ImageController extends Controller with Logging with Implicits with Execu
       case "glt" => renderImage(target, mode, model.image.GalleryLargeTrail)
       case "gst" => renderImage(target, mode, model.image.GallerySmallTrail)
       case "n" => renderImage(target, mode, model.image.Naked)
-      case "f" => renderImage(target, mode, model.image.FeaturedTrail)
       case _ => NotFound
     }
   }
@@ -58,13 +57,9 @@ object ImageController extends Controller with Logging with Implicits with Execu
                     // configuration
                     val operation = new IMOperation()
                     operation.addImage
-
-                    (profile.width, profile.height) match {
-                      case (Some(width), Some(height)) => operation.resize(width, height)
-                      case (Some(width), None) => operation.resize(width)
-                      case _ => Unit
+                    if (!(profile.width.isEmpty && profile.height.isEmpty)) {
+                      operation.resize(profile.width.get, profile.height.get)
                     }
-
                     operation.quality(profile.compression.toDouble)
                     operation.addImage(format + ":-") // TODO assumes im and content-type will always map to each other
 
