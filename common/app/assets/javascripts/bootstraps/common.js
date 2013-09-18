@@ -134,7 +134,9 @@ define([
 
         transcludePopular: function () {
             common.mediator.on('page:common:ready', function(config, context) {
-                popular(config, context);
+                if('abExpandableMostPopular' in config.switches && !config.switches.abExpandableMostPopular) {
+                    popular(config, context);
+                }
             });
         },
 
@@ -252,33 +254,11 @@ define([
                         return viewData;
                     });
 
-                    Ophan.sendLog(config.swipe ? config.swipe.referrer : undefined);
+                    Ophan.sendLog(config.swipe ? config.swipe.referrer : undefined, true);
                 });
 
             });
 
-        },
-
-        // Temporary - for a user zoom survey
-        paragraphSpacing: function () {
-            var key = 'paragraphSpacing';
-            common.mediator.on('page:common:ready', function(config, context) {
-                var typographyPrefs = userPrefs.get(key);
-                switch (typographyPrefs) {
-                    case 'none':
-                        common.$g('body').addClass('test-paragraph-spacing--no-spacing');
-                        break;
-                    case 'indents':
-                        common.$g('body').addClass('test-paragraph-spacing--no-spacing-indents');
-                        break;
-                    case 'more':
-                        common.$g('body').addClass('test-paragraph-spacing--more-spacing');
-                        break;
-                    case 'clear':
-                        userPrefs.remove(key);
-                        break;
-                }
-            });
         },
 
         externalLinksCards: function (config) {
@@ -327,12 +307,15 @@ define([
             Cookies.cleanUp(["mmcore.pd", "mmcore.srv", "mmid"]);
         },
 
-        // let large viewports opt-in to the responsive beta
-        betaOptIn: function () {
-            var isBeta = /#beta/.test(window.location.hash);
-            if (isBeta && window.screen.width >= 900) {
+        // let large viewports opt-in to the responsive alpha
+        optIn: function () {
+            var countMeIn = /#countmein/.test(window.location.hash);
+            if (countMeIn && window.screen.width >= 900) {
                 var expiryDays = 365;
                 Cookies.add("GU_VIEW", "mobile", expiryDays);
+                Array.prototype.forEach.call(document.querySelectorAll('.release-message'), function (el) {
+                    el.className = el.className.replace('u-h', '');
+                });
             }
         },
 
@@ -412,9 +395,8 @@ define([
             modules.initSwipe(config, contextHtml);
             modules.transcludeCommentCounts();
             modules.initLightboxGalleries();
-            modules.betaOptIn();
+            modules.optIn();
             modules.faciaOptToggle();
-            modules.paragraphSpacing();
             modules.externalLinksCards();
         }
         common.mediator.emit("page:common:ready", config, context);

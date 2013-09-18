@@ -110,6 +110,14 @@ define(['modules/experiments/ab', 'fixtures/ab-test'], function(ab, ABTest) {
                 expect(localStorage.getItem(participationsKey)).toBe('{"value":{"DummyTest2":{"variant":"foo"}}}');
             });
 
+            it('should allow the forcing of users in to a given test and variant', function () {
+                ab.forceSegment('DummyTest', 'bar');
+                expect(getItem('DummyTest').variant).toBe('bar');
+                // ... and should be able to override 
+                ab.forceSegment('DummyTest', 'foo');
+                expect(getItem('DummyTest').variant).toBe('foo');
+            });
+
         });
     
         describe("Running tests", function () {
@@ -173,7 +181,18 @@ define(['modules/experiments/ab', 'fixtures/ab-test'], function(ab, ABTest) {
                 ab.segment(switches.both_tests_on);
                 ab.run(switches.both_tests_on);
                 expect(ab.makeOmnitureTag(switches.both_tests_on)).toBe("AB | DummyTest | control,AB | DummyTest2 | control");
-        
+
+            });
+
+            it('should generate Omniture tags when there is two tests, but one cannot run', function() {
+                Math.seedrandom('gu');
+                test.one.canRun = function() { return false; }
+                ab.addTest(test.one);
+                test.two.audience = 1;
+                ab.addTest(test.two);
+                ab.segment(switches.both_tests_on);
+                ab.run(switches.both_tests_on);
+                expect(ab.makeOmnitureTag(switches.both_tests_on)).toBe("AB | DummyTest2 | control");
             });
             
             it('should not generate Omniture tags when a test can not be run', function() {

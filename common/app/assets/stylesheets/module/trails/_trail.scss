@@ -25,9 +25,8 @@
 
     .trail__headline a,
     .trail__headline a:hover,
-    .trail__headline a:link,
+    .trail__headline a:focus,
     .trail__headline a:active,
-    .trail__headline a:visited,
     .trail h2 a {
         color: #333;
     }
@@ -79,9 +78,8 @@
 
     a,
     a:hover,
-    a:link,
-    a:active,
-    a:visited {
+    a:focus,
+    a:active {
         @extend %type-11;
         float: right;
         display: inline-block;
@@ -100,9 +98,8 @@
 .trail__count--commentcount {
     a,
     a:hover,
-    a:link,
-    a:active,
-    a:visited {
+    a:focus,
+    a:active {
         color: #F6644F;
     }
 }
@@ -110,9 +107,8 @@
 .trail__count--imagecount {
     a,
     a:hover,
-    a:link,
-    a:active,
-    a:visited {
+    a:focus,
+    a:active {
         color: #666666;
     }
 
@@ -171,8 +167,6 @@
     }
 }
 
-
-
 .trail--gallery {
 
     background-color: #F9F9F6;
@@ -202,7 +196,17 @@
     margin: $baseline * 4 0;
 }
 
-
+.trail--expandable {
+    &.has-image {
+        .trail__img {
+            float: left;
+        }
+        .trail__expander-headline {
+            float: right;
+            width: 61%;
+        }
+    }
+}
 
 /**
  * @todo: Clean these up into proper modifiers

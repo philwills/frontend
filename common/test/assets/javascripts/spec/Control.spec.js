@@ -1,7 +1,8 @@
 define([ 'common',
          'bean',
-         'modules/navigation/control',
-         'helpers/fixtures'], function(common, bean, Control, fixtures) {
+         'modules/toggles',
+         'helpers/fixtures'], function(common, bean, Toggles, fixtures) {
+
         describe("Controls", function() {
 
             var delay = 405, // This is 5ms greater than the actual rateLimit delay, to allow a bit of leeway

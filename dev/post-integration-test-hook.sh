@@ -25,7 +25,67 @@ function currentStaged {
 
 function tag {
   echo "Tagging $1 build $2 for PROD."
-  local URL="${TEAMCITY_API_URL}/app/rest/builds/buildType:(project:frontend,name:$1),number:$2/tags"
+
+  ##############################################################################
+  #
+  # On update to TeamCity 8 replace the following with:
+  #   local URL="${TEAMCITY_API_URL}/app/rest/builds/project:frontend,buildType:(name:$1),number:$2/tags"
+  #
+  ##START#######################################################################
+  case "$1" in
+    admin)
+      local BUILD_TYPE="bt1127"
+      ;;
+    applications)
+      local BUILD_TYPE="bt1125"
+      ;;
+    article)
+      local BUILD_TYPE="bt1128"
+      ;;
+    core-navigation)
+      local BUILD_TYPE="bt1130"
+      ;;
+    diagnostics)
+      local BUILD_TYPE="bt1131"
+      ;;
+    discussion)
+      local BUILD_TYPE="bt1132"
+      ;;
+    facia)
+      local BUILD_TYPE="bt1140"
+      ;;
+    football)
+      local BUILD_TYPE="bt1134"
+      ;;
+    front)
+      local BUILD_TYPE="bt1135"
+      ;;
+    identity)
+      local BUILD_TYPE="bt1158"
+      ;;
+    image)
+      local BUILD_TYPE="bt1136"
+      ;;
+    interactive)
+      local BUILD_TYPE="bt1144"
+      ;;
+    porter)
+      local BUILD_TYPE="bt1151"
+      ;;
+    router)
+      local BUILD_TYPE="bt1137"
+      ;;
+    sport)
+      local BUILD_TYPE="bt1147"
+      ;;
+    *)
+      local URL="(project:frontend,name:$1)"
+      ;;
+  esac
+
+  local URL="${TEAMCITY_API_URL}/app/rest/builds/buildType:${BUILD_TYPE},number:$2/tags"
+  ##END#########################################################################
+
   curl --header "Content-Type: text/plain" -XPOST -d "PROD" "$URL"
 }
 
@@ -36,50 +96,21 @@ function tag {
 #
 ################################################################################
 
+if [ "${TRIGGERING_BUILD_NUMBER-unset}" == "unset" ]
+then
+  echo "Tests not triggered by continuous deployment."
+  exit 0
+fi
+
 PROJECT=${TEAMCITY_BUILDCONF_NAME%-integration-tests}
-TRIGGERING_BUILD_NUMBER=${TRIGGERING_BUILD_NUMBER-NONE}
 CURRENT=$(currentStaged "${PROJECT}")
 
 if [ "${CURRENT}" != "${TRIGGERING_BUILD_NUMBER}" ]
 then
   # The tests passed, just not on a stable build. Another attempt will follow.
-  echo "Tests preempted by staging deployment for ${PROJECT} build ${CURRENT}" >&2
+  echo "Tests preempted by staging deployment for ${PROJECT} build ${CURRENT}."
   exit 0
 fi
 
 tag "${PROJECT}" "${CURRENT}"
 
-
-
-
-
-################################################################################
-#
-# TODO: Delete following after tagging based deployment enabled.
-#
-################################################################################
-
-function productionStatus {
-  local URL="${DEPLOY_API_URL}/history?key=${DEPLOY_API_KEY}&pageSize=1&stage=PROD&projectName=$1&task=Deploy"
-
-  # Take off the json around results to remove incidental `status` fields
-  curl "$URL" | sed 's/.*results":\[//g' | sed 's/\].*//g' | \
-     sed 's/.*status":"//g' | sed 's/".*//g'
-}
-
-function productionDeploy {
-  if [ "$(productionStatus "$1")" == "Completed" ]
-  then
-    echo "Initiating $1 deploy build $2 to production."
-    local URL="${DEPLOY_API_URL}/deploy/request?key=${DEPLOY_API_KEY}"
-    local BODY="{ \"project\": \"frontend::$1\", \"build\": \"$2\", \"stage\": \"PROD\" }"
-    curl --header "Content-Type: application/json" -XPOST -d "$BODY" "$URL"
-  else
-    echo "Not deploying over unsuccessful current deployment" >&2
-  fi
-}
-
-
-productionDeploy "${PROJECT}" "${CURRENT}"
-
-################################################################################

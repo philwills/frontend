@@ -7,6 +7,7 @@ import java.net.InetAddress
 import play.api.Play
 import java.io.{FileInputStream, File}
 import org.apache.commons.io.IOUtils
+import conf.Configuration
 
 class BaseGuardianConfiguration(val application: String, val webappConfDirectory: String = "env") extends Logging {
   protected val configuration = ConfigurationFactory.getConfiguration(application, webappConfDirectory)
@@ -64,6 +65,17 @@ class GuardianConfiguration(
     lazy val timeout: Int = configuration.getIntegerProperty("content.api.timeout.millis").getOrElse(2000)
   }
 
+  object ophanApi {
+    lazy val key = configuration.getStringProperty("ophan.api.key") getOrElse {
+      throw new IllegalStateException("Ophan Api key not configured")
+    }
+    lazy val host = configuration.getStringProperty("ophan.api.host") getOrElse {
+      throw new IllegalStateException("Ophan Api host not configured")
+    }
+
+    lazy val timeout = configuration.getIntegerProperty("content.api.timeout.millis").getOrElse(2000)
+  }
+
   object frontend {
     lazy val store = configuration.getStringProperty("frontend.store") getOrElse {
       throw new IllegalStateException("Fronts Api not configured")
@@ -74,8 +86,12 @@ class GuardianConfiguration(
     lazy val connection = configuration.getStringProperty("mongo.connection.readonly.password").getOrElse(throw new RuntimeException("Mongo connection not configured"))
   }
 
-  object host {
+  object hostMachine {
     lazy val name = InetAddress.getLocalHost.getHostName
+  }
+
+  object site {
+    lazy val host = configuration.getStringProperty("guardian.page.host").getOrElse("")
   }
 
   object proxy {
@@ -91,6 +107,10 @@ class GuardianConfiguration(
     lazy val port: Int = portOption getOrElse {
       throw new IllegalStateException("HTTP proxy port not configured")
     }
+  }
+
+  object github {
+    lazy val token = configuration.getStringProperty("github.token")
   }
 
   object ajax {
@@ -163,6 +183,10 @@ class GuardianConfiguration(
       .getOrElse(throw new RuntimeException("Front config url not set"))
   }
 
+  object facia {
+    lazy val stage = configuration.getStringProperty("facia.stage").getOrElse(Configuration.environment.stage)
+  }
+
   object pa {
     lazy val apiKey = configuration.getStringProperty("pa.api.key")
       .getOrElse(throw new RuntimeException("unable to load pa api key"))
@@ -186,14 +210,14 @@ class GuardianConfiguration(
 
     lazy val credentials: AWSCredentials = new BasicAWSCredentials(accessKey, secretKey)
   }
-  
+
   object pingdom {
     lazy val url = configuration.getStringProperty("pingdom.url").getOrElse(throw new RuntimeException("Pingdom url not set"))
     lazy val user = configuration.getStringProperty("pingdom.user").getOrElse(throw new RuntimeException("Pingdom user not set"))
     lazy val password  = configuration.getStringProperty("pingdom.password").getOrElse(throw new RuntimeException("Pingdom password not set"))
     lazy val apiKey = configuration.getStringProperty("pingdom.apikey").getOrElse(throw new RuntimeException("Pingdom api key not set"))
   }
-  
+
   object riffraff {
     lazy val url = configuration.getStringProperty("riffraff.url").getOrElse(throw new RuntimeException("RiffRaff url not set"))
     lazy val apiKey = configuration.getStringProperty("riffraff.apikey").getOrElse(throw new RuntimeException("RiffRaff api key not set"))

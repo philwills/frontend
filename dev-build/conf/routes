@@ -9,24 +9,37 @@ GET        /assets/*file                                                        
 #Note the order of these is important
 
 # Discussion
-GET        /discussion/comment-counts                                                                     controllers.CommentCountController.render(shortUrls: String)
-GET        /discussion/comment-counts.json                                                                controllers.CommentCountController.render(shortUrls: String)
-GET        /discussion/*shortUrl.json                                                                     controllers.CommentPageController.render(shortUrl)
-GET        /discussion/*shortUrl                                                                          controllers.CommentPageController.render(shortUrl)
+GET        /discussion/comment-counts                                                                     controllers.DiscussionApp.commentCount(shortUrls: String)
+GET        /discussion/comment-counts.json                                                                controllers.DiscussionApp.commentCount(shortUrls: String)
+GET        /discussion/*shortUrl.json                                                                     controllers.DiscussionApp.commentPage(shortUrl)
+GET        /discussion/*shortUrl                                                                          controllers.DiscussionApp.commentPage(shortUrl)
 
 #Core nav
 GET        /most-read                                                                                     controllers.MostPopularController.render(path = "")
 GET        /most-read.json                                                                                controllers.MostPopularController.render(path = "")
 GET        /most-read/card.json                                                                           controllers.MostPopularController.renderCard()
+GET        /most-read/expandable/*path.json                                                               controllers.MostPopularController.renderExpandable(path)
+GET        /most-read/expandable/*path                                                                    controllers.MostPopularController.renderExpandable(path)
 GET        /most-read/*path.json                                                                          controllers.MostPopularController.render(path)
 GET        /most-read/*path                                                                               controllers.MostPopularController.render(path)
+
+#Optimise User Journey to referrer
+GET        /most-read-facebook                                                                            controllers.MostPopularFromFacebookController.render(path = "")
+GET        /most-read-facebook.json         controllers.MostPopularFromFacebookController.render(path = "")
+GET        /most-read-facebook/*path.json   controllers.MostPopularFromFacebookController.render(path)
+GET        /most-read-facebook/*path        controllers.MostPopularFromFacebookController.render(path)
+GET        /most-read-facebook/card.json    controllers.MostPopularFromFacebookController.renderCard()
+GET        /most-read/expandable-facebook/*path.json     controllers.MostPopularFromFacebookController.renderExpandable(path)
+GET        /most-read/expandable-facebook/*path          controllers.MostPopularFromFacebookController.renderExpandable(path)
+
 GET        /top-stories                                                                                   controllers.TopStoriesController.render()
 GET        /top-stories.json                                                                              controllers.TopStoriesController.renderJson()
 GET        /top-stories/trails                                                                            controllers.TopStoriesController.renderTrails()
 GET        /top-stories/trails.json                                                                       controllers.TopStoriesController.renderJsonTrails()
 GET        /related/*path.json                                                                            controllers.RelatedController.render(path)
 GET        /related/*path                                                                                 controllers.RelatedController.render(path)
-GET        /recent/card.json                                                                                   controllers.RecentController.render()
+GET        /recent/card.json                                                                              controllers.RecentController.render()
+
 
 #Style-guide
 GET        /style-guide                                                                                   controllers.StyleGuideController.renderIndex
@@ -95,9 +108,6 @@ GET        /cricket/match/:matchId                                              
 GET        /sport/cricket/match/:matchId.json                                                             controllers.CricketMatchController.renderMatchId(matchId)
 GET        /sport/cricket/match/:matchId                                                                  controllers.CricketMatchController.renderMatchId(matchId)
 
-#Film
-GET        /film                                                                                          controllers.FaciaController.renderFilm
-
 #Front
 GET        /$path<(us|uk|au)?>                                                                            controllers.FrontController.render(path)
 GET        /$path<(us|uk|au)?>.json                                                                       controllers.FrontController.render(path)
@@ -148,7 +158,7 @@ GET        /$path<[\w\d-]*/[\w\d-]*/[\w\d-]*>/trails                            
 GET        /$path<[\w\d-]*/[\w\d-]*/[\w\d-]*>/trails.json                                                 controllers.TagController.renderTrails(path)
 
 # Experimental
-GET    /cards/opengraph/*path                               controllers.CardController.opengraph(path)
+GET        /cards/opengraph/*path                                                                         controllers.CardController.opengraph(path)
 
 #Articles
 GET        /*path.json                                                                                    controllers.ArticleController.renderLatest(path, lastUpdate: Option[String])

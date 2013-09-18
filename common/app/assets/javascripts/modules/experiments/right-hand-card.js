@@ -30,11 +30,16 @@ define([
     };
 
     RightHandCard.prototype.loadCard = function() {
-        if (detect.getLayoutMode() === 'extended') {
+        var self = this,
+            layoutMode = detect.getLayoutMode();
+
+        if (layoutMode !== 'mobile' && layoutMode !== 'tablet') {
             if(this.type !== 'story-package') {
                 this.fetchData();
             }
             this.dedupe();
+            this.$el.removeClass('is-hidden');
+
             common.mediator.emit('fragment:ready:dates');
         }
     };
@@ -43,7 +48,7 @@ define([
         var headline = this.$el[0].querySelector('.card__headline').innerHTML;
         common.toArray(this.options.context.querySelectorAll('.trail')).forEach(function(el){
             if(el.querySelector('.trail__headline a').innerHTML.trim() === headline) {
-                el.remove();
+                el.parentNode.removeChild(el);
             }
         });
     };

@@ -3,36 +3,40 @@ define([
     'modules/storage',
 
     //Current tests
-    'modules/experiments/tests/paragraph-spacing',
     'modules/experiments/tests/inline-link-card',
     'modules/experiments/tests/aa',
     'modules/experiments/tests/gallery-style',
     'modules/experiments/tests/gallery-cta',
     'modules/experiments/tests/swipe-ctas',
-    'modules/experiments/tests/expandable-trails',
-    'modules/experiments/tests/right-hand-card'
+    'modules/experiments/tests/expandable-mostpopular',
+    'modules/experiments/tests/right-hand-card',
+    'modules/experiments/tests/live-blog-show-more',
+    'modules/experiments/tests/most-popular-from-facebook'
 ], function (
     common,
     store,
-    ParagraphSpacing,
+    
     ExperimentInlineLinkCard,
     Aa,
     GalleryStyle,
     GalleryCta,
     SwipeCtas,
-    ExperimentExpandableTrails,
-    RightHandCard
+    ExperimentExpandableMostPopular,
+    RightHandCard,
+    LiveBlogShowMore,
+    MostPopularFromFacebook
     ) {
 
     var TESTS = [
-            new ParagraphSpacing(),
             new ExperimentInlineLinkCard(),
             new Aa(),
             new GalleryStyle(),
             new GalleryCta(),
             new SwipeCtas(),
-            new ExperimentExpandableTrails(),
-            new RightHandCard()
+            new ExperimentExpandableMostPopular(),
+            new RightHandCard(),
+            new LiveBlogShowMore(),
+            new MostPopularFromFacebook()
         ],
         participationsKey = 'gu.ab.participations';
 
@@ -102,12 +106,16 @@ define([
     }
 
     function makeOmnitureTag (config) {
-        var participations = getParticipations();
-        return Object.keys(participations).map(function (k) {
+        var participations = getParticipations(),
+            tag = [];
+
+        Object.keys(participations).forEach(function (k) {
             if (testCanBeRun(getTest(k), config)) {
-                return ['AB', k, participations[k].variant].join(' | ');
+                tag.push(['AB', k, participations[k].variant].join(' | '));
             }
-        }).join(',');
+        });
+
+        return tag.join(',');
     }
 
     // Finds variant in specific tests and runs it
@@ -168,6 +176,15 @@ define([
             var opts = options || {};
             getActiveTests().forEach(function(test) {
                 bucket(test, config);
+            });
+        },
+
+        // mostly for private use
+        forceSegment: function (testId, variant) {
+            getActiveTests().filter(function (test) {
+                return (test.id === testId);
+            }).forEach(function (test) {
+                addParticipation(test, variant);
             });
         },
 

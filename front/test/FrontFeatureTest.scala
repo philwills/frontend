@@ -64,7 +64,7 @@ class FrontFeatureTest extends FeatureSpec with GivenWhenThen with ShouldMatcher
           import browser._
 
           Then("I should see the link for the desktop site")
-          findFirst(".main-site-link").href should endWith("/uk?view=desktop")
+          findFirst(".js-main-site-link").href should endWith("/uk?view=desktop")
       }
     }
 
@@ -75,7 +75,7 @@ class FrontFeatureTest extends FeatureSpec with GivenWhenThen with ShouldMatcher
           import browser._
 
           Then("I should see the link for the desktop site")
-          findFirst(".main-site-link").href should endWith("/us?view=desktop")
+          findFirst(".js-main-site-link").href should endWith("/us?view=desktop")
       }
     }
 
@@ -252,6 +252,16 @@ class FrontFeatureTest extends FeatureSpec with GivenWhenThen with ShouldMatcher
       }
     }
 
+    scenario("Front block anchors") {
+      Given("I visit the network front")
+      HtmlUnit("/uk") {
+        browser =>
+          import browser._
+
+          Then("I should have ids for each block")
+          findFirst("h1[id='commentisfree']").getText should startWith ("Comment is free")
+      }
+    }
 
     // this is so that the load balancer knows this server has a problem
     scenario("Return error if front is empty") {
@@ -294,11 +304,13 @@ private case class StubTrail(url: String) extends Trail {
 
   override def sectionName = ""
 
-  override def thumbnail = None
-
   override def images = Nil
 
-  override def videoImages = Nil
+  override def videos = Nil
 
   override def isLive = false
+
+  override def thumbnail = None
+
+  override def mainPicture = None
 }

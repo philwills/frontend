@@ -8,7 +8,7 @@ define([
     "modules/trailblock-show-more",
     "modules/footballfixtures",
     "modules/cricket",
-    "modules/masthead-relative-dates"
+    "modules/experiments/facia-load"
 ], function (
     common,
     bonzo,
@@ -17,7 +17,7 @@ define([
     TrailblockShowMore,
     FootballFixtures,
     Cricket,
-    mastheadRelativeDates
+    faciaLoad
 ) {
 
     var modules = {
@@ -84,10 +84,10 @@ define([
             });
         },
 
-        relativiseMastheadDates: function () {
-            common.mediator.on('page:front:ready', function(config, context) {
-                mastheadRelativeDates.init(context);
-            });
+        faciaLoadTest: function(config) {
+            if (config.switches.faciaLoadTest) {
+                common.mediator.on('page:front:ready', faciaLoad);
+            }
         }
 
     };
@@ -99,7 +99,7 @@ define([
             modules.showTrailblockShowMore();
             modules.showFootballFixtures();
             modules.showCricket();
-            modules.relativiseMastheadDates();
+            modules.faciaLoadTest(config);
         }
         common.mediator.emit("page:front:ready", config, context);
     };

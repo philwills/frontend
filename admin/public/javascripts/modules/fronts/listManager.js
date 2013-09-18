@@ -17,82 +17,54 @@ define([
     contentApi,
     ophanApi
 ) {
-    var collections = {},
-        dragging = false,
-        clipboardEl = document.querySelector('#clipboard'),
-        listLoadsPending = 0,
+    var clipboardEl = document.querySelector('#clipboard'),
         loc = window.location;
 
     return function(selector) {
 
-        var model = {},
-            self = this;
+        var self = this,
+            model = {
+                latestArticles: new LatestArticles(),
+                clipboard:      knockout.observableArray(),
+                collections:    knockout.observableArray(),
+                configs:        knockout.observableArray(),
+                config:         knockout.observable(),
+                actions: {
+                    unsetConfig: unsetConfig,
+                    flushClipboard: flushClipboard
+                }
+            };
 
-        function chosenLists() {
-            return [].concat(_.filter((common.util.queryParams().blocks || "").split(","), function(str){ return !!str; }));
+        function getConfig() {
+            return [].concat(_.filter((common.util.queryParams().config || "").split(","), function(str){ return !!str; }));
         }
 
-        function addList(id) {
-            var lists = chosenLists();
-            lists = _.without(lists, id);
-            lists.unshift(id);
-            lists = _.first(lists, common.config.maxDisplayableLists || 3);
-            setDisplayedLists(lists);
+        function setConfig(ids) {
+            history.pushState({}, "", loc.pathname + '?' + common.util.ammendedQueryStr('config', [].concat(ids).join(',')));
+            renderCollections();
         }
 
-        function dropList(list) {
-            setDisplayedLists(_.reject(chosenLists(), function(id){ return id === list.id; }));
-            common.util.pageReflow();
+        function unsetConfig() {
+            model.config(undefined);
+            setConfig([]);
         }
 
-        function clearAll() {
-            setDisplayedLists([]);
+        function renderConfig() {
+            model.config(getConfig()[0]);
         }
 
-        function setDisplayedLists(listIDs) {
-            var qp = common.util.queryParams();
-            qp.blocks = listIDs.join(',');
-            qp = _.pairs(qp)
-                .filter(function(p){ return !!p[0]; })
-                .map(function(p){ return p[0] + (p[1] ? '=' + p[1] : ''); })
-                .join('&');
-
-            history.pushState({}, "", loc.pathname + '?' + qp);
-            renderLists();
-        }
-
-        function displayInAllEditions() {
-            setDisplayedLists(model.editions().map(function(edition){
-                return [edition, model.section(), model.block()].join('/'); 
-            }));
-        }
-
-        function renderLists(opts) {
-            var chosen = chosenLists(),
-                first;
-
-            opts = opts || {};
-
-            model.listsDisplayed.remove(function(list){
-                if (chosen.indexOf(list.id) === -1) {
-                    return true;
-                } else {
-                    chosen = _.without(chosen, list.id);
-                    return false;
-                }    
+        function renderCollections() {
+            model.collections.removeAll();
+            getConfig().map(function(config){
+                fetchConfig(config, function(collections){
+                    model.collections(
+                        (collections || []).map(function(collection){
+                            return new List(collection);
+                        })
+                    );
+                    connectSortableLists();                
+                });
             });
-
-            chosen.forEach(function(id){
-                model.listsDisplayed.push(new List(id));
-            });
-
-            if(opts.inferDefaults && chosen[0]) {
-                first = chosen[0].split('/');
-                model.edition(first.shift());
-                model.section(first.shift());
-            }
-
-            connectSortableLists();
         }
 
         function connectSortableLists() {
@@ -143,7 +115,8 @@ define([
         };
 
         function saveListDelta(id, list) {
-            var listId,
+            var isLive = list.hasClass('is-live'),
+                listId,
                 inList,
                 listObj,
                 position,
@@ -161,8 +134,8 @@ define([
             if (inList.length) {
                 delta = {
                     item: id,
-                    draft: true,
-                    live: list.hasClass('is-live')
+                    live:   isLive,
+                    draft: !isLive
                 };
 
                 position = inList.next().data('url');
@@ -190,176 +163,135 @@ define([
             }
         };
 
-        function _startPoller() {
-            setInterval(function(){
-                model.listsDisplayed().forEach(function(list){
-                    if (!dragging) {
-                        list.refresh();
-                    }
-                });
-            }, 5000);
-        }
-        var startPoller = _.once(_startPoller);
+        function startPoller() {
+            var period = common.config.collectionsPollMs || 60000;
 
-        function fetchCollections(callback) {
+            setInterval(function(){                
+                model.collections().forEach(function(list, index){
+                    setTimeout(function(){
+                        list.refresh();
+                    }, index * period / (model.collections().length + 1)); // stagger requests
+                });
+            }, period);
+
+            startPoller = function() {}; // make idempotent
+        }
+
+        function fetchConfigs(callback) {
             reqwest({
-                url: common.config.apiBase + '/collection',
+                url: common.config.apiBase + '/config',
                 type: 'json'
             }).then(
                 function(resp) {
-                    resp.forEach(function(id){
-                        // Only use "first/three/levels" of the collection id path
-                        treeAdd(_.first(id.split('/'), 3), collections);
-                    });                    
-                    model.editions(_.keys(collections));
+                    if (!_.isArray(resp) || resp.length === 0) {
+                        window.console.log("ERROR: No configs were found");      
+                        return; 
+                    }
+                    model.configs(resp.sort());
                     if (_.isFunction(callback)) { callback(); }
                 },
-                function(xhr) { alert("Oops. There was a problem listing the available collections"); }
+                function(xhr) { window.console.log("ERROR: There was a problem listing the configs"); }
             );
         };
 
-        function treeAdd(path, obj) {
-            var f = _.first(path),
-                r = _.rest(path);
+        function fetchConfig(id, callback) {
+            reqwest({
+                url: common.config.apiBase + '/config/' + id,
+                type: 'json'
+            }).then(
+                function(resp) {
+                    if (_.isFunction(callback)) { callback(resp); }
+                },
+                function(xhr) { window.console.log("ERROR: There was a problem fetching the config for " + id); }
+            );
+        };
 
-            obj[f] = obj[f] || {};
-            if (r.length) {
-                treeAdd(r, obj[f]);
+        function flushClipboard() {
+            model.clipboard.removeAll();
+            clipboardEl.innerHTML = '';
+        };
+
+        function onDragOver(event) {
+            event.preventDefault();
+        }
+
+        function onDrop(event) {
+            var url = event.testData ? event.testData : event.dataTransfer.getData('Text');
+
+            if(!url) { return true; }
+
+            event.preventDefault();
+
+            if (common.util.urlHost(url).indexOf('google') > -1) {
+                url = decodeURIComponent(common.util.parseQueryParams(url).url);
+            };
+
+            model.clipboard.unshift(new Article({
+                id: common.util.urlAbsPath(url)
+            }));
+
+            contentApi.decorateItems(model.clipboard());
+            ophanApi.decorateItems(model.clipboard());
+        }
+
+        model.config.subscribe(function(config) {
+            var section = (config || '').split('/')[1]; // assumes ids are formed "edition/section/.."
+            model.latestArticles.section(common.config.sectionSearches[section || 'default'] || section);
+            setConfig(config ? [config] : []);
+        });
+
+        knockout.bindingHandlers.makeDropabble = {
+            init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                element.addEventListener('dragover',  onDragOver,  false);
+                element.addEventListener('drop',      onDrop,      false);
             }
         };
 
-        function displaySelectedBlocks() {           
-            var blocks = model.block() ? [model.block()] : model.blocks();
+        knockout.bindingHandlers.sparkline = {
+            update: function (element, valueAccessor, allBindingsAccessor, model) {
+                var groups = knockout.utils.unwrapObservable(valueAccessor()),
+                    max = _.max(_.pluck(groups, 'max'));
 
-            blocks.forEach(function(block){
-                addList([
-                    model.edition(),
-                    model.section(),
-                    block
-                ].join('/'));
-            })
+                if (!max) { return };
+
+                _.chain(groups)
+                .sortBy(function(g){
+                    // Put biggest groups first, so that its fill color is behind the other groups
+                    return -1 * g.max;
+                }).each(function(group, i){
+
+                    group.data.pop(); // drop the last data point. 
+
+                    var data = group.data,
+                        isHot = (_.last(data)/group.minsPerSlot) > 10;
+
+                    $(element).sparkline(data, {
+                        chartRangeMax: max,
+                        defaultPixelsPerValue: data.length < 50 ? data.length < 30 ? 3 : 2 : 1,
+                        height: Math.max(10, Math.min(30, max)),
+                        lineColor: '#' + group.color,
+                        spotColor: false,
+                        minSpotColor: false,
+                        maxSpotColor: false,
+                        lineWidth: isHot ? 2 : 1,
+                        fillColor: isHot ? '#eeeeee' : false,
+                        composite: i > 0
+                    });
+                });
+            }
         };
 
         this.init = function(callback) {
-            model.latestArticles  = new LatestArticles();
-            model.listsDisplayed  = knockout.observableArray();
-            model.clipboard        = knockout.observableArray();
-
-            model.editions = knockout.observableArray();
-            model.edition  = knockout.observable();
-
-            model.sections = knockout.observableArray();
-            model.section  = knockout.observable();
-
-            model.blocks   = knockout.observableArray();
-            model.block    = knockout.observable();
-
-            model.actions = {
-                displaySelectedBlocks: displaySelectedBlocks,
-                displayInAllEditions: displayInAllEditions,
-                dropList: dropList,
-                clearAll: clearAll,
-                flushClipboard: flushClipboard
-            }
-
-            model.edition.subscribe(function(edition) {
-                model.sections.removeAll();
-                if (common.util.hasNestedProperty(collections, [edition])) {
-                    model.sections(_.keys(collections[edition]));
-                }
-                model.section(undefined);
-
-                model.blocks.removeAll();
-                model.block(undefined);
-            });
-
-            model.section.subscribe(function(section) {
-                model.blocks.removeAll();
-                if (common.util.hasNestedProperty(collections, [model.edition(), section])) {
-                    model.blocks(_.keys(collections[model.edition()][section]));
-                }
-                model.block(undefined);
-
-                if (section) {
-                    model.latestArticles.section(common.config.sectionSearches[section] || section);
-                }
-            });
-
-            function flushClipboard() {
-                model.clipboard.removeAll();
-                clipboardEl.innerHTML = '';
-            };
-
-            function onDragOver(event) {
-                event.preventDefault();
-            }
-
-            function onDrop(event) {
-                var url = event.testData ? event.testData : event.dataTransfer.getData('Text');
-
-                if(!url) { return true; }
-
-                event.preventDefault();
-
-                if (common.util.urlHost(url).indexOf('google') > -1) {
-                    url = decodeURIComponent(common.util.parseQueryParams(url).url);
-                };
-
-                model.clipboard.unshift(new Article({
-                    id: common.util.urlAbsPath(url)
-                }));
-
-                contentApi.decorateItems(model.clipboard());
-                ophanApi.decorateItems(model.clipboard());
-            }
-
-            knockout.bindingHandlers.makeDropabble = {
-                init: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                    element.addEventListener('dragover',  onDragOver,  false);
-                    element.addEventListener('drop',      onDrop,      false);
-                }
-            };
-
-            knockout.bindingHandlers.sparkline = {
-                update: function (element, valueAccessor, allBindingsAccessor, model) {
-                    var value = knockout.utils.unwrapObservable(valueAccessor()),
-                        height = Math.max(15, Math.min(30, _.max(value))),
-                        options = allBindingsAccessor().sparklineOptions || {
-                            lineColor: '#d61d00',
-                            fillColor: '#ffbaaf',
-                            height: height
-                        };
-
-                    if( value && _.max(value)) {
-                        $(element).sparkline(value, options);                        
-                    }
-                }
-            };
-
-            common.util.mediator.on('list:load:start', function() {
-                listLoadsPending += 1;
-            });
-
-            common.util.mediator.on('list:load:end', function() {
-                listLoadsPending -= 1;
-                if (listLoadsPending < 1) {
-                    listLoadsPending = 0;
-                    common.util.pageReflow();
-                }
-            });
-
-            fetchCollections(function(){
+            fetchConfigs(function(){
                 knockout.applyBindings(model);
 
-                renderLists({inferDefaults: true});
-
-                window.onpopstate = renderLists;
+                renderConfig();
+                window.onpopstate = renderConfig;
 
                 startPoller();
                 model.latestArticles.search();
                 model.latestArticles.startPoller();
             });
-
         };
 
     };

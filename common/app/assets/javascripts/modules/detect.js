@@ -6,14 +6,19 @@
 /*jshint strict: false */
 /*global DocumentTouch: true */
 
-define(['modules/userPrefs'], function (userPrefs) {
+define(['modules/userPrefs', 'common'], function (userPrefs, common) {
 
-    var BASE_WIDTH     = 732,
-        MEDIAN_WIDTH   = 972,
-        EXTENDED_WIDTH = 1052,  // Breakpoint where we see the left column in article pages
+    var BASE_WIDTH     = 660,
+        MEDIAN_WIDTH   = 980,
+        EXTENDED_WIDTH = 1060,  // Breakpoint where we see the left column in article pages
         mobileOS,
-        supportsPushState;
-    
+        supportsPushState,
+        pageVisibility = document.visibilityState ||
+                         document.webkitVisibilityState ||
+                         document.mozVisibilityState ||
+                         document.msVisibilityState ||
+                         'visible';
+
     /**
      * @param Number width Allow passing in of width, for testing (innerWidth read only
      * in firefox
@@ -134,7 +139,7 @@ define(['modules/userPrefs'], function (userPrefs) {
     function getFontFormatSupport(ua) {
         var format = 'woff';
             ua = ua.toLowerCase();
-            
+
         if (ua.indexOf('android') > -1) {
             format = 'ttf';
         }
@@ -232,6 +237,63 @@ define(['modules/userPrefs'], function (userPrefs) {
         return (window.innerHeight > window.innerWidth) ? 'portrait' : 'landscape';
     }
 
+    function getBreakpoint() {
+        var breakpoint = window.getComputedStyle(document.body, ':after').getPropertyValue('content');
+        // firefox seems to wrap the value in quotes
+        return breakpoint.replace(/^"([^"]*)"$/, "$1");
+    }
+
+    // Page Visibility
+    function initPageVisibility() {
+        // Taken from http://stackoverflow.com/a/1060034
+        var hidden = "hidden";
+
+        function onchange(evt) {
+            var v = 'visible',
+                h = 'hidden',
+                evtMap = {
+                    focus: v,
+                    focusin: v,
+                    pageshow: v,
+                    blur: h,
+                    focusout: h,
+                    pagehide:h
+                };
+
+            evt = evt || window.event;
+            if (evt.type in evtMap) {
+                pageVisibility = evtMap[evt.type];
+            } else {
+                pageVisibility = this[hidden] ? "hidden" : "visible";
+            }
+
+            common.mediator.emit('modules:detect:pagevisibility:' + pageVisibility);
+        }
+
+        // Standards:
+        if (hidden in document) {
+            document.addEventListener("visibilitychange", onchange);
+        } else if ((hidden = "mozHidden") in document) {
+            document.addEventListener("mozvisibilitychange", onchange);
+        } else if ((hidden = "webkitHidden") in document) {
+            document.addEventListener("webkitvisibilitychange", onchange);
+        } else if ((hidden = "msHidden") in document) {
+            document.addEventListener("msvisibilitychange", onchange);
+        }
+        // IE 9 and lower:
+        else if ('onfocusin' in document) {
+            document.onfocusin = document.onfocusout = onchange;
+        }
+        // All others:
+        else {
+            window.onpageshow = window.onpagehide = window.onfocus = window.onblur = onchange;
+        }
+    }
+
+    function pageVisible() {
+        return pageVisibility === 'visible' ? true : false;
+    }
+
     return {
         getLayoutMode: getLayoutMode,
         getMobileOS: getMobileOS,
@@ -244,7 +306,10 @@ define(['modules/userPrefs'], function (userPrefs) {
         hasSvgSupport: hasSvgSupport,
         hasTouchScreen: hasTouchScreen,
         hasPushStateSupport: hasPushStateSupport,
-        getOrientation: getOrientation
+        getOrientation: getOrientation,
+        getBreakpoint: getBreakpoint,
+        initPageVisibility: initPageVisibility,
+        pageVisible: pageVisible
     };
 
 });

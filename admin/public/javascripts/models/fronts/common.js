@@ -5,18 +5,17 @@ define([
     EventEmitter,
     ko
 ) {
-    var _listsContainerID = '#trailblocks',
-        _masonryEl;
-
     return {
         config: {
             searchPageSize:        20,
-            maxDisplayableLists:   6,
-            maxOphanCallsPerBlock: 10,
-            cacheExpiryMs:         300000, // 300000 = five mins 
+            maxDisplayableLists:   20,
+            ophanCallsPerSecond:   4,     // n.b. times number of blocks
+            collectionsPollMs:     10000, // 10 seconds
+            latestArticlesPollMs:  10000, // 10 seconds
+            cacheExpiryMs:         60000, // 1 min 
             defaultToLiveMode:     true,
             sectionSearches: {
-                "news": "news|uk|uk-news|world",
+                "default": "news|uk|uk-news|world",
                 "culture": "cluture|film|music|books|artanddesign|tv-and-radio|stage"
             },
 
@@ -36,9 +35,17 @@ define([
                 return false;
             },
 
+            ammendedQueryStr: function(key, val) {
+                var qp = this.queryParams();
+                qp[key] = val;
+                return _.pairs(qp)
+                    .filter(function(p){ return !!p[0]; })
+                    .map(function(p){ return p[0] + (p[1] ? '=' + p[1] : ''); })
+                    .join('&');
+            },
+
             parseQueryParams: function(url) {
-                url = url.indexOf('?') === -1 ? url: _.rest(url.split('?')).join('?');
-                return _.object(url.split('&').map(function(keyVal){
+                return _.object(this.urlQuery(url).split('&').map(function(keyVal){
                     return keyVal.split('=').map(function(s){
                         return decodeURIComponent(s);
                     });
@@ -47,6 +54,14 @@ define([
 
             queryParams: function() {
                 return this.parseQueryParams(window.location.search);
+            },
+
+            urlQuery: function(url) {
+                var a;
+                if(typeof url !== 'string') { return; }
+                a = document.createElement('a');
+                a.href = url;
+                return a.search.slice(1);
             },
 
             urlAbsPath: function(url) {
@@ -92,15 +107,6 @@ define([
                 _.keys(target).forEach(function(key){
                     target[key](opts[key]);
                 });
-            },
-
-            pageReflow: function() {
-                if(_masonryEl) {
-                    _masonryEl.masonry('destroy');
-                } else {
-                    _masonryEl = $(_listsContainerID);
-                }
-                _masonryEl.masonry();
             }
         }
 
