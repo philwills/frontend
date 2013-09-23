@@ -172,7 +172,7 @@ case class PictureCleaner(imageHolder: Elements) extends HtmlCleaner with implic
 
   def clean(body: Document): Document = {
     body.getElementsByTag("figure").foreach { fig =>
-      if(!fig.hasClass("element-comment")) {
+      if(!fig.hasClass("element-comment") && !fig.hasClass("element-tweet")) {
         fig.attr("itemprop", "associatedMedia")
         fig.attr("itemscope", "")
         fig.attr("itemtype", "http://schema.org/ImageObject")
