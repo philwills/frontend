@@ -149,7 +149,7 @@ class GuardianConfiguration(val application: String, val webappConfDirectory: St
     // But does not change across environments
     lazy val config: Map[String, String] = Map(
       "ophanUrl" -> "http://s.ophan.co.uk/js/ophan.min",
-      "googleSearchUrl" -> "http://www.google.co.uk/cse/cse.js",
+      "googleSearchUrl" -> "//www.google.co.uk/cse/cse.js",
       "discussionApiUrl" -> "http://discussion.guardianapis.com/discussion-api",
       "interactiveUrl" -> "http://interactive.guim.co.uk/next-gen/"
     )
