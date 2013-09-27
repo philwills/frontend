@@ -1,7 +1,33 @@
 @()(implicit request: RequestHeader)
 
-<form method="POST" class="d-comment-box component" action="/discussion/comment">
+<form method="POST" id="d-comment-form" class="d-comment-box component" action="/discussion/comment">
     <label for="body" class="cta">Add your comment</label>
+    <input type="checkbox" id="expertise" name="insight" value="expertise">
+    <label for="expertise">I have expertise on this subject</label>
+    <input type="checkbox" id="experience" name="insight" value="experience">
+    <label for="experience">I have personal experience</label>
+    <input type="checkbox" id="eyewitness" name="insight" value="eyewitness">
+    <label for="eyewitness">I am an eyewitness</label>
     <textarea name="body" class="d-comment-box__body" placeholder="Join the discussion…"></textarea>
     <button type="submit" class="submit-input comment-box__submit">Submit</button>
 </form>
+<script>
+    document.getElementById('d-comment-form' ).addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var formEl = e.currentTarget
+
+        alert(formEl.elements.namedItem('insight' ).value)
+
+        console.log(formEl.elements.namedItem('insight'))
+
+        if (formEl.elements.insight.value) {
+            if (confirm('Are you sure you want to claim that ' + formEl.elements.insight.value + '?')) {
+                comment = {
+                    body: formEl.elements.body.value
+                };
+                formEl.submit()
+            }
+        }
+    })
+</script>

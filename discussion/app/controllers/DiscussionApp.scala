@@ -9,6 +9,7 @@ import play.api.libs.ws.{WS, Response}
 
 
 trait DiscussionDispatcher extends CommentCountController with CommentPageController with PostCommentController
+  with ModerationController
 
 object DiscussionApp extends DiscussionDispatcher {
   protected val discussionApi = current.plugin(classOf[DiscussionApi]) getOrElse {

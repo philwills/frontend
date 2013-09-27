@@ -14,6 +14,32 @@ case class CommentCount(id: String, count: Int) {
   )
 }
 
+case object Expertise extends Insight{
+  def describe = "claims expertise"
+  def id = "expertise"
+}
+case object Eyewitness extends Insight{
+  def describe = "claims to be an eyewitness"
+  def id = "eyewitness"
+}
+case object PersonalExperience extends Insight{
+  def describe = "claims to have personal experience"
+  def id = "experience"
+}
+
+trait Insight {
+  def id: String
+  def describe: String
+}
+object Insight {
+  def apply(s: String) = s match {
+    case "expertise" => Some(Expertise)
+    case "experience" => Some(PersonalExperience)
+    case "eyewitness" => Some(Eyewitness)
+    case _ => None
+  }
+}
+
 case class Comment(
   id: Int,
   body: String,
@@ -23,7 +49,8 @@ case class Comment(
   isHighlighted: Boolean,
   isBlocked: Boolean,
   responseTo: Option[ResponseTo] = None,
-  numRecommends: Int
+  numRecommends: Int,
+  insight: Seq[Insight] = Seq()
 )
 
 object Comment extends {

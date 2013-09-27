@@ -12,7 +12,10 @@ import play.api.libs.json.JsArray
 import play.api.libs.ws.Response
 import play.api.libs.json.JsObject
 import play.api.libs.json.JsNumber
-import discussion.model.{Profile, Comment, CommentCount}
+import discussion.model._
+import scala.util.Random
+import play.api.libs.ws.Response
+import discussion.model.CommentCount
 
 trait DiscussionApi extends ExecutionContexts with Logging {
 
@@ -25,10 +28,30 @@ trait DiscussionApi extends ExecutionContexts with Logging {
     Comment(0, "Fake comment body", Seq(),
       profile, DateTime.now, false, false, None, 10)
   ))
-//  def comments() = Seq[Comment]()
 
-  def postComment(body: String) = {
-    comments.send(cs => cs :+ Comment(cs.length, body, Seq(), profile, DateTime.now, false, false, None, 10))
+  lazy val queue = AkkaAgent(Seq(
+    Comment(0, "This is completely libellous", Seq(),
+      profile, DateTime.now, false, false, None, 0, Seq(Expertise)
+    )
+  ))
+
+  def postComment(body: String, insight: Seq[Insight]) = {
+    val comment = Comment(Random.nextInt(), body, Seq(), profile, DateTime.now, false, false, None, 10, insight)
+    comments.send(cs => cs :+ comment)
+    queue.send(_ :+  comment)
+  }
+
+  def approve(id: Int, insights: Seq[Insight]) {
+    queue.send(_.filterNot(_.id == id))
+    comments.send(cs => cs map {
+      case c if c.id == id => c.copy(insight = insights)
+      case x => x
+    })
+  }
+
+  def reject(id: Int) {
+    queue.send(_.filterNot(_.id == id))
+    comments.send(_.filterNot(_.id == id))
   }
 
 
