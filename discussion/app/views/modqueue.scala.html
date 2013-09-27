@@ -16,18 +16,32 @@
             <!-- Latest compiled and minified JavaScript -->
         <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
+        <style>
+            .list-group li {
+                padding: 5px 20px;
+            }
+        </style>
     </head>
     <body>
         <div class="container">
             <h1>Moderation Queue</h1>
-        <ol class="list-unstyled">
+        <ol class="list-unstyled list-group">
         @for(c <- commentQueue) {
             <li>
+                <div class="d-comment__media">
+                    <span class="d-comment__avatar-wrapper"><img src="@c.profile.avatar" alt="" class="d-comment__avatar" width="36" height="36" /></span>
+                </div>
+                <div>
+                    <span class="d-comment__author">@c.profile.displayName</span>
+                    @if(c.profile.isContributor){<i class="d-badge d-badge--contributor d-comment__author-status" title="Contributor"><span class="d-badge__label">Contributor</span></i>}
+                    @if(c.profile.isStaff){<i class="d-badge d-badge--guardian-staff d-comment__author-status" title="Guardian staff"><span class="d-badge__label">Guardian Staff</span></i>}
+                </div>
                 <p>@c.body</p>
                 <form method="POST" role="form">
                 @for(i <- c.insight) {
-                    <div>
-                    @i.describe
+                    <div class="row well well-sm">
+                    <div class="col-sm-4">@i.describe</div>
+                    <div class="col-sm-4">
                     <label class="radio-inline">
                         <input type="radio" name="@i.id" value="yes">
                         Yes
@@ -36,6 +50,7 @@
                         <input type="radio" name="@i.id" value="no">
                         No
                     </label>
+                    </div>
                     </div>
                 }
                     <input type="hidden" name="id" value="@c.id">

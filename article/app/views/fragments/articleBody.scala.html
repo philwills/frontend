@@ -99,7 +99,7 @@
                             $('#modal-expertise').modal({show: true, backdrop: false})
                             $('#expertise-ok' ).click(function() {
                                 $('expertise-tags-h' ).val($('#expertise-tag').val())
-                                $('#modal-expertise').modal({show: false})
+                                $('#modal-expertise').modal('hide')
                                 formEl.submit()
                             })
                         } else {
