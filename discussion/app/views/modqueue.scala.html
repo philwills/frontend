@@ -1,0 +1,50 @@
+@(commentQueue: Seq[discussion.model.Comment])(implicit request: RequestHeader)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Moderation Queue</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href='@routes.Assets.at("bootstrap-3.0.0/css/bootstrap.min.css")'>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+
+            <!-- Optional theme -->
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+
+            <!-- Latest compiled and minified JavaScript -->
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+    </head>
+    <body>
+        <div class="container">
+            <h1>Moderation Queue</h1>
+        <ol class="list-unstyled">
+        @for(c <- commentQueue) {
+            <li>
+                <p>@c.body</p>
+                <form method="POST" role="form">
+                @for(i <- c.insight) {
+                    <div>
+                    @i.describe
+                    <label class="radio-inline">
+                        <input type="radio" name="@i.id" value="yes">
+                        Yes
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="@i.id" value="no">
+                        No
+                    </label>
+                    </div>
+                }
+                    <input type="hidden" name="id" value="@c.id">
+                    <button class="btn btn-success" name="action" value="approve">Approve</button>
+                    <button class="btn btn-danger" name="action" value="reject">Reject</button>
+                </form>
+            </li>
+        }
+        </ol>
+        </div>
+    </body>
+</html>
