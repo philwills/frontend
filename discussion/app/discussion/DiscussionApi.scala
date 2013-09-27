@@ -1,108 +1,108 @@
 package discussion
 
-import common.{ExecutionContexts, Logging}
+import _root_.model.Page
+import common.{AkkaAgent, ExecutionContexts, Logging}
 import common.DiscussionMetrics.DiscussionHttpTimingMetric
 import conf.Switches.ShortDiscussionSwitch
-import model._
-import play.api.libs.ws.{Response, WS}
-import play.api.libs.json.{JsNumber, JsObject, JsArray, Json}
+import play.api.libs.json._
 import System.currentTimeMillis
 import scala.concurrent.Future
 import org.joda.time.DateTime
-
-case class CommentPage(
-  override val id: String,
-  title: String,
-  comments: Seq[Comment],
-  contentUrl: String,
-  currentPage: Int,
-  pages: Int,
-  isClosedForRecommendation: Boolean
-) extends Page(id = id, section = "Global", webTitle = title, analyticsName = s"GFE:Article:Comment discussion page $currentPage") {
-  lazy val hasMore: Boolean = currentPage < pages
-}
+import play.api.libs.json.JsArray
+import play.api.libs.ws.Response
+import play.api.libs.json.JsObject
+import play.api.libs.json.JsNumber
+import discussion.model.{Profile, Comment, CommentCount}
 
 trait DiscussionApi extends ExecutionContexts with Logging {
 
-  import conf.Configuration.discussion.apiRoot
-  protected def GET(url: String): Future[Response] = WS.url(url).withTimeout(2000).get()
+  protected def GET(url: String): Future[Response]
+  protected val apiRoot: String
 
-  def commentCounts(ids: String) = {
+  val profile = Profile("http://static.guim.co.uk/sys-images/Guardian/Pix/site_furniture/2010/09/01/no-user-image.gif", "Faker", false, false)
 
+  lazy val comments = AkkaAgent(Seq(
+    Comment(0, "Fake comment body", Seq(),
+      profile, DateTime.now, false, false, None, 10)
+  ))
+//  def comments() = Seq[Comment]()
+
+  def postComment(body: String) = {
+    comments.send(cs => cs :+ Comment(cs.length, body, Seq(), profile, DateTime.now, false, false, None, 10))
+  }
+
+
+  def commentCounts(ids: String): Future[Seq[CommentCount]] = {
+    def onError(response: Response) =
+      s"Error loading comment count ids: $ids status: ${response.status} message: ${response.statusText}"
     val apiUrl = s"$apiRoot/getCommentCounts?short-urls=$ids"
 
+//<<<<<<< HEAD
     val start = currentTimeMillis
-
-//    GET(apiUrl).map{ response =>
-//
-//      DiscussionHttpTimingMetric.recordTimeSpent(currentTimeMillis - start)
-//
-//      response.status match {
-//
-//        case 200 =>
-//          val json = Json.parse(response.body).asInstanceOf[JsObject].fieldSet.toSeq
-//          json.map{
-//            case (id, JsNumber(i)) => CommentCount(id , i.toInt)
-//            case bad => throw new RuntimeException(s"never understood $bad")
-//          }
-//        case other =>
-//          log.error(s"Error loading comment counts id: $ids status: $other message: ${response.statusText}")
-//          throw new RuntimeException("Error from discussion API")
-//      }
-//    }
     Future.successful(Seq(CommentCount("123", 10)))
   }
 
-  def commentsFor(id: String, page: String) = {
-
+  def commentsFor(key: String, page: String) = {
     val size = if (ShortDiscussionSwitch.isSwitchedOn) 10 else 50
 
-    val apiUrl = s"$apiRoot/discussion/$id?pageSize=$size&page=$page&orderBy=oldest&showSwitches=true"
-
-    val start = currentTimeMillis
-
-//    GET(apiUrl).map{ response =>
-//
-//      DiscussionHttpTimingMetric.recordTimeSpent(currentTimeMillis - start)
-//
-//      response.status match {
-//
-//        case 200 =>
-//
-//          val json = Json.parse(response.body)
-//
-//          val comments = (json \\ "comments")(0).asInstanceOf[JsArray].value.map{ commentJson =>
-//            val responses = (commentJson \\ "responses").headOption.map(_.asInstanceOf[JsArray].value.map(responseJson => Comment(responseJson))).getOrElse(Nil)
-//            Comment(commentJson, responses)
-//          }
-//
-//          CommentPage(
-//            id = s"discussion/$id",
-//            title = (json \ "discussion" \ "title").as[String],
-//            contentUrl = (json \ "discussion" \ "webUrl").as[String],
-//            comments = comments,
-//            currentPage =  (json \ "currentPage").as[Int],
-//            pages = (json \ "pages").as[Int],
-//            isClosedForRecommendation = (json \ "discussion" \ "isClosedForRecommendation").as[Boolean]
-//          )
-//
-//        case other =>
-//          log.error(s"Error loading comments id: $id status: $other message: ${response.statusText}")
-//          throw new RuntimeException("Error from discussion API")
-//      }
-//    }
     Future.successful(CommentPage(
-      id= s"disussion/$id",
+      id= s"disussion/$key",
       title= "title",
       contentUrl = "http://url.com",
-      comments = Seq(
-        Comment(1, "Fake comment body", Seq(), Profile("http://static.guim.co.uk/sys-images/Guardian/Pix/site_furniture/2010/09/01/no-user-image.gif", "Faker", false, false), DateTime.now, false, false, None, 10)
-      ),
+      comments = comments(),
       currentPage = 1,
       pages = 1,
       isClosedForRecommendation = false
     ))
+//=======
+//    val apiUrl = s"$apiRoot/discussion/$key?pageSize=$size&page=$page&orderBy=oldest&showSwitches=true"
+//
+//    def onError(r: Response) =
+//      s"Error loading comments id: $key status: ${r.status} message: ${r.statusText}"
+//
+//    getJsonOrError(apiUrl, onError) map {
+//      json =>
+//        val comments = (json \\ "comments")(0).asInstanceOf[JsArray].value map {
+//          commentJson =>
+//            val responses = (commentJson \\ "responses").headOption map {
+//              responsesJson =>
+//                responsesJson.asInstanceOf[JsArray].value map {
+//                  responseJson =>
+//                    Comment(responseJson)
+//                }
+//            } getOrElse Nil
+//            Comment(commentJson, responses)
+//        }
+//
+//        CommentPage(
+//          id = s"discussion/$key",
+//          title = (json \ "discussion" \ "title").as[String],
+//          contentUrl = (json \ "discussion" \ "webUrl").as[String],
+//          comments = comments,
+//          currentPage = (json \ "currentPage").as[Int],
+//          pages = (json \ "pages").as[Int],
+//          isClosedForRecommendation = (json \ "discussion" \ "isClosedForRecommendation").as[Boolean]
+//        )
+//    }
   }
+
+  protected def getJsonOrError(url: String, onError: (Response) => String):Future[JsValue] = {
+    val start = currentTimeMillis()
+    GET(url) map {
+      response =>
+        DiscussionHttpTimingMetric.recordTimeSpent(currentTimeMillis - start)
+
+        response.status match {
+          case 200 =>
+            Json.parse(response.body)
+
+          case _ =>
+            log.error(onError(response))
+            throw new RuntimeException("Error from Discussion API")
+        }
+    }
+  }
+
 }
 
 

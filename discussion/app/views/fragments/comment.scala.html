@@ -1,4 +1,4 @@
-@(comment: Comment, isClosedForRecommendation: Boolean = true, isResponse: Boolean = false)(implicit request: RequestHeader)
+@(comment: discussion.model.Comment, isClosedForRecommendation: Boolean = true, isResponse: Boolean = false)(implicit request: RequestHeader)
 
 <li class="d-comment
            @if(isResponse){d-comment--response}else{d-comment--top-level}

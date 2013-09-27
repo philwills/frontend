@@ -13,6 +13,7 @@ GET        /discussion/comment-counts                                           
 GET        /discussion/comment-counts.json                                                                controllers.DiscussionApp.commentCount(shortUrls: String)
 GET        /discussion/*shortUrl.json                                                                     controllers.DiscussionApp.commentPage(shortUrl)
 GET        /discussion/*shortUrl                                                                          controllers.DiscussionApp.commentPage(shortUrl)
+POST       /discussion/comment                    controllers.DiscussionApp.postComment()
 
 #Core nav
 GET        /most-read                                                                                     controllers.MostPopularController.render(path = "")

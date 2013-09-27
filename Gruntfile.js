@@ -142,7 +142,7 @@ module.exports = function (grunt) {
             common: {
                 options: {
                     specs: grunt.file.expand(
-                         'common/test/assets/javascripts/spec/*.js',[
+                         'common/test/assets/javascripts/spec/**/*.js',[
                         '!common/test/assets/javascripts/spec/Autoupdate.spec.js',
                         '!common/test/assets/javascripts/spec/DocumentWrite.spec.js',
                         '!common/test/assets/javascripts/spec/Fonts.spec.js',
@@ -359,11 +359,19 @@ module.exports = function (grunt) {
             // Copy the project's pre-commit hook into .git/hooks
             command: 'cp git-hooks/pre-commit .git/hooks/'
           }
+        },
+
+        watch: {
+            test: {
+                files: ['common/test/assets/javascripts/**/*.js', 'common/app/assets/javascripts/**/*.js'],
+                tasks: 'test:unit:common'
+            }
         }
 
     });
 
     // Load the plugins
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-css-metrics');
     grunt.loadNpmTasks('grunt-contrib-jshint');

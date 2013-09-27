@@ -1,3 +1,4 @@
+
 define([
     'common',
     'bonzo',
@@ -5,6 +6,7 @@ define([
     'bean',
     'ajax',
     'modules/discussion/recommend-comments',
+    'modules/discussion/comment-box',
     'modules/userPrefs',
     'modules/analytics/clickstream',
     'modules/inview',
@@ -16,6 +18,7 @@ define([
     bean,
     ajax,
     RecommendComments,
+    CommentBox,
     userPrefs,
     ClickStream,
     Inview,
