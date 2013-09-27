@@ -35,9 +35,9 @@
                           datetime="@comment.date.toString("yyyy-MM-dd'T'HH:mm:ss'Z'")" data-timestamp="@comment.date.getMillis">
                         @Format(comment.date, "d MMM y")
                     </time>
-                    <ul>
+                    <ul class="insight-status">
                     @for(insight <- comment.insight) {
-                        <li>@insight</li>
+                        <li class="@insight.id"><div><i class="i i-recommend"></i>1</div> <span>@insight</span></li>
                     }
                     </ul>
                 </div>

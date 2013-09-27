@@ -2,13 +2,18 @@
 
 <form method="POST" id="d-comment-form" class="d-comment-box component" action="/discussion/comment">
     <label for="body" class="cta">Add your comment</label>
+    <p><img src="http://i.imgur.com/oioYg70.png" /></p>
+    
     <input type="checkbox" id="expertise" name="insight" value="expertise" class="insight">
-    <label for="expertise">I have expertise on this subject</label>
+    <label style="margin-bottom: 0;" for="expertise">I have expertise on this subject</label>
     <input type="hidden" name="expertise-tags-h" id="expertise-tags-h">
+    
     <input type="checkbox" id="experience" name="insight" value="experience" class="insight">
-    <label for="experience">I have personal experience</label>
+    <label style="margin-bottom: 0;" for="experience">I have personal experience</label>
+    
     <input type="checkbox" id="eyewitness" name="insight" value="eyewitness" class="insight">
-    <label for="eyewitness">I am an eyewitness</label>
+    <label style="margin-bottom: 0;" for="eyewitness">I am an eyewitness</label>
+    
     <textarea name="body" class="d-comment-box__body" placeholder="Join the discussion…"></textarea>
-    <button type="submit" class="submit-input comment-box__submit">Submit</button>
+    <button type="submit" class="submit-input comment-box__submit">Post comment</button>
 </form>

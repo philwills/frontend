@@ -93,7 +93,7 @@
 
                         var formEl = e.target
 
-                        var checked = $('.insight:checked' ).attr('value')
+                        var checked = $('#expertise').is(':checked');
 
                         if (checked) {
                             $('#modal-expertise').modal({show: true, backdrop: false})
@@ -119,6 +119,48 @@
                 })
                 </script>
 
+                <style>
+                    ul.insight-status {
+                        margin: 10px 0 0 0;
+                    }
+
+                    ul.insight-status li {
+                        background-color: #4490ce;
+                        padding: 5px;            
+                        display: block;            
+                        width: 73px;
+                        font-weight: bold;
+                        color: #ffffff;
+                        margin-bottom: 3px;
+                    }
+
+                    ul.insight-status div {
+                        display: inline;
+                        vertical-align: middle;
+                    }
+
+                    ul.insight-status span {
+                        display: inline-block;
+                        background-repeat: no-repeat;
+                        width: 37px;
+                        height: 25px;
+                        text-indent: -1000em;
+                        background-size: 100%;
+                    }
+
+                    li.expertise span {
+                        background-image: url(http://i.imgur.com/JuT9w3P.png);
+                    }
+
+                    li.eyewitness span {
+                        background-image: url(http://i.imgur.com/mD8JR6G.png);
+                    }
+
+                    li.experience span {
+                        background-image: url(http://i.imgur.com/H89iTdU.png);
+                    }
+                </style>
+
                 <h3 id="comments" class="type-2 article-zone">Comments</h3>
                 <div class="article__discussion"></div>
 
@@ -136,7 +178,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title">What is expertise in relation to?</h4>
+                                <h4 class="modal-title">What is your expertise in relation to?</h4>
                             </div>
                             <div class="modal-body">
                                 <select class="form-control" id="expertise-tag">
